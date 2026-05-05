@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfoVital - Paso 1</title>
+    <style>
+        :root {
+            --primary: #0052FF;
+            --text: #1A1C1E;
+            --muted: #667085;
+            --bg: #F8F9FA;
+            --surface: #FFFFFF;
+            --radius: 16px;
+            --border: #E4E7EC;
+        }
+
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: var(--bg);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .iphone {
+            width: 100%;
+            max-width: 414px;
+            height: 100vh;
+            background: var(--surface);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            padding: 20px 24px;
+            font-weight: 700;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 0 24px;
+        }
+
+        h2 {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .field {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 16px;
+        }
+
+        .blood-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .blood-opt {
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .blood-opt.active {
+            border-color: var(--primary);
+            background: #F0F5FF;
+            color: var(--primary);
+        }
+
+        .footer {
+            padding: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn {
+            display: block;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 20px;
+            border-radius: var(--radius);
+            font-weight: 700;
+            text-align: center;
+            font-size: 17px;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="iphone">
+        <div class="header">PASO 1 DE 4</div>
+        <div class="content">
+            <h2>Datos básicos</h2>
+            <div class="field"><label>Nombre completo</label><input type="text" id="nombre"
+                    placeholder="Ej. Juan Pérez"></div>
+            <div class="field"><label>Edad</label><input type="number" id="edad" placeholder="Ej. 30"></div>
+            <div class="field">
+                <label>Tipo de sangre</label>
+                <div class="blood-grid">
+                    <div class="blood-opt" onclick="setBlood('O+')">O+</div>
+                    <div class="blood-opt" onclick="setBlood('O-')">O-</div>
+                    <div class="blood-opt" onclick="setBlood('A+')">A+</div>
+                    <div class="blood-opt" onclick="setBlood('A-')">A-</div>
+                </div>
+            </div>
+        </div>
+        <div class="footer"><button onclick="save()" class="btn">Continuar</button></div>
+    </div>
+    <script src="js/app.js"></script>
+    <script>
+        let selectedBlood = '';
+        function setBlood(b) {
+            selectedBlood = b;
+            document.querySelectorAll('.blood-opt').forEach(opt => {
+                opt.classList.toggle('active', opt.textContent === b);
+            });
+        }
+        function save() {
+            const nombre = document.getElementById('nombre').value;
+            const edad = document.getElementById('edad').value;
+            if (!nombre || !edad || !selectedBlood) {
+                alert('Por favor completa todos los campos');
+                return;
+            }
+            InfoVital.saveData({ nombre, edad, sangre: selectedBlood });
+            InfoVital.nextStep('step2.html');
+        }
+        // Load existing
+        window.onload = () => {
+            const data = InfoVital.getData();
+            if (data.nombre) document.getElementById('nombre').value = data.nombre;
+            if (data.edad) document.getElementById('edad').value = data.edad;
+            if (data.sangre) setBlood(data.sangre);
+        }
+    </script>
+</body>
+
+</html>

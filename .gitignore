@@ -1,0 +1,6 @@
+node_modules/
+.DS_Store
+*.log
+data/
+scripts/
+profiles_template.csv

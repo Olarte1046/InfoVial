@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfoVital - Paso 2</title>
+    <style>
+        :root {
+            --primary: #0052FF;
+            --text: #1A1C1E;
+            --muted: #667085;
+            --bg: #F8F9FA;
+            --surface: #FFFFFF;
+            --radius: 16px;
+            --border: #E4E7EC;
+        }
+
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: var(--bg);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .iphone {
+            width: 100%;
+            max-width: 414px;
+            height: 100vh;
+            background: var(--surface);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            padding: 20px 24px;
+            font-weight: 700;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 0 24px;
+        }
+
+        h2 {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .check-item.active {
+            border-color: var(--primary);
+            background: #F0F5FF;
+            color: var(--primary);
+        }
+
+        .footer {
+            padding: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn {
+            display: block;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 20px;
+            border-radius: var(--radius);
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            font-size: 17px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="iphone">
+        <div class="header">PASO 2 DE 4</div>
+        <div class="content">
+            <h2>Condiciones médicas</h2>
+            <div class="check-item" onclick="toggleCondition(this)">Diabetes</div>
+            <div class="check-item" onclick="toggleCondition(this)">Epilepsia</div>
+            <div class="check-item" onclick="toggleCondition(this)">Hipertensión</div>
+            <div class="check-item" id="none-opt" onclick="setNone()">Ninguna</div>
+        </div>
+        <div class="footer"><button onclick="save()" class="btn">Continuar</button></div>
+    </div>
+    <script src="js/app.js"></script>
+    <script>
+        const conditions = new Set();
+        function toggleCondition(el) {
+            const val = el.textContent;
+            if (conditions.has(val)) {
+                conditions.delete(val);
+                el.classList.remove('active');
+            } else {
+                conditions.add(val);
+                el.classList.add('active');
+                document.getElementById('none-opt').classList.remove('active');
+            }
+        }
+        function setNone() {
+            conditions.clear();
+            document.querySelectorAll('.check-item').forEach(el => el.classList.remove('active'));
+            document.getElementById('none-opt').classList.add('active');
+        }
+        function save() {
+            const list = Array.from(conditions);
+            if (list.length === 0 && !document.getElementById('none-opt').classList.contains('active')) {
+                alert('Por favor selecciona al menos una opción');
+                return;
+            }
+            InfoVital.saveData({ condiciones: list });
+            InfoVital.nextStep('step3.html');
+        }
+        window.onload = () => {
+            const data = InfoVital.getData();
+            if (data.condiciones && data.condiciones.length > 0) {
+                document.querySelectorAll('.check-item').forEach(el => {
+                    if (data.condiciones.includes(el.textContent)) {
+                        conditions.add(el.textContent);
+                        el.classList.add('active');
+                    }
+                });
+            } else if (data.condiciones && data.condiciones.length === 0) {
+                // Check if it was explicitly "None" or just empty
+                // In this simple MVP, we just assume empty means not set yet unless confirmed
+            }
+        }
+    </script>
+</body>
+
+</html>

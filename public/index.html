@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>InfoVital - Bienvenida</title>
+    <style>
+        :root {
+            --primary: #0052FF;
+            --text: #1A1C1E;
+            --muted: #667085;
+            --bg: #F8F9FA;
+            --surface: #FFFFFF;
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: var(--bg);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .iphone {
+            width: 100%;
+            max-width: 414px;
+            height: 100vh;
+            background: var(--surface);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .content {
+            flex: 1;
+            padding: 40px 24px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo {
+            width: 72px;
+            height: 72px;
+            background: var(--primary);
+            border-radius: 20px;
+            margin: 0 auto 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text);
+            margin: 0;
+            letter-spacing: -1px;
+        }
+
+        p {
+            font-size: 18px;
+            color: var(--muted);
+            line-height: 1.5;
+            margin: 16px 0 40px;
+        }
+
+        .footer {
+            padding: 24px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 20px;
+            border-radius: var(--radius);
+            font-weight: 700;
+            font-size: 17px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="iphone">
+        <div class="content">
+            <div class="logo">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="white">
+                    <path
+                        d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
+                </svg>
+            </div>
+            <h1>InfoVital</h1>
+            <p>Crea tu perfil médico en minutos y genera un código QR para emergencias.</p>
+        </div>
+        <div class="footer">
+            <a href="step1.html" class="btn">Crear mi perfil</a>
+        </div>
+    </div>
+    <script src="/js/app.js"></script>
+    <script>
+        // InfoVital might not be defined if script failed to load, but we cleared data earlier.
+        localStorage.removeItem('infovital_registration_data');
+    </script>
+</body>
+
+</html>

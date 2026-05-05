@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfoVital - Paso 4</title>
+    <style>
+        :root {
+            --primary: #0052FF;
+            --text: #1A1C1E;
+            --muted: #667085;
+            --bg: #F8F9FA;
+            --surface: #FFFFFF;
+            --radius: 16px;
+            --border: #E4E7EC;
+        }
+
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: var(--bg);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .iphone {
+            width: 100%;
+            max-width: 414px;
+            height: 100vh;
+            background: var(--surface);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            padding: 20px 24px;
+            font-weight: 700;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 0 24px;
+        }
+
+        h2 {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 16px;
+        }
+
+        .footer {
+            padding: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn {
+            display: block;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 20px;
+            border-radius: var(--radius);
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            font-size: 17px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="iphone">
+        <div class="header">PASO 4 DE 4</div>
+        <div class="content">
+            <h2>Contacto SOS</h2>
+            <div class="field"><label>Nombre contacto</label><input type="text" id="contacto_nombre"
+                    placeholder="Ej. María García"></div>
+            <div class="field"><label>Teléfono</label><input type="tel" id="contacto_tel"
+                    placeholder="+57 300 000 0000"></div>
+            <div class="field"><label>Relación</label><input type="text" id="contacto_relacion"
+                    placeholder="Ej. Esposa, Padre..."></div>
+        </div>
+        <div class="footer"><button onclick="save()" class="btn">Revisar perfil</button></div>
+    </div>
+    <script src="js/app.js"></script>
+    <script>
+        function save() {
+            const nombre = document.getElementById('contacto_nombre').value;
+            const tel = document.getElementById('contacto_tel').value;
+            const relacion = document.getElementById('contacto_relacion').value;
+            if (!nombre || !tel || !relacion) {
+                alert('Por favor completa todos los campos del contacto');
+                return;
+            }
+            InfoVital.saveData({
+                contacto_nombre: nombre,
+                contacto_tel: tel,
+                contacto_relacion: relacion
+            });
+            InfoVital.nextStep('step4b.html');
+        }
+        window.onload = () => {
+            const data = InfoVital.getData();
+            if (data.contacto_nombre) document.getElementById('contacto_nombre').value = data.contacto_nombre;
+            if (data.contacto_tel) document.getElementById('contacto_tel').value = data.contacto_tel;
+            if (data.contacto_relacion) document.getElementById('contacto_relacion').value = data.contacto_relacion;
+        }
+    </script>
+</body>
+
+</html>

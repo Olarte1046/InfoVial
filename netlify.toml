@@ -1,0 +1,4 @@
+[[redirects]]
+  from = "/u/*"
+  to = "/u.html?id=:splat"
+  status = 200

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfoVital - Perfil Creado</title>
+    <style>
+        :root {
+            --primary: #0052FF;
+            --text: #1A1C1E;
+            --muted: #667085;
+            --bg: #F8F9FA;
+            --surface: #FFFFFF;
+            --radius: 16px;
+            --border: #E4E7EC;
+            --red: #D32F2F;
+        }
+
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: var(--bg);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .iphone {
+            width: 100%;
+            max-width: 414px;
+            height: 100vh;
+            background: var(--surface);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content {
+            flex: 1;
+            padding: 40px 24px;
+            text-align: center;
+        }
+
+        .icon-success {
+            width: 64px;
+            height: 64px;
+            background: #34C759;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            color: white;
+        }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        p {
+            color: var(--muted);
+            margin: 12px 0 32px;
+        }
+
+        .qr-card {
+            background: #F2F4F7;
+            padding: 24px;
+            border-radius: 24px;
+            border: 2px dashed var(--border);
+            display: inline-block;
+        }
+
+        .qr-img {
+            width: 220px;
+            height: 220px;
+            border-radius: 12px;
+        }
+
+        .footer {
+            padding: 24px;
+            gap: 12px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .btn {
+            display: block;
+            padding: 20px;
+            border-radius: var(--radius);
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="iphone">
+        <div class="content">
+            <div class="icon-success"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="3">
+                    <path d="M20 6L9 17l-5-5" />
+                </svg></div>
+            <h2>¡Perfil listo!</h2>
+            <p>Tu código QR de emergencia ha sido generado correctamente.</p>
+            <div class="qr-card">
+                <img id="qr-display" src="" alt="QR Emergency" class="qr-img">
+            </div>
+        </div>
+        <div class="footer">
+            <a id="qr-download" href="#" download="VitalID-QR.png" class="btn btn-primary">Descargar QR</a>
+            <a href="index.html" class="btn btn-secondary">Volver al inicio</a>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        window.onload = () => {
+            const lastId = localStorage.getItem('infovital_last_id');
+            if (lastId) {
+                const domain = window.location.origin;
+                const profileUrl = `${domain}/u/${lastId}`;
+
+                // Create a temporary hidden container for QR generation
+                const temp = document.createElement('div');
+                new QRCode(temp, {
+                    text: profileUrl,
+                    width: 400,
+                    height: 400,
+                    colorDark: "#0052FF",
+                    colorLight: "#FFFFFF",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+
+                // Extract the image once rendered
+                setTimeout(() => {
+                    const canvas = temp.querySelector('canvas');
+                    const qrDataUrl = canvas ? canvas.toDataURL("image/png") : temp.querySelector('img').src;
+                    document.getElementById('qr-display').src = qrDataUrl;
+                    document.getElementById('qr-download').href = qrDataUrl;
+                }, 200);
+            }
+        };
+    </script>
+</body>
+
+</html>
