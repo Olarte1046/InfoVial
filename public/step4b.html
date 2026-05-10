@@ -232,10 +232,10 @@
         window.onload = () => {
             document.getElementById('summary-paciente').textContent = `${data.nombre} (${data.edad} años)`;
             document.getElementById('summary-sangre').textContent = data.sangre;
-           document.getElementById('summary-condiciones').textContent =
-    Array.isArray(data.condiciones)
-        ? data.condiciones.join(', ')
-        : (data.condiciones || 'Ninguna');
+            document.getElementById('summary-condiciones').textContent =
+                Array.isArray(data.condiciones)
+                    ? data.condiciones.join(', ')
+                    : (data.condiciones || 'Ninguna');
             document.getElementById('summary-medicamentos').textContent = data.medicamentos || 'Ninguno';
             document.getElementById('summary-contacto-nom').textContent = `${data.contacto_nombre} (${data.contacto_relacion})`;
             document.getElementById('summary-contacto-tel').textContent = data.contacto_tel;
@@ -272,7 +272,7 @@
             };
 
             try {
-                const { data: inserted, error } = await supabase
+                const { data: inserted, error } = await supabaseClient
                     .from('profiles')
                     .insert([profileData])
                     .select()
