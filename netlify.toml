@@ -2,3 +2,28 @@
   from = "/u/*"
   to = "/u.html?id=:splat"
   status = 200
+
+[[redirects]]
+  from = "/privacy"
+  to = "/legal/privacy.html"
+  status = 200
+
+[[redirects]]
+  from = "/terms"
+  to = "/legal/terms.html"
+  status = 200
+
+[[redirects]]
+  from = "/disclaimer"
+  to = "/legal/disclaimer.html"
+  status = 200
+
+[[redirects]]
+  from = "/data-policy"
+  to = "/legal/data-policy.html"
+  status = 200
+
+[[redirects]]
+  from = "/manual"
+  to = "/legal/manual.html"
+  status = 200

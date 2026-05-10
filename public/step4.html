@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfoVital - Paso 4</title>
+    <title>InfoVial - Paso 4</title>
     <style>
         :root {
             --primary: #0052FF;
@@ -103,31 +103,37 @@
                     placeholder="+57 300 000 0000"></div>
             <div class="field"><label>Relación</label><input type="text" id="contacto_relacion"
                     placeholder="Ej. Esposa, Padre..."></div>
+            <div class="field"><label>Ciudad</label><input type="text" id="ciudad" placeholder="Ej. Bogotá"></div>
         </div>
         <div class="footer"><button onclick="save()" class="btn">Revisar perfil</button></div>
     </div>
-    <script src="/js/app.js"></script>
+    <script src="/js/app.js" defer></script>
     <script>
         function save() {
-            const nombre = document.getElementById('contacto_nombre').value;
-            const tel = document.getElementById('contacto_tel').value;
-            const relacion = document.getElementById('contacto_relacion').value;
-            if (!nombre || !tel || !relacion) {
-                alert('Por favor completa todos los campos del contacto');
+            const contacto_nombre = document.getElementById('contacto_nombre').value;
+            const contacto_tel = document.getElementById('contacto_tel').value;
+            const contacto_relacion = document.getElementById('contacto_relacion').value;
+            const ciudad = document.getElementById('ciudad').value;
+
+            if (!contacto_nombre || !contacto_tel || !contacto_relacion) {
+                alert('Por favor completa los campos de contacto');
                 return;
             }
-            InfoVital.saveData({
-                contacto_nombre: nombre,
-                contacto_tel: tel,
-                contacto_relacion: relacion
+
+            InfoVial.saveData({
+                contacto_nombre,
+                contacto_tel,
+                contacto_relacion,
+                ciudad
             });
-            InfoVital.nextStep('step4b.html');
+            InfoVial.nextStep('step4b.html');
         }
         window.onload = () => {
-            const data = InfoVital.getData();
+            const data = InfoVial.getData();
             if (data.contacto_nombre) document.getElementById('contacto_nombre').value = data.contacto_nombre;
             if (data.contacto_tel) document.getElementById('contacto_tel').value = data.contacto_tel;
             if (data.contacto_relacion) document.getElementById('contacto_relacion').value = data.contacto_relacion;
+            if (data.ciudad) document.getElementById('ciudad').value = data.ciudad;
         }
     </script>
 </body>

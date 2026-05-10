@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfoVial - Manual de Uso</title>
+    <style>
+        :root {
+            --primary: #0052FF;
+            --text: #1A1C1E;
+            --bg: #F8F9FA;
+        }
+
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .card {
+            background: white;
+            max-width: 600px;
+            width: 100%;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-top: 0;
+        }
+
+        h2 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-top: 24px;
+            border-bottom: 2px solid var(--bg);
+            padding-bottom: 8px;
+        }
+
+        p,
+        li {
+            font-size: 15px;
+            color: #444;
+        }
+
+        .step {
+            font-weight: 700;
+            color: var(--primary);
+            margin-right: 8px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 32px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>MANUAL DE USO – INFOVIAL</h1>
+
+        <h2>1. CREAR TU PERFIL</h2>
+        <p>Ingresa tus datos básicos como nombre, edad y tipo de sangre.</p>
+
+        <h2>2. AGREGAR INFORMACIÓN MÉDICA</h2>
+        <p>Incluye condiciones médicas y medicamentos si aplica.</p>
+
+        <h2>3. AGREGAR CONTACTOS DE EMERGENCIA</h2>
+        <p>Registra una o más personas que deben ser contactadas en caso de emergencia.</p>
+
+        <h2>4. GENERAR TU QR</h2>
+        <p>Una vez completado el registro, se generará automáticamente un código QR.</p>
+
+        <h2>5. USO DEL QR</h2>
+        <p>En caso de emergencia, cualquier persona puede escanear el QR para acceder a tu información médica básica.
+        </p>
+
+        <h2>6. RECOMENDACIÓN</h2>
+        <p>Coloca tu QR en lugares visibles como: Celular, Pulsera, Casco o Billetera.</p>
+
+        <a href="javascript:history.back()" class="back">← Volver</a>
+    </div>
+</body>
+
+</html>

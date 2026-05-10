@@ -1,8 +1,8 @@
 /**
- * InfoVital Persistence & Navigation Helper
+ * InfoVial Persistence & Navigation Helper
  */
-const InfoVital = {
-    storageKey: 'infovital_registration_data',
+const InfoVial = {
+    storageKey: 'infovial_registration_data',
 
     // Load data from localStorage
     getData() {
@@ -15,7 +15,9 @@ const InfoVital = {
             medicamentos: '',
             contacto_nombre: '',
             contacto_tel: '',
-            contacto_relacion: ''
+            contacto_relacion: '',
+            ciudad: '',
+            eps: ''
         };
     },
 
@@ -34,6 +36,22 @@ const InfoVital = {
     // Navigation helper
     nextStep(nextPage) {
         window.location.href = nextPage;
+    },
+
+    // Guard to ensure user doesn't skip steps
+    checkProgress() {
+        const data = this.getData();
+        const path = window.location.pathname;
+
+        // Simple rules
+        if (path.includes('step2') && !data.nombre) window.location.href = 'step1.html';
+        if (path.includes('step3') && !data.nombre) window.location.href = 'step1.html';
+        if (path.includes('step4') && !data.nombre) window.location.href = 'step1.html';
+        if (path.includes('step5') && !localStorage.getItem('infovial_last_id')) window.location.href = 'index.html';
     }
 };
 
+// Auto-check on load (if not on index or public profile)
+if (!window.location.pathname.includes('u/') && !window.location.pathname.endsWith('index.html') && window.location.pathname !== '/') {
+    InfoVial.checkProgress();
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfoVial - Aviso Médico</title>
+    <style>
+        :root {
+            --primary: #0052FF;
+            --text: #1A1C1E;
+            --bg: #F8F9FA;
+        }
+
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .card {
+            background: white;
+            max-width: 500px;
+            width: 100%;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #D32F2F;
+            margin-top: 0;
+        }
+
+        h2 {
+            font-size: 14px;
+            text-transform: uppercase;
+            margin-top: 24px;
+        }
+
+        p,
+        li {
+            font-size: 15px;
+            color: #444;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 32px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>AVISO MÉDICO IMPORTANTE</h1>
+        <p>InfoVial NO es un servicio médico.</p>
+        <p>La información mostrada en este sistema:</p>
+        <ul>
+            <li>Es proporcionada directamente por el usuario</li>
+            <li>No ha sido verificada por profesionales de la salud</li>
+            <li>Puede estar incompleta o desactualizada</li>
+        </ul>
+        <p>Este sistema:</p>
+        <ul>
+            <li>No reemplaza atención médica profesional</li>
+            <li>No sustituye historias clínicas oficiales</li>
+            <li>No garantiza precisión en situaciones de emergencia</li>
+        </ul>
+        <p>En caso de emergencia, siempre contactar servicios médicos oficiales inmediatamente.</p>
+        <a href="javascript:history.back()" class="back">← Volver</a>
+    </div>
+</body>
+
+</html>

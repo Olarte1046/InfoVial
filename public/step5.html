@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfoVital - Perfil Creado</title>
+    <title>InfoVial - Código QR</title>
     <style>
         :root {
             --primary: #0052FF;
@@ -114,21 +114,21 @@
                     stroke-width="3">
                     <path d="M20 6L9 17l-5-5" />
                 </svg></div>
-            <h2>¡Perfil listo!</h2>
-            <p>Tu código QR de emergencia ha sido generado correctamente.</p>
+            <h1>¡Perfil creado!</h1>
+            <p>Escanea tu código para verificar la información o descarga la imagen para portarla siempre contigo.</p>
             <div class="qr-card">
                 <img id="qr-display" src="" alt="QR Emergency" class="qr-img">
             </div>
         </div>
         <div class="footer">
-            <a id="qr-download" href="#" download="VitalID-QR.png" class="btn btn-primary">Descargar QR</a>
+            <a id="qr-download" href="#" download="InfoVial-QR.png" class="btn btn-primary">Descargar QR</a>
             <a href="index.html" class="btn btn-secondary">Volver al inicio</a>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+    <script defer>
         window.onload = () => {
-            const lastId = localStorage.getItem('infovital_last_id');
+            const lastId = localStorage.getItem('infovial_last_id');
             if (lastId) {
                 const domain = window.location.origin;
                 const profileUrl = `${domain}/u/${lastId}`;

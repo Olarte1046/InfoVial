@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfoVital - Paso 3</title>
+    <title>InfoVial - Paso 3</title>
     <style>
         :root {
             --primary: #0052FF;
@@ -99,15 +99,15 @@
         </div>
         <div class="footer"><button onclick="save()" class="btn">Continuar</button></div>
     </div>
-    <script src="/js/app.js"></script>
+    <script src="/js/app.js" defer></script>
     <script>
         function save() {
             const meds = document.getElementById('medicamentos').value;
-            InfoVital.saveData({ medicamentos: meds });
-            InfoVital.nextStep('step4.html');
+            InfoVial.saveData({ medicamentos: meds });
+            InfoVial.nextStep('step4.html');
         }
         window.onload = () => {
-            const data = InfoVital.getData();
+            const data = InfoVial.getData();
             if (data.medicamentos) document.getElementById('medicamentos').value = data.medicamentos;
         }
     </script>

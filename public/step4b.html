@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfoVital - Revisión</title>
+    <title>InfoVial - Revisión</title>
     <style>
         :root {
             --primary: #0052FF;
@@ -170,7 +170,7 @@
 
 <body>
     <div class="iphone">
-        <div class="header">REVISIÓN FINAL</div>
+        <div class="header">REVISIÓN FINAL INFOVIAL</div>
         <div class="content">
             <h2>Confirma tus datos</h2>
             <p class="desc">Verifica que la información sea correcta antes de generar tu código QR permanente.</p>
@@ -212,8 +212,10 @@
             <div class="legal-check">
                 <input type="checkbox" id="legal-consent" onchange="toggleConfirm()">
                 <label for="legal-consent">
-                    Declaro que he leído y acepto la <a href="/privacy">Política de Privacidad</a>,
-                    los <a href="/terms">Términos</a> y el <a href="/disclaimer">Aviso Legal</a>.
+                    Declaro que he leído y acepto la <a href="/legal/privacy.html">Política de Privacidad</a>,
+                    los <a href="/legal/terms.html">Términos</a>, el <a href="/legal/data-policy.html">Tratamiento de
+                        Datos</a>
+                    y el <a href="/legal/disclaimer.html">Aviso Legal</a>.
                 </label>
             </div>
         </div>
@@ -223,12 +225,12 @@
             <a href="step1.html" class="btn btn-secondary">Editar información</a>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="/js/supabase-config.js"></script>
-    <script src="/js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+    <script src="/js/supabase-config.js" defer></script>
+    <script src="/js/app.js" defer></script>
     <script>
-        const data = InfoVital.getData();
+        const data = InfoVial.getData();
         window.onload = () => {
             document.getElementById('summary-paciente').textContent = `${data.nombre} (${data.edad} años)`;
             document.getElementById('summary-sangre').textContent = data.sangre;
@@ -247,13 +249,13 @@
 
         async function confirmCreation() {
             const btn = document.getElementById('confirm-btn');
-            const data = InfoVital.getData(); // Get fresh data
+            const data = InfoVial.getData(); // Get fresh data
             btn.disabled = true;
             btn.textContent = 'Creando perfil...';
 
             // Generate unique ID in hex (8 characters)
             const hexId = Math.random().toString(16).slice(2, 10);
-            const fullId = `VITAL-${hexId.toUpperCase()}`;
+            const fullId = `VIAL-${hexId.toUpperCase()}`; // Project name change
 
             const profileData = {
                 vital_id: fullId,
@@ -281,8 +283,8 @@
                 if (error) throw error;
 
                 // Save vital_id for the QR generation in step5
-                localStorage.setItem('infovital_last_id', fullId);
-                InfoVital.nextStep('step5.html');
+                localStorage.setItem('infovial_last_id', fullId);
+                InfoVial.nextStep('step5.html');
 
             } catch (err) {
                 console.error('Error Supabase:', err);

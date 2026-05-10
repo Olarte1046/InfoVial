@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfoVital - Paso 1</title>
+    <title>InfoVial - Paso 1</title>
     <style>
         :root {
             --primary: #0052FF;
@@ -134,7 +134,7 @@
         </div>
         <div class="footer"><button onclick="save()" class="btn">Continuar</button></div>
     </div>
-    <script src="/js/app.js"></script>
+    <script src="/js/app.js" defer></script>
     <script>
         let selectedBlood = '';
         function setBlood(b) {
@@ -150,12 +150,11 @@
                 alert('Por favor completa todos los campos');
                 return;
             }
-            InfoVital.saveData({ nombre, edad, sangre: selectedBlood });
-            InfoVital.nextStep('step2.html');
+            InfoVial.saveData({ nombre, edad, sangre: selectedBlood });
+            InfoVial.nextStep('step2.html');
         }
-        // Load existing
         window.onload = () => {
-            const data = InfoVital.getData();
+            const data = InfoVial.getData();
             if (data.nombre) document.getElementById('nombre').value = data.nombre;
             if (data.edad) document.getElementById('edad').value = data.edad;
             if (data.sangre) setBlood(data.sangre);
