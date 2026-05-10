@@ -148,6 +148,24 @@
             margin-bottom: 16px;
             box-shadow: var(--shadow-urgent);
             transition: transform 0.1s ease;
+            animation: pulse-red 2s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.4);
+            }
+
+            70% {
+                transform: scale(1.02);
+                box-shadow: 0 0 0 10px rgba(211, 47, 47, 0);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(211, 47, 47, 0);
+            }
         }
 
         .emergency-btn:active {
@@ -302,7 +320,7 @@
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="/js/supabase-config.js" defer></script>
-    <script src="/js/app.js" defer></script>
+    <script src="/js/app.js"></script>
 </head>
 
 <body class="loading">
@@ -402,80 +420,96 @@
     </div>
 
     <script>
-        (async function init() {
+        window.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const idFromParam = urlParams.get('id');
             const idFromPath = window.location.pathname.split('/').filter(Boolean).pop();
-            const userId = idFromParam || idFromPath;
+            let userId = idFromParam || idFromPath;
 
-            console.log('--- DIAGNOSTICS ---');
-            console.log('Full URL:', window.location.href);
-            console.log('Pathname:', window.location.pathname);
-            console.log('Search Params:', window.location.search);
-            console.log('Resolved userId:', userId);
-
-            console.log('Resolving profile for ID:', userId);
+            // Diagnostic Logs
+            console.log('--- InfoVial Resolver ---');
+            console.log('URL:', window.location.href);
+            console.log('ID extracted:', userId);
 
             if (!userId || userId === 'u' || userId === 'u.html' || userId === '') {
+                console.error('Invalid ID');
                 showError();
                 return;
             }
+
+            // Force Uppercase for matching
+            userId = userId.toUpperCase();
 
             try {
                 // Performance Optimization: Check local cache first
                 const cachedData = localStorage.getItem(`infovial_cache_${userId}`);
                 if (cachedData) {
-                    console.log('Serving from cache...');
+                    console.log('Serving from cache:', userId);
                     injectData(JSON.parse(cachedData));
                     document.body.classList.remove('loading');
+                }
+
+                if (typeof supabaseClient === 'undefined') {
+                    throw new Error('supabaseClient not initialized. Check script ordering.');
                 }
 
                 const { data, error } = await supabaseClient
                     .from('profiles')
                     .select('*')
-                    .eq('vital_id', userId.toUpperCase())
+                    .eq('vital_id', userId)
                     .single();
 
                 if (error) {
-                    console.error('Supabase query error:', error);
-                    // Only throw if there's no cache
+                    console.error('Supabase Error:', error);
                     if (!cachedData) throw error;
                     return;
                 }
 
                 if (!data) {
-                    console.warn('No profile found for userId:', userId);
+                    console.warn('DB returned empty for:', userId);
                     if (!cachedData) throw new Error('User not found');
                     return;
                 }
 
-                console.log('Profile found:', data);
-                // Update cache
+                console.log('Successfully fetched:', data.nombre);
                 localStorage.setItem(`infovial_cache_${userId}`, JSON.stringify(data));
-
                 injectData(data);
                 document.body.classList.remove('loading');
-            }
-
-            catch (err) {
-                console.error(err);
+            } catch (err) {
+                console.error('Final Catch:', err.message);
                 showError();
             }
-        })();
+        });
 
         function injectData(u) {
+            if (!u) return;
             document.title = `InfoVial - ${u.nombre}`;
-            document.getElementById('user-name-display').textContent = u.nombre;
 
-            document.getElementById('user-meta').textContent = `${u.edad} años • ${u.ciudad}`;
-            document.getElementById('user-blood').textContent = u.sangre;
-            document.getElementById('user-allergies').textContent = u.condiciones || 'Ninguna conocida';
-            document.getElementById('user-conditions').textContent = u.condiciones || 'Ninguna conocida';
-            document.getElementById('user-eps').textContent = u.eps;
-            document.getElementById('user-id').textContent = u.vital_id;
-            document.getElementById('user-meds').textContent = u.medicamentos || 'Ninguno';
+            const nameEl = document.getElementById('user-name-display');
+            if (nameEl) nameEl.textContent = u.nombre;
 
-            document.getElementById('emergency-btn').href = `tel:${u.telefono_emergencia}`;
+            const metaEl = document.getElementById('user-meta');
+            if (metaEl) metaEl.textContent = `${u.edad || '??'} años • ${u.ciudad || 'No especificada'}`;
+
+            const bloodEl = document.getElementById('user-blood');
+            if (bloodEl) bloodEl.textContent = u.sangre || '??';
+
+            const allergyEl = document.getElementById('user-allergies');
+            if (allergyEl) allergyEl.textContent = u.condiciones || 'Ninguna conocida';
+
+            const condEl = document.getElementById('user-conditions');
+            if (condEl) condEl.textContent = u.condiciones || 'Ninguna conocida';
+
+            const epsEl = document.getElementById('user-eps');
+            if (epsEl) epsEl.textContent = u.eps || 'No especificada';
+
+            const medsEl = document.getElementById('user-meds');
+            if (medsEl) medsEl.textContent = u.medicamentos || 'Ninguno';
+
+            const btnEl = document.getElementById('emergency-btn');
+            if (btnEl && u.telefono_emergencia) {
+                btnEl.href = `tel:${u.telefono_emergencia}`;
+            }
         }
 
         function showError() {
