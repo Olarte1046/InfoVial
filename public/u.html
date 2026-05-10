@@ -32,11 +32,39 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-neutral);
+            background: radial-gradient(at 0% 0%, #F4F7F9 0%, #FFFFFF 50%, #E8F0FE 100%);
             color: var(--text-main);
             margin: 0;
             display: flex;
             justify-content: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 414px;
+            min-height: 100dvh;
+            padding: 16px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .clinical-card,
+        .patient-header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
         .container {
@@ -290,7 +318,7 @@
         <!-- HEADER PACIENTE -->
         <header class="patient-header">
             <div class="patient-info">
-                <h1 id="user-name">... <span class="premium-badge">InfoVial Basic</span></h1>
+                <h1><span id="user-name-display">...</span> <span class="premium-badge">InfoVial Basic</span></h1>
                 <p id="user-meta">...</p>
             </div>
             <div class="blood-tag">
@@ -380,6 +408,12 @@
             const idFromPath = window.location.pathname.split('/').filter(Boolean).pop();
             const userId = idFromParam || idFromPath;
 
+            console.log('--- DIAGNOSTICS ---');
+            console.log('Full URL:', window.location.href);
+            console.log('Pathname:', window.location.pathname);
+            console.log('Search Params:', window.location.search);
+            console.log('Resolved userId:', userId);
+
             console.log('Resolving profile for ID:', userId);
 
             if (!userId || userId === 'u' || userId === 'u.html' || userId === '') {
@@ -399,7 +433,7 @@
                 const { data, error } = await supabaseClient
                     .from('profiles')
                     .select('*')
-                    .eq('vital_id', userId)
+                    .eq('vital_id', userId.toUpperCase())
                     .single();
 
                 if (error) {
@@ -431,7 +465,7 @@
 
         function injectData(u) {
             document.title = `InfoVial - ${u.nombre}`;
-            document.getElementById('user-name').textContent = u.nombre;
+            document.getElementById('user-name-display').textContent = u.nombre;
 
             document.getElementById('user-meta').textContent = `${u.edad} años • ${u.ciudad}`;
             document.getElementById('user-blood').textContent = u.sangre;
