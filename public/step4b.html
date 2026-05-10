@@ -247,6 +247,7 @@
 
         async function confirmCreation() {
             const btn = document.getElementById('confirm-btn');
+            const data = InfoVital.getData(); // Get fresh data
             btn.disabled = true;
             btn.textContent = 'Creando perfil...';
 
@@ -254,39 +255,41 @@
             const hexId = Math.random().toString(16).slice(2, 10);
             const fullId = `VITAL-${hexId.toUpperCase()}`;
 
-          const profileData = {
-    vital_id: fullId,
-    nombre: data.nombre || null,
-    edad: parseInt(data.edad) || null,
-    sangre: data.sangre || null,
-    condiciones: Array.isArray(data.condiciones)
-        ? data.condiciones.join(', ')
-        : data.condiciones || null,
-    medicamentos: data.medicamentos || null,
-    eps: "No especificado",
-    telefono_emergencia: data.contacto_tel || null,
-    contacto_nombre: data.contacto_nombre || null,
-    contacto_relacion: data.contacto_relacion || null,
-    ciudad: "No especificada"
-};
+            const profileData = {
+                vital_id: fullId,
+                nombre: data.nombre || null,
+                edad: parseInt(data.edad) || null,
+                sangre: data.sangre || null,
+                condiciones: Array.isArray(data.condiciones)
+                    ? data.condiciones.join(', ')
+                    : data.condiciones || null,
+                medicamentos: data.medicamentos || null,
+                eps: data.eps || "No especificado",
+                telefono_emergencia: data.contacto_tel || null,
+                contacto_nombre: data.contacto_nombre || null,
+                contacto_relacion: data.contacto_relacion || null,
+                ciudad: data.ciudad || "No especificada"
+            };
 
-           try {
-    const { data: inserted, error } = await supabase
-        .from('profiles')
-        .insert([profileData])
-        .select()
-        .single();
+            try {
+                const { data: inserted, error } = await supabase
+                    .from('profiles')
+                    .insert([profileData])
+                    .select()
+                    .single();
 
-    if (error) throw error;
+                if (error) throw error;
 
-    localStorage.setItem('infovital_last_id', inserted.id);
-    InfoVital.nextStep('step5.html');
+                // Save vital_id for the QR generation in step5
+                localStorage.setItem('infovital_last_id', fullId);
+                InfoVital.nextStep('step5.html');
 
-} catch (err) {
-    alert('Error al guardar en la nube: ' + err.message);
-    btn.disabled = false;
-    btn.textContent = 'Confirmar y crear QR';
-}
+            } catch (err) {
+                console.error('Error Supabase:', err);
+                alert('Error al guardar en la nube: ' + err.message);
+                btn.disabled = false;
+                btn.textContent = 'Confirmar y crear QR';
+            }
         }
     </script>
 </body>

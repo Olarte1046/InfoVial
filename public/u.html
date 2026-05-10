@@ -361,11 +361,11 @@
             }
 
             try {
-                const {
-                    data, error
-                }
-
-                    = await supabase.from('profiles').select('*').eq('id', userId).single();
+                const { data, error } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('vital_id', userId)
+                    .single();
 
                 if (error || !data) throw new Error('User not found');
 
@@ -380,34 +380,18 @@
         })();
 
         function injectData(u) {
-            document.title = `VitalID - $ {
-                u.nombre
-            }
-
-            `;
+            document.title = `VitalID - ${u.nombre}`;
             document.getElementById('user-name').textContent = u.nombre;
 
-            document.getElementById('user-meta').textContent = `$ {
-                u.edad
-            }
-
-            años • $ {
-                u.ciudad
-            }
-
-            `;
+            document.getElementById('user-meta').textContent = `${u.edad} años • ${u.ciudad}`;
             document.getElementById('user-blood').textContent = u.sangre;
-            document.getElementById('user-allergies').textContent = u.alergias.join(', ') || 'Ninguna conocida';
-            document.getElementById('user-conditions').textContent = u.condiciones.join(', ') || 'Ninguna conocida';
+            document.getElementById('user-allergies').textContent = u.condiciones || 'Ninguna conocida';
+            document.getElementById('user-conditions').textContent = u.condiciones || 'Ninguna conocida';
             document.getElementById('user-eps').textContent = u.eps;
-            document.getElementById('user-id').textContent = u.id;
-            document.getElementById('user-meds').textContent = u.medicamentos.join(', ') || 'Ninguno';
+            document.getElementById('user-id').textContent = u.vital_id;
+            document.getElementById('user-meds').textContent = u.medicamentos || 'Ninguno';
 
-            document.getElementById('emergency-btn').href = `tel:$ {
-                u.telefono_emergencia
-            }
-
-            `;
+            document.getElementById('emergency-btn').href = `tel:${u.telefono_emergencia}`;
         }
 
         function showError() {

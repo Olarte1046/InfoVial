@@ -37,10 +37,3 @@ const InfoVital = {
     }
 };
 
-/**
- * Supabase Initialization
- */
-let supabase;
-if (typeof SUPABASE_URL !== 'undefined') {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-}
