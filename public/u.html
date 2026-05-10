@@ -42,7 +42,7 @@
         .container {
             width: 100%;
             max-width: 414px;
-            min-height: 100vh;
+            min-height: 100dvh;
             padding: 16px;
         }
 
@@ -74,6 +74,9 @@
             font-size: 24px;
             font-weight: 800;
             letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .patient-info p {
@@ -211,6 +214,25 @@
             text-align: right;
         }
 
+        .premium-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #E8F0FE;
+            color: var(--medical-blue);
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-left: 8px;
+            opacity: 0.8;
+        }
+
+        .premium-locked {
+            filter: grayscale(1);
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
         footer {
             text-align: center;
             padding: 30px;
@@ -268,7 +290,7 @@
         <!-- HEADER PACIENTE -->
         <header class="patient-header">
             <div class="patient-info">
-                <h1 id="user-name">...</h1>
+                <h1 id="user-name">... <span class="premium-badge">InfoVial Basic</span></h1>
                 <p id="user-meta">...</p>
             </div>
             <div class="blood-tag">
@@ -327,9 +349,9 @@
                     <label>EPS / Seguro</label>
                     <span id="user-eps">...</span>
                 </div>
-                <div class="data-row">
-                    <label>ID Paciente</label>
-                    <span id="user-id">...</span>
+                <div class="data-row premium-locked" style="opacity: 0.4;">
+                    <label>Historial Clínico (Premium)</label>
+                    <span>Bloqueado</span>
                 </div>
                 <div class="data-row">
                     <label>Medicamentos</label>

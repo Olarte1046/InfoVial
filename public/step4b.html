@@ -27,7 +27,7 @@
         .iphone {
             width: 100%;
             max-width: 414px;
-            height: 100vh;
+            height: 100dvh;
             background: var(--surface);
             display: flex;
             flex-direction: column;
@@ -230,7 +230,11 @@
     <script src="/js/supabase-config.js" defer></script>
     <script src="/js/app.js" defer></script>
     <script>
+        // CRITICAL: Hard redirect if data is missing BEFORE window.onload
         const data = InfoVial.getData();
+        if (!data || !data.nombre) {
+            window.location.href = 'step1.html';
+        }
         window.onload = () => {
             document.getElementById('summary-paciente').textContent = `${data.nombre} (${data.edad} años)`;
             document.getElementById('summary-sangre').textContent = data.sangre;

@@ -27,7 +27,7 @@
         .iphone {
             width: 100%;
             max-width: 414px;
-            height: 100vh;
+            height: 100dvh;
             background: var(--surface);
             display: flex;
             flex-direction: column;
@@ -100,6 +100,11 @@
             <div class="check-item" onclick="toggleCondition(this)">Epilepsia</div>
             <div class="check-item" onclick="toggleCondition(this)">Hipertensión</div>
             <div class="check-item" id="none-opt" onclick="setNone()">Ninguna</div>
+            <div class="check-item" id="other-opt" onclick="toggleOther()">Otra...</div>
+            <div id="other-input-container" style="display: none; margin-top: -8px; margin-bottom: 12px;">
+                <input type="text" id="other-condition" placeholder="Especifique condición..."
+                    style="width: 100%; padding: 16px; border: 2px solid var(--primary); border-radius: var(--radius); font-size: 16px;">
+            </div>
         </div>
         <div class="footer"><button onclick="save()" class="btn">Continuar</button></div>
     </div>
@@ -121,9 +126,35 @@
             conditions.clear();
             document.querySelectorAll('.check-item').forEach(el => el.classList.remove('active'));
             document.getElementById('none-opt').classList.add('active');
+            document.getElementById('other-input-container').style.display = 'none';
+            document.getElementById('other-condition').value = '';
         }
+
+        function toggleOther() {
+            const el = document.getElementById('other-opt');
+            const container = document.getElementById('other-input-container');
+            const input = document.getElementById('other-condition');
+
+            if (el.classList.contains('active')) {
+                el.classList.remove('active');
+                container.style.display = 'none';
+            } else {
+                el.classList.add('active');
+                container.style.display = 'block';
+                input.focus();
+                document.getElementById('none-opt').classList.remove('active');
+            }
+        }
+
         function save() {
             const list = Array.from(conditions);
+
+            // Add 'Otra' if active
+            const otherVal = document.getElementById('other-condition').value.trim();
+            if (document.getElementById('other-opt').classList.contains('active') && otherVal) {
+                list.push(otherVal);
+            }
+
             if (list.length === 0 && !document.getElementById('none-opt').classList.contains('active')) {
                 alert('Por favor selecciona al menos una opción');
                 return;
@@ -134,15 +165,21 @@
         window.onload = () => {
             const data = InfoVial.getData();
             if (data.condiciones && data.condiciones.length > 0) {
-                document.querySelectorAll('.check-item').forEach(el => {
-                    if (data.condiciones.includes(el.textContent)) {
-                        conditions.add(el.textContent);
-                        el.classList.add('active');
+                const known = ['Diabetes', 'Epilepsia', 'Hipertensión'];
+                data.condiciones.forEach(c => {
+                    if (known.includes(c)) {
+                        conditions.add(c);
+                        document.querySelectorAll('.check-item').forEach(el => {
+                            if (el.textContent === c) el.classList.add('active');
+                        });
+                    } else {
+                        // It's 'Otra'
+                        toggleOther();
+                        document.getElementById('other-condition').value = c;
                     }
                 });
             } else if (data.condiciones && data.condiciones.length === 0) {
-                // Check if it was explicitly "None" or just empty
-                // In this simple MVP, we just assume empty means not set yet unless confirmed
+                setNone();
             }
         }
     </script>

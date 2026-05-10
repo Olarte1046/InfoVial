@@ -27,7 +27,7 @@
         .iphone {
             width: 100%;
             max-width: 414px;
-            height: 100vh;
+            height: 100dvh;
             background: var(--surface);
             display: flex;
             flex-direction: column;
@@ -65,6 +65,30 @@
             font-size: 16px;
             font-family: inherit;
             resize: none;
+            transition: border-color 0.2s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .check-item-btn {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--muted);
+        }
+
+        .check-item-btn.active {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: #F0F5FF;
         }
 
         .footer {
@@ -96,13 +120,26 @@
             <h2>Medicamentos</h2>
             <p>Indica si tomas algún medicamento de forma diaria o recurrente.</p>
             <textarea id="medicamentos" placeholder="Ej. Insulina diaria 20mg, Losartán..."></textarea>
+
+            <div style="display: flex; gap: 10px; margin-top: 12px;">
+                <button type="button" onclick="setNoMeds()" class="check-item-btn">Ninguno</button>
+            </div>
         </div>
         <div class="footer"><button onclick="save()" class="btn">Continuar</button></div>
     </div>
     <script src="/js/app.js" defer></script>
     <script>
+        function setNoMeds() {
+            document.getElementById('medicamentos').value = 'Ninguno';
+            document.getElementById('medicamentos').focus();
+        }
+
         function save() {
-            const meds = document.getElementById('medicamentos').value;
+            const meds = document.getElementById('medicamentos').value.trim();
+            if (!meds) {
+                alert('Si no toma medicamentos, escriba "Ninguno" o presione el botón.');
+                return;
+            }
             InfoVial.saveData({ medicamentos: meds });
             InfoVial.nextStep('step4.html');
         }
