@@ -7,13 +7,15 @@
     <title>InfoVial - Paso 4</title>
     <style>
         :root {
-            --primary: #0052FF;
-            --text: #1A1C1E;
-            --muted: #667085;
-            --bg: #F8F9FA;
+            --primary: #12324A;
+            --primary-night: #0E2235;
+            --text: #0F1720;
+            --muted: #5F6368;
+            --bg: #F8FAFC;
             --surface: #FFFFFF;
             --radius: 16px;
-            --border: #E4E7EC;
+            --border: #D8E0E7;
+            --shadow: 0 4px 12px rgba(18, 50, 74, 0.05);
         }
 
         body {
@@ -62,12 +64,24 @@
             margin-bottom: 8px;
         }
 
-        input {
+        input[type="text"],
+        input[type="tel"],
+        select {
             width: 100%;
-            padding: 16px;
+            padding: 18px;
             border: 2px solid var(--border);
             border-radius: var(--radius);
-            font-size: 16px;
+            font-size: 17px;
+            outline: none;
+            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.9);
+            appearance: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(18, 50, 74, 0.1);
         }
 
         .footer {

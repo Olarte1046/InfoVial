@@ -7,15 +7,15 @@
     <title>InfoVial - Perfil Médico Crítico</title>
     <style>
         :root {
-            --medical-blue: #0052FF;
+            --medical-blue: #12324A;
+            --medical-light: #E8F0FE;
             --emergency-red: #D32F2F;
-            /* Rojo clínico profundo, alta visibilidad */
-            --bg-neutral: #F4F7F9;
+            --bg-clinical: #F8FAFC;
             --surface: #FFFFFF;
-            --text-main: #121212;
+            --text-main: #0F1720;
             --text-muted: #5F6368;
             --radius: 16px;
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
             --shadow-urgent: 0 8px 24px rgba(211, 47, 47, 0.25);
         }
 
@@ -32,7 +32,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
-            background: radial-gradient(at 0% 0%, #F4F7F9 0%, #FFFFFF 50%, #E8F0FE 100%);
+            background: radial-gradient(at 0% 0%, #F8FAFC 0%, #FFFFFF 50%, #D8E0E7 100%);
             color: var(--text-main);
             margin: 0;
             display: flex;
@@ -263,7 +263,7 @@
         .premium-badge {
             display: inline-block;
             padding: 4px 8px;
-            background: #E8F0FE;
+            background: var(--medical-light);
             color: var(--medical-blue);
             border-radius: 4px;
             font-size: 10px;
@@ -386,7 +386,8 @@
                 </div>
                 <div class="clinical-entry">
                     <div class="entry-icon" style="background: #E8F0FE;">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0052FF" stroke-width="3">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--medical-blue)"
+                            stroke-width="3">
                             <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
                         </svg>
                     </div>

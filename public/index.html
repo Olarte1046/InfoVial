@@ -7,12 +7,14 @@
     <title>InfoVial - Bienvenida</title>
     <style>
         :root {
-            --primary: #0052FF;
-            --text: #1A1C1E;
-            --muted: #667085;
-            --bg: #F8F9FA;
+            --primary: #12324A;
+            --primary-night: #0E2235;
+            --text: #0F1720;
+            --muted: #5F6368;
+            --bg: #F8FAFC;
             --surface: #FFFFFF;
             --radius: 16px;
+            --shadow: 0 10px 40px rgba(18, 50, 74, 0.1);
         }
 
         * {
@@ -32,10 +34,10 @@
             width: 100%;
             max-width: 414px;
             height: 100dvh;
-            background: radial-gradient(at 0% 0%, #FFFFFF 0%, #F8F9FA 50%, #E8F0FE 100%);
+            background: radial-gradient(at 0% 0%, #F8FAFC 0%, #FFFFFF 50%, #D8E0E7 100%);
             display: flex;
             flex-direction: column;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             position: relative;
             overflow: hidden;
         }
@@ -47,7 +49,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle at 70% 30%, rgba(0, 82, 255, 0.05) 0%, transparent 50%);
+            background: radial-gradient(circle at 70% 30%, rgba(18, 50, 74, 0.05) 0%, transparent 50%);
             pointer-events: none;
             z-index: 0;
         }

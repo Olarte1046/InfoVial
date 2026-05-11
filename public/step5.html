@@ -7,14 +7,15 @@
     <title>InfoVial - Código QR</title>
     <style>
         :root {
-            --primary: #0052FF;
-            --text: #1A1C1E;
-            --muted: #667085;
-            --bg: #F8F9FA;
+            --primary: #12324A;
+            --text: #0F1720;
+            --muted: #5F6368;
+            --bg: #F8FAFC;
             --surface: #FFFFFF;
             --radius: 16px;
-            --border: #E4E7EC;
+            --border: #D8E0E7;
             --red: #D32F2F;
+            --shadow: 0 10px 40px rgba(18, 50, 74, 0.1);
         }
 
         body {
@@ -29,11 +30,12 @@
             width: 100%;
             max-width: 414px;
             height: 100dvh;
-            background: radial-gradient(at 0% 0%, #FFFFFF 0%, #F4F7F9 50%, #E8F0FE 100%);
+            background: radial-gradient(at 0% 0%, #F8FAFC 0%, #FFFFFF 50%, #D8E0E7 100%);
             display: flex;
             flex-direction: column;
             position: relative;
             overflow: hidden;
+            box-shadow: var(--shadow);
         }
 
         .iphone::before {
@@ -80,9 +82,9 @@
             background: white;
             padding: 32px;
             border-radius: 32px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 12px 40px rgba(18, 50, 74, 0.08);
             display: inline-block;
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
             animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -167,7 +169,7 @@
                     text: profileUrl,
                     width: 400,
                     height: 400,
-                    colorDark: "#0052FF",
+                    colorDark: "#12324A",
                     colorLight: "#FFFFFF",
                     correctLevel: QRCode.CorrectLevel.H
                 });

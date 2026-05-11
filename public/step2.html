@@ -7,13 +7,15 @@
     <title>InfoVial - Paso 2</title>
     <style>
         :root {
-            --primary: #0052FF;
-            --text: #1A1C1E;
-            --muted: #667085;
-            --bg: #F8F9FA;
+            --primary: #12324A;
+            --primary-night: #0E2235;
+            --text: #0F1720;
+            --muted: #5F6368;
+            --bg: #F8FAFC;
             --surface: #FFFFFF;
             --radius: 16px;
-            --border: #E4E7EC;
+            --border: #D8E0E7;
+            --shadow: 0 4px 12px rgba(18, 50, 74, 0.05);
         }
 
         body {
@@ -55,17 +57,19 @@
             display: flex;
             align-items: center;
             padding: 20px;
+            background: var(--surface);
             border: 2px solid var(--border);
             border-radius: var(--radius);
             margin-bottom: 12px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
+            box-shadow: var(--shadow);
         }
 
         .check-item.active {
             border-color: var(--primary);
-            background: #F0F5FF;
+            background: #F0F4F8;
             color: var(--primary);
         }
 

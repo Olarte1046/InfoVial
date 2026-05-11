@@ -7,30 +7,51 @@
     <title>InfoVial - Revisión</title>
     <style>
         :root {
-            --primary: #0052FF;
-            --text: #1A1C1E;
-            --muted: #667085;
-            --bg: #F8F9FA;
+            --medical-blue: #12324A;
+            --medical-light: #E8F0FE;
+            --emergency-red: #D32F2F;
+            --bg-clinical: #F8FAFC;
             --surface: #FFFFFF;
+            --text-main: #0F1720;
+            --text-muted: #5F6368;
             --radius: 16px;
-            --border: #E4E7EC;
-        }
-
-        body {
-            font-family: -apple-system, system-ui, sans-serif;
-            background: var(--bg);
-            margin: 0;
-            display: flex;
-            justify-content: center;
+            --border: #D8E0E7;
+            --shadow: 0 4px 12px rgba(18, 50, 74, 0.05);
         }
 
         .iphone {
             width: 100%;
             max-width: 414px;
             height: 100dvh;
-            background: var(--surface);
+            background: radial-gradient(at 0% 0%, #F8FAFC 0%, #FFFFFF 50%, #D8E0E7 100%);
             display: flex;
             flex-direction: column;
+            box-shadow: 0 10px 40px rgba(18, 50, 74, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .clinical-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .btn-primary {
+            background: var(--medical-blue);
+            color: white;
+            box-shadow: 0 4px 12px rgba(18, 50, 74, 0.2);
+        }
+
+        .legal-check label a {
+            color: var(--medical-blue);
+            text-decoration: none;
+            font-weight: 700;
         }
 
         .header {
@@ -175,19 +196,20 @@
             <h2>Confirma tus datos</h2>
             <p class="desc">Verifica que la información sea correcta antes de generar tu código QR permanente.</p>
 
-            <div class="review-card">
+            <div class="review-card clinical-card">
                 <a href="step1.html" class="edit-link">Editar</a>
                 <div class="review-group">
-                    <div class="label">Paciente</div>
+                    <div class="label">Identidad del Paciente</div>
                     <div id="summary-paciente" class="value">...</div>
                 </div>
                 <div class="review-group">
                     <div class="label">Tipo de Sangre</div>
-                    <div id="summary-sangre" class="value" style="color: var(--primary); font-size: 24px;">...</div>
+                    <div id="summary-sangre" class="value"
+                        style="color: var(--medical-blue); font-size: 24px; font-weight: 900;">...</div>
                 </div>
             </div>
 
-            <div class="review-card">
+            <div class="review-card clinical-card">
                 <a href="step2.html" class="edit-link" style="top: 15px">Editar</a>
                 <div class="review-group">
                     <div class="label">Condiciones / Alergias</div>
@@ -195,17 +217,18 @@
                 </div>
                 <div class="review-group">
                     <a href="step3.html" class="edit-link" style="top: 60px">Editar</a>
-                    <div class="label">Medicamentos</div>
+                    <div class="label">Medicamentos Actuales</div>
                     <div id="summary-medicamentos" class="value">...</div>
                 </div>
             </div>
 
-            <div class="review-card" style="border-left: 4px solid var(--primary);">
+            <div class="review-card clinical-card" style="border-left: 4px solid var(--emergency-red);">
                 <a href="step4.html" class="edit-link">Editar</a>
                 <div class="review-group">
-                    <div class="label">Contacto SOS</div>
+                    <div class="label">Contacto de Emergencia</div>
                     <div id="summary-contacto-nom" class="value">...</div>
-                    <div id="summary-contacto-tel" class="value" style="font-size: 15px; font-weight: 400;">...</div>
+                    <div id="summary-contacto-tel" class="value"
+                        style="font-size: 15px; font-weight: 500; color: var(--text-muted);">...</div>
                 </div>
             </div>
 
