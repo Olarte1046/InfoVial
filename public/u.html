@@ -328,6 +328,17 @@
     <div id="error-overlay">
         <h2 style="color: var(--emergency-red)">Perfil no encontrado</h2>
         <p>La información solicitada no existe o no se puede cargar en este momento.</p>
+        <button onclick="toggleDebug()"
+            style="margin-top: 20px; background: none; border: 1px solid #ddd; padding: 10px; border-radius: 8px; font-size: 10px;">Ver
+            Diagnóstico</button>
+    </div>
+
+    <div id="debug-panel"
+        style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #000; color: #0F0; padding: 20px; font-family: monospace; font-size: 10px; z-index: 9999; max-height: 50vh; overflow-y: auto;">
+        <button onclick="this.parentElement.style.display='none'"
+            style="float: right; color: #0F0; background: none; border: 1px solid #0F0;">Cerrar</button>
+        <h3>DEBUG INFOVIAL</h3>
+        <pre id="debug-log"></pre>
     </div>
 
     <div class="container">
@@ -420,63 +431,84 @@
     </div>
 
     <script>
+        function logDebug(msg) {
+            console.log(msg);
+            const log = document.getElementById('debug-log');
+            if (log) log.innerHTML += `> ${msg}\n`;
+        }
+
+        function toggleDebug() {
+            const p = document.getElementById('debug-panel');
+            p.style.display = p.style.display === 'none' ? 'block' : 'none';
+        }
+
         window.addEventListener('DOMContentLoaded', async () => {
+            logDebug('Initializing Resolver...');
             const urlParams = new URLSearchParams(window.location.search);
             const idFromParam = urlParams.get('id');
-            const idFromPath = window.location.pathname.split('/').filter(Boolean).pop();
-            let userId = idFromParam || idFromPath;
+            const pathParts = window.location.pathname.split('/').filter(Boolean);
+            const idFromPath = pathParts.pop();
 
-            // Diagnostic Logs
-            console.log('--- InfoVial Resolver ---');
-            console.log('URL:', window.location.href);
-            console.log('ID extracted:', userId);
+            // Try to find the pattern VIAL- or VITAL- anywhere in the pathname
+            const match = window.location.pathname.match(/VI[AL]+-[A-F0-9]+/i);
+            let userId = idFromParam || (match ? match[0] : idFromPath);
+
+            logDebug('URL: ' + window.location.href);
+            logDebug('Extracted ID: ' + userId);
 
             if (!userId || userId === 'u' || userId === 'u.html' || userId === '') {
-                console.error('Invalid ID');
+                logDebug('ERROR: Invalid ID sequence');
                 showError();
                 return;
             }
 
-            // Force Uppercase for matching
             userId = userId.toUpperCase();
+            logDebug('Querying ID: ' + userId);
 
             try {
-                // Performance Optimization: Check local cache first
                 const cachedData = localStorage.getItem(`infovial_cache_${userId}`);
                 if (cachedData) {
-                    console.log('Serving from cache:', userId);
+                    logDebug('Cache found, injecting...');
                     injectData(JSON.parse(cachedData));
                     document.body.classList.remove('loading');
                 }
 
                 if (typeof supabaseClient === 'undefined') {
-                    throw new Error('supabaseClient not initialized. Check script ordering.');
+                    throw new Error('supabaseClient not initialized');
                 }
+
+                // Try original ID, and also the swapped prefix just in case
+                const altId = userId.startsWith('VIAL-')
+                    ? userId.replace('VIAL-', 'VITAL-')
+                    : userId.replace('VITAL-', 'VIAL-');
+
+                logDebug('Querying Primary ID: ' + userId);
+                logDebug('Querying Alternate ID: ' + altId);
 
                 const { data, error } = await supabaseClient
                     .from('profiles')
                     .select('*')
-                    .eq('vital_id', userId)
+                    .or(`vital_id.eq.${userId},vital_id.eq.${altId}`)
                     .single();
 
                 if (error) {
-                    console.error('Supabase Error:', error);
+                    logDebug('Supabase Error: ' + JSON.stringify(error));
                     if (!cachedData) throw error;
                     return;
                 }
 
                 if (!data) {
-                    console.warn('DB returned empty for:', userId);
-                    if (!cachedData) throw new Error('User not found');
+                    logDebug('DB Error: Record not found in profiles table');
+                    if (!cachedData) throw new Error('User not found in DB');
                     return;
                 }
 
-                console.log('Successfully fetched:', data.nombre);
+                logDebug('SUCCESS: Record fetched for ' + data.nombre);
                 localStorage.setItem(`infovial_cache_${userId}`, JSON.stringify(data));
                 injectData(data);
                 document.body.classList.remove('loading');
             } catch (err) {
-                console.error('Final Catch:', err.message);
+                logDebug('CRITICAL CATCH: ' + err.message);
                 showError();
             }
         });
