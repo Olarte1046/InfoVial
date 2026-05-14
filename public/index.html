@@ -5,130 +5,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>InfoVial - Bienvenida</title>
+    <link rel="stylesheet" href="/css/main.css">
     <style>
-        :root {
-            --primary: #12324A;
-            --primary-night: #0E2235;
-            --text: #0F1720;
-            --muted: #5F6368;
-            --bg: #F8FAFC;
-            --surface: #FFFFFF;
-            --radius: 16px;
-            --shadow: 0 10px 40px rgba(18, 50, 74, 0.1);
-        }
-
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: -apple-system, system-ui, sans-serif;
-            background: var(--bg);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-        }
-
-        .iphone {
-            width: 100%;
-            max-width: 414px;
-            height: 100dvh;
-            background: radial-gradient(at 0% 0%, #F8FAFC 0%, #FFFFFF 50%, #D8E0E7 100%);
-            display: flex;
-            flex-direction: column;
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .iphone::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 70% 30%, rgba(18, 50, 74, 0.05) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .content {
-            flex: 1;
-            padding: 40px 24px;
+        .hero {
             text-align: center;
+            padding: 60px 0 40px;
+        }
+
+        .logo-container {
+            margin-bottom: 32px;
             display: flex;
-            flex-direction: column;
             justify-content: center;
         }
 
-        .logo {
-            width: 72px;
-            height: 72px;
-            background: var(--primary);
-            border-radius: 20px;
-            margin: 0 auto 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        h1 {
+        .hero h1 {
             font-size: 32px;
-            font-weight: 800;
-            color: var(--text);
-            margin: 0;
-            letter-spacing: -1px;
+            margin-bottom: 12px;
         }
 
-        p {
-            font-size: 18px;
-            color: var(--muted);
-            line-height: 1.5;
-            margin: 16px 0 40px;
-        }
-
-        .footer {
-            padding: 24px;
-        }
-
-        .btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--primary);
-            color: white;
-            text-decoration: none;
-            padding: 20px;
-            border-radius: var(--radius);
-            font-weight: 700;
+        .hero p {
             font-size: 17px;
+            color: var(--text-muted);
+            max-width: 300px;
+            margin: 0 auto;
         }
     </style>
 </head>
 
 <body>
-    <div class="iphone">
-        <div class="content">
-            <div class="logo">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="white">
-                    <path
-                        d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
+    <div class="app-container">
+        <div class="hero">
+            <div class="logo-container">
+                <svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg">
+                    <g>
+                        <path d="M16 10 L26 36 L36 10" fill="none" stroke="#0052FF" stroke-width="3"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                        <polyline points="18,24 22,24 24,18 27,30 30,22 34,24" fill="none" stroke="#2EC4B6"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </g>
+                    <text x="52" y="30" font-family="Manrope, sans-serif" font-size="20" font-weight="600"
+                        fill="#121212">Infovial</text>
                 </svg>
             </div>
-            <h1>InfoVial</h1>
-            <p>Crea tu perfil médico en minutos y genera un código QR para emergencias.</p>
+            <h1>Bienvenido</h1>
+            <p>Registra tu perfil médico de emergencia en menos de 2 minutos.</p>
         </div>
-        <div class="footer">
-            <a href="step1.html" class="btn">Crear mi perfil</a>
+
+        <div class="card">
+            <h2 class="mb-16">¿Por qué usar Infovial?</h2>
+            <div class="description mb-24">
+                En caso de emergencia, los primeros respondientes podrán acceder a tu información vital escaneando un
+                código QR.
+            </div>
+            <ul style="list-style: none; color: var(--text-muted); font-size: 14px;">
+                <li style="margin-bottom: 12px; display: flex; align-items: flex-start;">
+                    <span style="color: var(--success); margin-right: 10px; font-weight: bold;">✓</span>
+                    Sin aplicaciones que descargar
+                </li>
+                <li style="margin-bottom: 12px; display: flex; align-items: flex-start;">
+                    <span style="color: var(--success); margin-right: 10px; font-weight: bold;">✓</span>
+                    Acceso instantáneo vital
+                </li>
+                <li style="display: flex; align-items: flex-start;">
+                    <span style="color: var(--success); margin-right: 10px; font-weight: bold;">✓</span>
+                    Privacidad garantizada
+                </li>
+            </ul>
+        </div>
+
+        <div class="mt-auto">
+            <a href="step1.html" class="btn btn-primary">Comenzar registro</a>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="/js/supabase-config.js" defer></script>
     <script src="/js/app.js"></script>
     <script>
-        // InfoVial might not be defined immediately if deferring, but we clear it.
         localStorage.removeItem('infovial_registration_data');
     </script>
 </body>

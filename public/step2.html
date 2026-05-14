@@ -3,115 +3,78 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>InfoVial - Paso 2</title>
+    <link rel="stylesheet" href="/css/main.css">
     <style>
-        :root {
-            --primary: #12324A;
-            --primary-night: #0E2235;
-            --text: #0F1720;
-            --muted: #5F6368;
-            --bg: #F8FAFC;
-            --surface: #FFFFFF;
-            --radius: 16px;
-            --border: #D8E0E7;
-            --shadow: 0 4px 12px rgba(18, 50, 74, 0.05);
-        }
-
-        body {
-            font-family: -apple-system, system-ui, sans-serif;
-            background: var(--bg);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-        }
-
-        .iphone {
-            width: 100%;
-            max-width: 414px;
-            height: 100dvh;
-            background: var(--surface);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .header {
-            padding: 20px 24px;
-            font-weight: 700;
-            color: var(--muted);
-            font-size: 14px;
-        }
-
-        .content {
-            flex: 1;
-            padding: 0 24px;
-        }
-
-        h2 {
-            font-size: 26px;
-            font-weight: 800;
-            margin-bottom: 24px;
-        }
-
         .check-item {
             display: flex;
             align-items: center;
-            padding: 20px;
+            padding: 18px 20px;
             background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-input);
             margin-bottom: 12px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: var(--shadow);
         }
 
         .check-item.active {
             border-color: var(--primary);
-            background: #F0F4F8;
+            background: rgba(0, 82, 255, 0.05);
             color: var(--primary);
         }
 
-        .footer {
-            padding: 24px;
-            border-top: 1px solid var(--border);
+        .check-item::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 1.5px solid var(--border);
+            border-radius: 50%;
+            margin-left: auto;
+            transition: all 0.2s;
         }
 
-        .btn {
-            display: block;
+        .check-item.active::after {
             background: var(--primary);
-            color: white;
-            text-decoration: none;
-            padding: 20px;
-            border-radius: var(--radius);
-            font-weight: 700;
-            text-align: center;
-            cursor: pointer;
-            border: none;
-            width: 100%;
-            font-size: 17px;
+            border-color: var(--primary);
+            box-shadow: inset 0 0 0 4px white;
         }
     </style>
 </head>
 
 <body>
-    <div class="iphone">
-        <div class="header">PASO 2 DE 4</div>
-        <div class="content">
-            <h2>Condiciones médicas</h2>
+    <div class="app-container">
+        <div class="mb-24" style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="label" style="margin: 0;">Paso 2 de 4</span>
+            <div
+                style="height: 4px; flex: 1; background: var(--border); margin-left: 16px; border-radius: 2px; position: relative; overflow: hidden;">
+                <div style="position: absolute; left: 0; top: 0; height: 100%; width: 50%; background: var(--primary);">
+                </div>
+            </div>
+        </div>
+
+        <h1>Condiciones</h1>
+        <p class="description">Selecciona las condiciones médicas que posees actualmente.</p>
+
+        <div class="card" style="padding: 16px;">
             <div class="check-item" onclick="toggleCondition(this)">Diabetes</div>
             <div class="check-item" onclick="toggleCondition(this)">Epilepsia</div>
             <div class="check-item" onclick="toggleCondition(this)">Hipertensión</div>
             <div class="check-item" id="none-opt" onclick="setNone()">Ninguna</div>
             <div class="check-item" id="other-opt" onclick="toggleOther()">Otra...</div>
-            <div id="other-input-container" style="display: none; margin-top: -8px; margin-bottom: 12px;">
-                <input type="text" id="other-condition" placeholder="Especifique condición..."
-                    style="width: 100%; padding: 16px; border: 2px solid var(--primary); border-radius: var(--radius); font-size: 16px;">
+
+            <div id="other-input-container" style="display: none; padding-top: 4px;">
+                <input type="text" id="other-condition" placeholder="Especifique condición...">
             </div>
         </div>
-        <div class="footer"><button onclick="save()" class="btn">Continuar</button></div>
+
+        <div class="mt-auto">
+            <button onclick="save()" class="btn btn-primary">Continuar</button>
+        </div>
     </div>
+
     <script src="/js/app.js"></script>
     <script>
         const conditions = new Set();
@@ -152,8 +115,6 @@
 
         function save() {
             const list = Array.from(conditions);
-
-            // Add 'Otra' if active
             const otherVal = document.getElementById('other-condition').value.trim();
             if (document.getElementById('other-opt').classList.contains('active') && otherVal) {
                 list.push(otherVal);
@@ -177,7 +138,6 @@
                             if (el.textContent === c) el.classList.add('active');
                         });
                     } else {
-                        // It's 'Otra'
                         toggleOther();
                         document.getElementById('other-condition').value = c;
                     }
