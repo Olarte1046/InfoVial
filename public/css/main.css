@@ -1,8 +1,11 @@
 :root {
+    /* Primary Colors */
     --primary: #0052FF;
     --primary-dark: #0041CC;
-    --success: #2EC4B6;
+    --success: #1DBE31;
     --critical: #E63946;
+
+    /* Light Theme Tokens */
     --bg-clinical: #F8FAFC;
     --surface: #FFFFFF;
     --text-main: #121212;
@@ -10,10 +13,22 @@
     --border: #EDF2F7;
     --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.05);
     --shadow-strong: 0 10px 40px rgba(0, 82, 255, 0.1);
+
+    /* Component Tokens */
     --radius-card: 16px;
     --radius-btn: 12px;
     --radius-input: 12px;
     --max-width: 420px;
+}
+
+:root[data-theme='dark'] {
+    --bg-clinical: #0F1115;
+    --surface: #1A1D23;
+    --text-main: #F4F7FB;
+    --text-muted: #8E96A3;
+    --border: #2D323C;
+    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.3);
+    --shadow-strong: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
 
 * {
@@ -21,6 +36,7 @@
     margin: 0;
     padding: 0;
     -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.1s ease;
 }
 
 body {
@@ -39,6 +55,25 @@ body {
     padding: 20px;
     display: flex;
     flex-direction: column;
+    position: relative;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-soft);
+    z-index: 100;
 }
 
 /* Card System */
@@ -48,11 +83,12 @@ body {
     padding: 24px;
     box-shadow: var(--shadow-soft);
     margin-bottom: 24px;
+    border: 1px solid var(--border);
 }
 
 /* Header & Typography */
 h1 {
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 800;
     margin-bottom: 8px;
     letter-spacing: -0.5px;
@@ -75,14 +111,14 @@ h2 {
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
     color: var(--text-muted);
     margin-bottom: 6px;
 }
 
 /* Form Elements */
 .input-group {
-    margin-bottom: 12px;
+    margin-bottom: 16px;
 }
 
 input[type="text"],
@@ -97,13 +133,13 @@ select {
     border-radius: var(--radius-input);
     font-size: 16px;
     outline: none;
-    transition: all 0.2s ease;
     background: var(--surface);
+    color: var(--text-main);
 }
 
 input:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(0, 82, 255, 0.08);
+    box-shadow: 0 0 0 4px rgba(0, 82, 255, 0.1);
 }
 
 /* Buttons */
@@ -111,16 +147,16 @@ input:focus {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 52px;
+    height: 54px;
     padding: 0 24px;
     border-radius: var(--radius-btn);
     font-weight: 700;
     font-size: 16px;
     cursor: pointer;
     border: none;
-    transition: all 0.2s ease;
     text-decoration: none;
     width: 100%;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-primary {
@@ -133,6 +169,11 @@ input:focus {
     transform: scale(0.98);
 }
 
+.btn-success {
+    background: var(--success);
+    color: white;
+}
+
 .btn-critical {
     background: var(--critical);
     color: white;
@@ -141,6 +182,21 @@ input:focus {
 .btn-outline {
     background: transparent;
     border: 1.5px solid var(--border);
+    color: var(--text-main);
+}
+
+.btn-back {
+    height: 40px;
+    font-size: 14px;
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    padding: 0;
+    justify-content: flex-start;
+    margin-bottom: 12px;
+}
+
+.btn-back:hover {
     color: var(--text-main);
 }
 
@@ -158,31 +214,41 @@ input:focus {
     text-align: center;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s;
+    background: var(--surface);
 }
 
 .blood-opt.active {
     border-color: var(--primary);
-    background: rgba(0, 82, 255, 0.05);
+    background: rgba(0, 82, 255, 0.08);
     color: var(--primary);
 }
 
-/* Spacing Helpers */
-.mt-16 { margin-top: 16px; }
-.mt-24 { margin-top: 24px; }
-.mb-16 { margin-bottom: 16px; }
-.mb-24 { margin-bottom: 24px; }
-
-/* Status Items (for u.html) */
-.status-badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 700;
-    display: inline-block;
+/* Navigation & Logos */
+.logo-centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 32px;
 }
 
-.status-urgent {
-    background: #FFEEEF;
-    color: var(--critical);
+/* Spacing Helpers */
+.mt-16 {
+    margin-top: 16px;
+}
+
+.mt-24 {
+    margin-top: 24px;
+}
+
+.mt-auto {
+    margin-top: auto;
+}
+
+.mb-16 {
+    margin-bottom: 16px;
+}
+
+.mb-24 {
+    margin-bottom: 24px;
 }

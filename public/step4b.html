@@ -1,74 +1,25 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>InfoVial - Revisión</title>
-    <link rel="stylesheet" href="/css/main.css">
-    <style>
-        .review-card {
-            position: relative;
-            padding-top: 32px;
-        }
-
-        .edit-link {
-            position: absolute;
-            top: 14px;
-            right: 16px;
-            color: var(--primary);
-            font-size: 11px;
-            font-weight: 700;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .blood-value {
-            color: var(--primary);
-            font-size: 28px;
-            font-weight: 900;
-            margin-top: 4px;
-        }
-
-        .legal-check {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 16px;
-            background: #F0F4F8;
-            border-radius: 12px;
-            margin-bottom: 24px;
-        }
-
-        .legal-check input {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .legal-check label {
-            font-size: 13px;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        .legal-check a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 700;
-        }
-    </style>
-</head>
-
 <body>
     <div class="app-container">
+        <button class="theme-toggle" onclick="InfoVial.toggleTheme()" aria-label="Toggle Theme"></button>
+
         <div class="mb-24">
             <span class="label">Revisión Final</span>
             <h1>Confirma tus datos</h1>
             <p class="description">Verifica que la información sea correcta antes de generar tu código QR permanente.
             </p>
+        </div>
+
+        <div class="logo-centered" style="margin-bottom: 24px;">
+            <svg width="120" height="32" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg">
+                <g>
+                    <path d="M16 10 L26 36 L36 10" fill="none" stroke="#0052FF" stroke-width="3" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <polyline points="18,24 22,24 24,18 27,30 30,22 34,24" fill="none" stroke="#2EC4B6" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </g>
+                <text x="52" y="30" font-family="Manrope, sans-serif" font-size="20" font-weight="600"
+                    fill="currentColor">Infovial</text>
+            </svg>
         </div>
 
         <div class="card review-card">
@@ -115,6 +66,7 @@
         </div>
 
         <div class="mt-auto">
+            <button onclick="InfoVial.backStep()" class="btn btn-back">← Volver</button>
             <button id="confirm-btn" onclick="confirmCreation()" class="btn btn-primary" disabled>Confirmar y crear
                 QR</button>
         </div>

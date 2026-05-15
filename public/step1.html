@@ -10,6 +10,8 @@
 
 <body>
     <div class="app-container">
+        <button class="theme-toggle" onclick="InfoVial.toggleTheme()" aria-label="Toggle Theme"></button>
+
         <div class="mb-24" style="display: flex; justify-content: space-between; align-items: center;">
             <span class="label" style="margin: 0;">Paso 1 de 4</span>
             <div
@@ -17,6 +19,19 @@
                 <div style="position: absolute; left: 0; top: 0; height: 100%; width: 25%; background: var(--primary);">
                 </div>
             </div>
+        </div>
+
+        <div class="logo-centered" style="margin-bottom: 24px;">
+            <svg width="120" height="32" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg">
+                <g>
+                    <path d="M16 10 L26 36 L36 10" fill="none" stroke="#0052FF" stroke-width="3" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <polyline points="18,24 22,24 24,18 27,30 30,22 34,24" fill="none" stroke="#2EC4B6" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </g>
+                <text x="52" y="30" font-family="Manrope, sans-serif" font-size="20" font-weight="600"
+                    fill="currentColor">Infovial</text>
+            </svg>
         </div>
 
         <h1>Datos básicos</h1>
@@ -49,6 +64,7 @@
         </div>
 
         <div class="mt-auto">
+            <button onclick="InfoVial.backStep()" class="btn btn-back">← Volver</button>
             <button onclick="save()" class="btn btn-primary">Continuar</button>
         </div>
     </div>

@@ -135,150 +135,90 @@
 </head>
 
 <body>
-
     <div class="error-overlay app-container">
         <h1 style="color: var(--critical);">Perfil no encontrado</h1>
-
-        <p class="description">
-            La información solicitada no existe o ha sido dada de baja.
-        </p>
-
-        <a href="/" class="btn btn-outline">
-            Volver al inicio
-        </a>
+        <p class="description">La información solicitada no existe o ha sido dada de baja.</p>
+        <a href="/" class="btn btn-outline">Volver al inicio</a>
     </div>
 
     <div class="main-content app-container">
+        <button class="theme-toggle" onclick="InfoVial.toggleTheme()" aria-label="Toggle Theme"></button>
 
-        <div class="vial-footer" style="padding: 10px 0;">
+        <div class="vial-footer" style="padding: 10px 0; border-bottom: 1px solid var(--border); margin-bottom: 24px;">
             Protocolo de Emergencia InfoVial
         </div>
 
         <header class="profile-header">
-
             <div>
-                <h1 class="user-name" style="margin: 0; font-size: 26px;">
-                    ...
-                </h1>
-
-                <p class="user-meta description" style="margin: 0; font-size: 14px;">
-                    ...
-                </p>
+                <h1 class="user-name" style="margin: 0; font-size: 26px;">...</h1>
+                <p class="user-meta description" style="margin: 0; font-size: 14px;">...</p>
             </div>
-
             <div class="blood-card">
-                <div class="user-blood val">
-                    ...
-                </div>
-
-                <div class="lab">
-                    SANGRE
-                </div>
+                <div class="user-blood val">...</div>
+                <div class="lab">SANGRE</div>
             </div>
-
         </header>
 
         <a href="#" class="emergency-btn emergency-action">
-
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                 stroke-linecap="round" stroke-linejoin="round">
-
                 <path
                     d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
                 </path>
-
             </svg>
-
             Llamar Contacto SOS
-
         </a>
 
         <div class="card" style="padding: 0;">
-
             <div class="clinical-row">
-
-                <div class="clinical-icon" style="background: #FFF0F1; color: var(--critical);">
-
+                <div class="clinical-icon" style="background: rgba(230, 57, 70, 0.1); color: var(--critical);">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="2.5">
-
                         <path
                             d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4M12 17h.01">
                         </path>
-
                     </svg>
-
                 </div>
-
                 <div class="clinical-data">
-
                     <b>Alergias / Condiciones</b>
-
-                    <p class="user-conditions">
-                        ...
-                    </p>
-
+                    <p class="user-conditions">...</p>
                 </div>
-
             </div>
-
             <div class="clinical-row">
-
                 <div class="clinical-icon">
-
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="2.5">
-
                         <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-
                     </svg>
-
                 </div>
-
                 <div class="clinical-data">
-
                     <b>Medicamentos</b>
-
-                    <p class="user-meds">
-                        ...
-                    </p>
-
+                    <p class="user-meds">...</p>
                 </div>
-
             </div>
-
         </div>
 
         <div class="card">
-
-            <h2 class="label" style="margin-bottom: 16px;">
-                Datos de Contacto
-            </h2>
-
+            <h2 class="label" style="margin-bottom: 16px;">Datos de Contacto</h2>
             <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-
-                <span class="description" style="margin: 0;">
-                    Familiar:
-                </span>
-
-                <span class="user-contact-name" style="font-weight: 700;">
-                    ...
-                </span>
-
+                <span class="description" style="margin: 0;">Familiar:</span>
+                <span class="user-contact-name" style="font-weight: 700;">...</span>
             </div>
-
             <div style="display: flex; justify-content: space-between;">
-
-                <span class="description" style="margin: 0;">
-                    Relación:
-                </span>
-
-                <span class="user-contact-rel" style="font-weight: 700;">
-                    ...
-                </span>
-
+                <span class="description" style="margin: 0;">Relación:</span>
+                <span class="user-contact-rel" style="font-weight: 700;">...</span>
             </div>
+        </div>
 
+        <div class="mt-24" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <button onclick="shareProfile()" class="btn btn-outline" style="height: 48px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="margin-right: 8px;">
+                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13" />
+                </svg>
+                Compartir
+            </button>
+            <a href="/" class="btn btn-primary" style="height: 48px;">Finalizar</a>
         </div>
 
         <div class="vial-footer">
@@ -286,102 +226,87 @@
             <br>
             Uso exclusivo para personal de emergencias.
         </div>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="/js/supabase-config.js" defer></script>
-
+    <script src="/js/app.js"></script>
     <script>
+        let profileData = null;
+
         window.addEventListener('DOMContentLoaded', async () => {
-
             const urlParams = new URLSearchParams(window.location.search);
-
             let userId = urlParams.get('id');
 
             if (!userId) {
-
                 const parts = window.location.pathname.split('/');
-
                 const lastPart = parts.pop() || parts.pop();
-
-                if (lastPart && lastPart.includes('VIAL-')) {
-                    userId = lastPart;
-                }
-
+                if (lastPart && lastPart.includes('VIAL-')) userId = lastPart;
             }
 
             const mainContent = document.querySelector('.main-content');
             const errorOverlay = document.querySelector('.error-overlay');
 
             if (!userId) {
-
                 mainContent.style.display = 'none';
                 errorOverlay.style.display = 'flex';
-
                 return;
-
             }
 
             try {
-
                 const { data, error } = await supabaseClient
                     .from('profiles')
                     .select('*')
                     .eq('vital_id', userId)
                     .single();
 
-                if (error || !data) {
-                    throw new Error('Not found');
-                }
-
+                if (error || !data) throw new Error('Not found');
+                profileData = data;
                 injectData(data);
-
             } catch (err) {
-
                 mainContent.style.display = 'none';
                 errorOverlay.style.display = 'flex';
-
             }
-
         });
 
         function injectData(u) {
-
             document.querySelector('.user-name').textContent = u.nombre;
-
-            document.querySelector('.user-meta').textContent =
-                `${u.edad} años • ${u.ciudad || 'No registrada'}`;
-
+            document.querySelector('.user-name').textContent = u.nombre;
+            document.querySelector('.user-meta').textContent = `${u.edad} años • ${u.ciudad || 'No registrada'}`;
             document.querySelector('.user-blood').textContent = u.sangre;
-
-            document.querySelector('.user-conditions').textContent =
-                u.condiciones || 'Ninguna conocida';
-
-            document.querySelector('.user-meds').textContent =
-                u.medicamentos || 'Ninguno';
-
-            document.querySelector('.user-contact-name').textContent =
-                u.contacto_nombre;
-
-            document.querySelector('.user-contact-rel').textContent =
-                u.contacto_relacion;
+            document.querySelector('.user-conditions').textContent = u.condiciones || 'Ninguna conocida';
+            document.querySelector('.user-meds').textContent = u.medicamentos || 'Ninguno';
+            document.querySelector('.user-contact-name').textContent = u.contacto_nombre;
+            document.querySelector('.user-contact-rel').textContent = u.contacto_relacion;
 
             const btn = document.querySelector('.emergency-btn');
-
             if (u.telefono_emergencia) {
-
                 btn.href = `tel:${u.telefono_emergencia}`;
-
             } else {
-
                 btn.style.display = 'none';
-
             }
+        }
 
+        async function shareProfile() {
+            if (!profileData) return;
+            const shareData = {
+                title: `Perfil Médico: ${profileData.nombre}`,
+                text: `Accede a la información médica de emergencia de ${profileData.nombre} vía InfoVial.`,
+                url: window.location.href
+            };
+
+            try {
+                if (navigator.share) {
+                    await navigator.share(shareData);
+                } else {
+                    await navigator.clipboard.writeText(window.location.href);
+                    alert('Enlace copiado al portapapeles');
+                }
+            } catch (err) {
+                console.error('Error sharing:', err);
+            }
         }
     </script>
-
 </body>
 
 </html>

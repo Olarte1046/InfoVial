@@ -34,8 +34,10 @@
 
 <body>
     <div class="app-container">
+        <button class="theme-toggle" onclick="InfoVial.toggleTheme()" aria-label="Toggle Theme"></button>
+
         <div class="hero">
-            <div class="logo-container">
+            <div class="logo-centered">
                 <svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg">
                     <g>
                         <path d="M16 10 L26 36 L36 10" fill="none" stroke="#0052FF" stroke-width="3"
@@ -44,7 +46,7 @@
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </g>
                     <text x="52" y="30" font-family="Manrope, sans-serif" font-size="20" font-weight="600"
-                        fill="#121212">Infovial</text>
+                        fill="currentColor">Infovial</text>
                 </svg>
             </div>
             <h1>Bienvenido</h1>
@@ -52,29 +54,62 @@
         </div>
 
         <div class="card">
-            <h2 class="mb-16">¿Por qué usar Infovial?</h2>
-            <div class="description mb-24">
-                En caso de emergencia, los primeros respondientes podrán acceder a tu información vital escaneando un
-                código QR.
+            <h2 class="mb-16">¿Cómo funciona?</h2>
+
+            <div class="instruction-item" style="display: flex; gap: 16px; margin-bottom: 20px;">
+                <div
+                    style="width: 40px; height: 40px; background: rgba(0, 82, 255, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--primary);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                    </svg>
+                </div>
+                <div>
+                    <div style="font-weight: 700; font-size: 15px; margin-bottom: 2px;">Crea tu perfil</div>
+                    <div style="font-size: 13px; color: var(--text-muted);">Ingresa tus datos vitales, alergias y
+                        contactos de emergencia.</div>
+                </div>
             </div>
-            <ul style="list-style: none; color: var(--text-muted); font-size: 14px;">
-                <li style="margin-bottom: 12px; display: flex; align-items: flex-start;">
-                    <span style="color: var(--success); margin-right: 10px; font-weight: bold;">✓</span>
-                    Sin aplicaciones que descargar
-                </li>
-                <li style="margin-bottom: 12px; display: flex; align-items: flex-start;">
-                    <span style="color: var(--success); margin-right: 10px; font-weight: bold;">✓</span>
-                    Acceso instantáneo vital
-                </li>
-                <li style="display: flex; align-items: flex-start;">
-                    <span style="color: var(--success); margin-right: 10px; font-weight: bold;">✓</span>
-                    Privacidad garantizada
-                </li>
-            </ul>
+
+            <div class="instruction-item" style="display: flex; gap: 16px; margin-bottom: 20px;">
+                <div
+                    style="width: 40px; height: 40px; background: rgba(29, 190, 49, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #1dbe31;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                        <rect x="7" y="7" width="3" height="3" />
+                        <rect x="14" y="7" width="3" height="3" />
+                        <rect x="7" y="14" width="3" height="3" />
+                        <path d="M14 14h3v3h-3z" />
+                    </svg>
+                </div>
+                <div>
+                    <div style="font-weight: 700; font-size: 15px; margin-bottom: 2px;">Genera tu QR</div>
+                    <div style="font-size: 13px; color: var(--text-muted);">Obtén un código único que puedes imprimir o
+                        guardar en tu celular.</div>
+                </div>
+            </div>
+
+            <div class="instruction-item" style="display: flex; gap: 16px;">
+                <div
+                    style="width: 40px; height: 40px; background: rgba(230, 57, 70, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--critical);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4M12 17h.01" />
+                    </svg>
+                </div>
+                <div>
+                    <div style="font-weight: 700; font-size: 15px; margin-bottom: 2px;">Acceso en Emergencias</div>
+                    <div style="font-size: 13px; color: var(--text-muted);">Personal médico escanea el código para
+                        salvar tu vida en segundos.</div>
+                </div>
+            </div>
         </div>
 
         <div class="mt-auto">
             <a href="step1.html" class="btn btn-primary">Comenzar registro</a>
+            <div style="text-align: center; margin-top: 16px; font-size: 12px; color: var(--text-muted);">
+                InfoVial es gratuito y seguro.
+            </div>
         </div>
     </div>
 
