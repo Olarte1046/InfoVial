@@ -92,8 +92,18 @@ const Dashboard = {
     profile: null,
 
     async init() {
+        // If no ID in localStorage, check URL params as fallback
         if (!this.currentId) {
-            window.location.href = 'index.html';
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlId = urlParams.get('id');
+            if (urlId && urlId.startsWith('VIAL-')) {
+                this.currentId = urlId;
+                localStorage.setItem('infovial_last_id', urlId);
+            }
+        }
+
+        if (!this.currentId) {
+            this.showClaimUI();
             return;
         }
         await this.loadProfile();
@@ -101,7 +111,10 @@ const Dashboard = {
     },
 
     async loadProfile() {
-        if (!typeof supabaseClient !== 'undefined') return;
+        if (typeof supabaseClient === 'undefined') {
+            console.error('Supabase client not loaded');
+            return;
+        }
         try {
             const { data, error } = await supabaseClient
                 .from('profiles')
@@ -109,10 +122,44 @@ const Dashboard = {
                 .eq('vital_id', this.currentId)
                 .single();
 
-            if (error) throw error;
+            if (error || !data) {
+                this.showClaimUI();
+                return;
+            };
             this.profile = data;
         } catch (err) {
             console.error('Error loading profile:', err);
+            this.showClaimUI();
+        }
+    },
+
+    showClaimUI() {
+        document.querySelector('.app-container').style.display = 'none';
+        document.getElementById('claim-view').style.display = 'flex';
+    },
+
+    async claimProfile(vialId) {
+        if (!vialId || !vialId.startsWith('VIAL-')) {
+            alert('Por favor ingresa un VIAL-ID válido (Ej: VIAL-ABCDEF)');
+            return;
+        }
+
+        try {
+            const { data, error } = await supabaseClient
+                .from('profiles')
+                .select('vital_id')
+                .eq('vital_id', vialId)
+                .single();
+
+            if (error || !data) {
+                alert('No se encontró ningún perfil con ese ID.');
+                return;
+            }
+
+            localStorage.setItem('infovial_last_id', vialId);
+            window.location.reload();
+        } catch (err) {
+            alert('Error al verificar el ID: ' + err.message);
         }
     },
 

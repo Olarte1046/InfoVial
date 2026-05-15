@@ -20,6 +20,40 @@
 </head>
 
 <body>
+    <!-- Recovery / Claim View (Hidden by default) -->
+    <div id="claim-view" class="app-container"
+        style="display: none; flex-direction: column; justify-content: center; min-height: 100vh; text-align: center;">
+        <div class="logo-centered" style="margin-bottom: 40px;">
+            <svg width="180" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg">
+                <g>
+                    <path d="M16 10 L26 36 L36 10" fill="none" stroke="#0052FF" stroke-width="3" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <polyline points="18,24 22,24 24,18 27,30 30,22 34,24" fill="none" stroke="#2EC4B6" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </g>
+                <text x="52" y="30" font-family="Manrope, sans-serif" font-size="20" font-weight="600"
+                    fill="currentColor">Infovial</text>
+            </svg>
+        </div>
+
+        <h1>Gestionar mi Perfil</h1>
+        <p class="description">Ingresa tu VIAL-ID o escanea tu QR para acceder a tu panel de control.</p>
+
+        <div class="card">
+            <div class="input-group">
+                <label class="label">Tu VIAL-ID</label>
+                <input type="text" id="claim-id-input" placeholder="Ej: VIAL-ABCDEF" style="text-transform: uppercase;">
+            </div>
+            <button class="btn btn-primary"
+                onclick="Dashboard.claimProfile(document.getElementById('claim-id-input').value)">Acceder al
+                Panel</button>
+        </div>
+
+        <div class="mt-24">
+            <a href="index.html" class="btn btn-outline">Volver al inicio</a>
+        </div>
+    </div>
+
     <div class="app-container" style="padding-top: 0;">
 
         <!-- Profile Header -->
