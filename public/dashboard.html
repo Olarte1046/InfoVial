@@ -58,8 +58,15 @@
 
         <!-- Profile Header -->
         <header class="dash-header">
-            <h1 id="dash-name">Cargando...</h1>
-            <div class="header-meta" id="dash-meta">...</div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <h1 id="dash-name">Cargando...</h1>
+                    <div class="header-meta" id="dash-meta">...</div>
+                </div>
+                <button class="btn-edit-small"
+                    style="color: white; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 12px;"
+                    onclick="Dashboard.openModal('modal-history')">Cambiar</button>
+            </div>
             <div style="display: flex; gap: 8px; margin-top: 12px;">
                 <div class="status-badge">Perfil Activo</div>
                 <div class="status-badge"
@@ -87,7 +94,7 @@
                 </svg>
                 <span>Tema</span>
             </div>
-            <div class="action-card" onclick="shareProfile()">
+            <div class="action-card" onclick="Dashboard.openModal('modal-share-new')">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13" />
                 </svg>
@@ -245,7 +252,7 @@
         </div>
     </div>
 
-    <!-- Contacts Modal -->
+    <!-- SOS Contacts Modal -->
     <div id="modal-contacts" class="modal-overlay" onclick="Dashboard.closeModal('modal-contacts')">
         <div class="modal-content" onclick="event.stopPropagation()">
             <div class="modal-header">
@@ -265,6 +272,54 @@
                 <input type="tel" id="edit-contacto-tel">
             </div>
             <button class="btn btn-primary" onclick="saveContacts()">Guardar Cambios</button>
+        </div>
+    </div>
+
+    <!-- History / Profiles Modal -->
+    <div id="modal-history" class="modal-overlay" onclick="Dashboard.closeModal('modal-history')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2>Mis Perfiles</h2>
+                <button class="modal-close" onclick="Dashboard.closeModal('modal-history')">&times;</button>
+            </div>
+            <p class="description">Selecciona un perfil guardado en este dispositivo.</p>
+            <div class="history-list" id="history-list-items"></div>
+
+            <div class="mt-24" style="padding-top: 16px; border-top: 1px solid var(--border);">
+                <label class="label" style="font-size: 11px;">Vincular Perfil Existente</label>
+                <div style="display: flex; gap: 8px; margin-top: 8px;">
+                    <input type="text" id="link-vial-id" placeholder="VIAL-XXXXXX"
+                        style="flex: 1; text-transform: uppercase; font-size: 14px; padding: 8px 12px;">
+                    <button class="btn btn-primary" style="padding: 8px 16px; width: auto;"
+                        onclick="Dashboard.claimProfile(document.getElementById('link-vial-id').value)">Vincular</button>
+                </div>
+            </div>
+
+            <div class="mt-24">
+                <button class="btn btn-outline" style="border-style: dashed; font-size: 13px;"
+                    onclick="window.location.href='step1.html'">+ Registrar Nuevo Perfil</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Share Modal -->
+    <div id="modal-share-new" class="modal-overlay" onclick="Dashboard.closeModal('modal-share-new')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2>Compartir Identidad</h2>
+                <button class="modal-close" onclick="Dashboard.closeModal('modal-share-new')">&times;</button>
+            </div>
+            <div class="share-preview">
+                <div id="share-qr-preview"
+                    style="width: 250px; height: 250px; margin: 0 auto; background: white; padding: 10px; border-radius: 12px; border: 1px solid var(--border);">
+                </div>
+            </div>
+            <div class="share-link-box">
+                <span id="share-url-text" class="share-link-text">...</span>
+                <button id="btn-copy-link" class="btn-copy" onclick="Dashboard.copyShareLink()">Copiar</button>
+            </div>
+            <p class="description" style="font-size: 12px; margin-top: -8px;">Cualquier persona con este código podrá
+                ver tu información vital.</p>
         </div>
     </div>
 

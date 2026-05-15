@@ -90,8 +90,12 @@ const InfoVial = {
 const Dashboard = {
     currentId: localStorage.getItem('infovial_last_id'),
     profile: null,
+    historyKey: 'infovial_history',
 
     async init() {
+        // Migration/Sync: Ensure currentId is in history
+        if (this.currentId) this.addToHistory(this.currentId);
+
         // If no ID in localStorage, check URL params as fallback
         if (!this.currentId) {
             const urlParams = new URLSearchParams(window.location.search);
@@ -99,6 +103,7 @@ const Dashboard = {
             if (urlId && urlId.startsWith('VIAL-')) {
                 this.currentId = urlId;
                 localStorage.setItem('infovial_last_id', urlId);
+                this.addToHistory(urlId);
             }
         }
 
@@ -108,6 +113,23 @@ const Dashboard = {
         }
         await this.loadProfile();
         this.render();
+    },
+
+    addToHistory(vialId) {
+        let history = JSON.parse(localStorage.getItem(this.historyKey) || '[]');
+        if (!history.includes(vialId)) {
+            history.push(vialId);
+            localStorage.setItem(this.historyKey, JSON.stringify(history));
+        }
+    },
+
+    getHistory() {
+        return JSON.parse(localStorage.getItem(this.historyKey) || '[]');
+    },
+
+    switchProfile(vialId) {
+        localStorage.setItem('infovial_last_id', vialId);
+        window.location.reload();
     },
 
     async loadProfile() {
@@ -192,11 +214,17 @@ const Dashboard = {
         const modal = document.getElementById(id);
         if (modal) {
             modal.classList.add('active');
-            // Fill inputs if editing
+            // Specific Modal Logic
             if (id === 'modal-identity') {
                 document.getElementById('edit-nombre').value = this.profile.nombre;
                 document.getElementById('edit-edad').value = this.profile.edad;
                 document.getElementById('edit-eps').value = this.profile.eps || '';
+            }
+            if (id === 'modal-history') {
+                this.renderHistory();
+            }
+            if (id === 'modal-share-new') {
+                this.renderShareUI();
             }
         }
     },
@@ -204,6 +232,66 @@ const Dashboard = {
     closeModal(id) {
         const modal = document.getElementById(id);
         if (modal) modal.classList.remove('active');
+    },
+
+    renderHistory() {
+        const history = this.getHistory();
+        const container = document.getElementById('history-list-items');
+        container.innerHTML = '';
+
+        if (history.length === 0) {
+            container.innerHTML = '<p class="description">No hay perfiles guardados.</p>';
+            return;
+        }
+
+        history.forEach(id => {
+            const item = document.createElement('div');
+            item.className = `history-item ${id === this.currentId ? 'active' : ''}`;
+            item.onclick = () => this.switchProfile(id);
+            item.innerHTML = `
+                <div class="history-avatar">${id.substring(5, 6)}</div>
+                <div style="flex: 1; text-align: left;">
+                    <div style="font-weight: 700; font-size: 14px;">${id}</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">Toca para cambiar</div>
+                </div>
+                ${id === this.currentId ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>' : ''}
+            `;
+            container.appendChild(item);
+        });
+    },
+
+    renderShareUI() {
+        const url = window.location.origin + '/u.html?id=' + this.currentId;
+        document.getElementById('share-url-text').textContent = url;
+
+        // Render QR in share modal
+        const container = document.getElementById('share-qr-preview');
+        container.innerHTML = '';
+        new QRCode(container, {
+            text: url,
+            width: 480,
+            height: 480,
+            colorDark: "#121212",
+            colorLight: "#FFFFFF",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    },
+
+    async copyShareLink() {
+        const url = window.location.origin + '/u.html?id=' + this.currentId;
+        const btn = document.getElementById('btn-copy-link');
+        try {
+            await navigator.clipboard.writeText(url);
+            const originalText = btn.textContent;
+            btn.textContent = '¡Copiado!';
+            btn.classList.add('success');
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.classList.remove('success');
+            }, 2000);
+        } catch (err) {
+            alert('Error al copiar');
+        }
     },
 
     async updateProfile(formData) {
@@ -234,6 +322,10 @@ const Dashboard = {
 
             if (error) throw error;
 
+            // Remove from history too
+            let history = this.getHistory().filter(id => id !== this.currentId);
+            localStorage.setItem(this.historyKey, JSON.stringify(history));
+
             localStorage.removeItem('infovial_last_id');
             InfoVial.clearData();
             alert('Perfil eliminado correctamente');
@@ -257,5 +349,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const isStep = /step\d/.test(window.location.pathname);
     if (isStep) {
         InfoVial.checkProgress();
+    }
+
+    // Sync newly created IDs into history on step 5
+    if (window.location.pathname.includes('step5.html')) {
+        const lastId = localStorage.getItem('infovial_last_id');
+        if (lastId) {
+            let history = JSON.parse(localStorage.getItem('infovial_history') || '[]');
+            if (!history.includes(lastId)) {
+                history.push(lastId);
+                localStorage.setItem('infovial_history', JSON.stringify(history));
+            }
+        }
     }
 });
