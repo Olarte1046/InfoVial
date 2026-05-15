@@ -1,3 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>InfoVial - Revisión</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <style>
+        .review-card {
+            position: relative;
+            padding-top: 32px;
+        }
+
+        .edit-link {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .blood-value {
+            color: var(--primary);
+            font-size: 28px;
+            font-weight: 900;
+            margin-top: 4px;
+        }
+
+        .legal-check {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+            background: rgba(0, 82, 255, 0.1);
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        :root[data-theme='dark'] .legal-check {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .legal-check input {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .legal-check label {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .legal-check a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
 <body>
     <div class="app-container">
         <button class="theme-toggle" onclick="InfoVial.toggleTheme()" aria-label="Toggle Theme"></button>
