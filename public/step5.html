@@ -131,7 +131,12 @@
         window.onload = () => {
             const lastId = localStorage.getItem('infovial_last_id');
             if (lastId) {
-                document.getElementById('vital-id-display').textContent = lastId;
+                // Mask ID: VIAL-ABCDEF -> VIAL-AB...EF
+                const maskedId = lastId.length > 10
+                    ? lastId.substring(0, 7) + '...' + lastId.substring(lastId.length - 2)
+                    : lastId;
+
+                document.getElementById('vital-id-display').textContent = maskedId;
                 const domain = window.location.origin;
                 const profileUrl = `${domain}/u.html?id=${lastId}`;
 

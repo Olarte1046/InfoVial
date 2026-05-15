@@ -10,7 +10,11 @@
 
     <style>
         body {
-            background: radial-gradient(at 0% 0%, #F8FAFC 0%, #FFFFFF 50%, #D8E0E7 100%);
+            background-color: var(--bg-clinical);
+        }
+
+        :root[data-theme='dark'] body {
+            background: radial-gradient(at 0% 0%, #1A1D23 0%, #0F1115 100%);
         }
 
         .profile-header {
@@ -90,7 +94,8 @@
         .clinical-icon {
             width: 40px;
             height: 40px;
-            background: #F0F4F8;
+            background: var(--bg-clinical);
+            border: 1px solid var(--border);
             border-radius: 10px;
             display: flex;
             align-items: center;
