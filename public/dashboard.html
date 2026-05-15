@@ -67,11 +67,15 @@
                     style="color: white; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 12px;"
                     onclick="Dashboard.openModal('modal-history')">Cambiar</button>
             </div>
-            <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
                 <div class="status-badge">Perfil Activo</div>
                 <div class="status-badge"
                     style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
                     Sangre: <span id="dash-blood" style="margin-left: 4px;">...</span>
+                </div>
+                <div class="status-badge"
+                    style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); font-family: monospace;">
+                    ID: <span id="dash-vial-id" style="margin-left: 4px;">...</span>
                 </div>
             </div>
         </header>

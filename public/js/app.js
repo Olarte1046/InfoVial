@@ -161,7 +161,10 @@ const Dashboard = {
     },
 
     async claimProfile(vialId) {
-        if (!vialId || !vialId.startsWith('VIAL-')) {
+        if (!vialId) return;
+        const normalizedId = vialId.trim().toUpperCase();
+
+        if (!normalizedId.startsWith('VIAL-')) {
             alert('Por favor ingresa un VIAL-ID válido (Ej: VIAL-ABCDEF)');
             return;
         }
@@ -170,7 +173,7 @@ const Dashboard = {
             const { data, error } = await supabaseClient
                 .from('profiles')
                 .select('vital_id')
-                .eq('vital_id', vialId)
+                .eq('vital_id', normalizedId)
                 .single();
 
             if (error || !data) {
@@ -178,7 +181,7 @@ const Dashboard = {
                 return;
             }
 
-            localStorage.setItem('infovial_last_id', vialId);
+            localStorage.setItem('infovial_last_id', normalizedId);
             window.location.reload();
         } catch (err) {
             alert('Error al verificar el ID: ' + err.message);
@@ -193,6 +196,7 @@ const Dashboard = {
         document.getElementById('dash-name').textContent = p.nombre;
         document.getElementById('dash-meta').textContent = `${p.edad} años • ${p.ciudad || 'Sin ciudad'}`;
         document.getElementById('dash-blood').textContent = p.sangre;
+        document.getElementById('dash-vial-id').textContent = p.vital_id;
 
         // Sections
         document.getElementById('val-nombre').textContent = p.nombre;
