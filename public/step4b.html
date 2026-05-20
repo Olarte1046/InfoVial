@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>InfoVial - Crear Cuenta</title>
+    <title>InfoVial - Activar Perfil</title>
     <link rel="stylesheet" href="/css/main.css">
 </head>
 
@@ -14,36 +14,39 @@
             <img src="/assets/logo-stacked-mobile.svg" alt="InfoVial" style="height: 60px;">
         </div>
 
-        <div class="animate-fade" style="animation-delay: 0.1s;">
-            <h1>Crea tu cuenta segura.</h1>
-            <p class="description" style="margin-bottom: 32px;">Para proteger tu información, necesitamos que crees una
-                contraseña.</p>
+        <div class="animate-fade" id="reg-main" style="animation-delay: 0.1s;">
+            <h1>Casi eres parte de InfoVial.</h1>
+            <p class="description" style="margin-bottom: 32px;">Para proteger tu información, validaremos tu identidad
+                vía email.</p>
 
-            <div class="card">
-                <div style="margin-bottom: 20px;">
-                    <label class="label">Email de contacto</label>
-                    <input type="email" id="email" placeholder="tu@email.com">
-                </div>
-
+            <div class="card" style="padding: 32px;">
                 <div style="margin-bottom: 24px;">
-                    <label class="label">Contraseña (Mín. 6 caracteres)</label>
-                    <input type="password" id="password" placeholder="••••••••">
+                    <label class="label">Tu Email Principal</label>
+                    <input type="email" id="email" placeholder="tu@email.com" style="font-size: 16px;">
                 </div>
 
                 <div id="auth-error"
-                    style="color: var(--critical); font-size: 14px; margin-bottom: 16px; text-align: center; display: none;">
+                    style="color: var(--critical); font-size: 14px; margin-bottom: 16px; text-align: center; display: none; font-weight: 600;">
                 </div>
 
-                <button id="finalize-btn" onclick="finalizeRegistration()" class="btn btn-primary">Finalizar y Activar
-                    QR</button>
+                <button id="finalize-btn" onclick="startActivation()" class="btn btn-primary">Recibir Enlace de
+                    Activación</button>
             </div>
+
+            <p style="text-align: center; margin-top: 24px; font-size: 13px; color: var(--text-muted);">
+                Al continuar, aceptas nuestros <a href="/legal/terms.html"
+                    style="color: var(--primary); text-decoration: none; font-weight: 700;">Términos</a>.
+            </p>
         </div>
 
-        <div class="mt-auto animate-fade" style="padding-bottom: 24px; animation-delay: 0.2s;">
-            <p style="text-align: center; font-size: 13px; color: var(--text-muted);">Al registrarte, aceptas nuestros
-                <a href="/legal/terms.html"
-                    style="color: var(--primary); text-decoration: none; font-weight: 700;">Términos y Condiciones</a>.
-            </p>
+        <div id="reg-sent" style="display: none; text-align: center; padding: 40px 24px; animation: fadeIn 0.4s ease;">
+            <div style="font-size: 48px; margin-bottom: 24px;">🛡️</div>
+            <h2 style="font-family: 'Manrope', sans-serif;">Verificación en curso</h2>
+            <p class="description">Hemos enviado un enlace especial a <strong
+                    id="sent-email-display"></strong>.<br><br>Al hacer clic en el enlace, tu perfil se activará
+                automáticamente y verás tu código QR.</p>
+            <button onclick="location.reload()" class="btn btn-outline"
+                style="margin-top: 32px; font-size: 13px; font-weight: 800;">Volver a intentar</button>
         </div>
     </div>
 
@@ -51,54 +54,43 @@
     <script src="/js/supabase-config.js"></script>
     <script src="/js/app.js"></script>
     <script>
-        async function finalizeRegistration() {
+        async function startActivation() {
             const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
             const btn = document.getElementById('finalize-btn');
             const errDiv = document.getElementById('auth-error');
 
-            if (!email || !password) { alert('Completa los datos de acceso'); return; }
+            if (!email) { alert('Ingresa tu email para continuar'); return; }
 
             btn.disabled = true;
-            btn.innerText = 'Activando perfil...';
+            btn.innerText = 'Preparando activación...';
             errDiv.style.display = 'none';
 
             try {
-                // 1. Sign up user
-                const { data: authData, error: authError } = await supabaseClient.auth.signUp({ email, password });
-                if (authError) throw authError;
-
-                // 2. Prepare profile data
+                // Store registration data temporary in a way that survives the magic link bounce
+                // Supabase doesn't easily store metadata for OTP signups before verification,
+                // so we use localStorage with a specific key.
                 const regData = InfoVial.getData();
-                const public_slug = crypto.randomUUID();
-                const vital_id = 'IV-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+                regData.email = email;
+                regData.pending_profile = true;
+                InfoVial.saveData(regData);
 
-                // 3. Create profile in DB
-                const { error: dbError } = await supabaseClient.from('profiles').insert({
-                    user_id: authData.user.id,
-                    nombre: regData.nombre,
-                    edad: regData.edad,
-                    sangre: regData.sangre,
-                    condiciones: regData.condiciones,
-                    medicamentos: regData.medicamentos,
-                    contacto_nombre: regData.contacto_nombre,
-                    contacto_relacion: regData.contacto_relacion,
-                    telefono_emergencia: regData.telefono_emergencia,
-                    ciudad: regData.ciudad,
-                    eps: regData.eps,
-                    public_slug: public_slug,
-                    vital_id: vital_id
+                const { error } = await supabaseClient.auth.signInWithOtp({
+                    email: email,
+                    options: {
+                        // Redirect back to dashboard where we'll finish the profile creation
+                        emailRedirectTo: 'https://infovial.app/dashboard.html?action=complete_registration',
+                    }
                 });
 
-                if (dbError) throw dbError;
+                if (error) throw error;
 
-                // Success
-                InfoVial.clearData();
-                window.location.href = 'step5.html?s=' + public_slug;
+                document.getElementById('reg-main').style.display = 'none';
+                document.getElementById('sent-email-display').textContent = email;
+                document.getElementById('reg-sent').style.display = 'block';
 
             } catch (err) {
                 btn.disabled = false;
-                btn.innerText = 'Finalizar y Activar QR';
+                btn.innerText = 'Recibir Enlace de Activación';
                 errDiv.textContent = err.message;
                 errDiv.style.display = 'block';
             }

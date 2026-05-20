@@ -94,6 +94,13 @@ const Dashboard = {
         this.session = await InfoVial.requireAuth();
         if (!this.session) return;
 
+        // Check for deferred registration completion
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('action') === 'complete_registration') {
+            await this.finalizeRegistration();
+            return;
+        }
+
         if (!navigator.onLine) {
             this.showOfflineError();
             return;
@@ -107,6 +114,48 @@ const Dashboard = {
             this.render();
         } else {
             this.showNoProfileUI();
+        }
+    },
+
+    async finalizeRegistration() {
+        const regData = InfoVial.getData();
+        if (!regData.pending_profile) {
+            window.location.href = 'dashboard.html';
+            return;
+        }
+
+        this.showLoading(true, 'Finalizando activación...');
+
+        try {
+            const public_slug = crypto.randomUUID();
+            const vital_id = 'IV-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+
+            const { data, error } = await supabaseClient.from('profiles').insert({
+                user_id: this.session.user.id,
+                nombre: regData.nombre,
+                edad: regData.edad,
+                sangre: regData.sangre,
+                condiciones: regData.condiciones,
+                medicamentos: regData.medicamentos,
+                contacto_nombre: regData.contacto_nombre,
+                contacto_relacion: regData.contacto_relacion,
+                telefono_emergencia: regData.telefono_emergencia,
+                ciudad: regData.ciudad,
+                eps: regData.eps,
+                public_slug: public_slug,
+                vital_id: vital_id
+            }).select().single();
+
+            if (error) throw error;
+
+            InfoVial.clearData();
+            window.location.href = 'step5.html?s=' + public_slug;
+        } catch (err) {
+            console.error('Finalization Error:', err);
+            alert('Error al activar perfil: ' + err.message);
+            this.showNoProfileUI();
+        } finally {
+            this.showLoading(false);
         }
     },
 
@@ -190,9 +239,20 @@ const Dashboard = {
         window.location.href = 'index.html';
     },
 
-    showLoading(show) {
-        // Implement simple loading overlay if needed
-        console.log('Loading state:', show);
+    showLoading(show, message = 'Cargando...') {
+        let loader = document.getElementById('global-loader');
+        if (!loader && show) {
+            loader = document.createElement('div');
+            loader.id = 'global-loader';
+            loader.innerHTML = `<div class="glass" style="position:fixed; inset:0; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; background: rgba(255,255,255,0.8); backdrop-filter:blur(10px);">
+                <div class="spinner" style="width:40px; height:40px; border:4px solid var(--primary-soft); border-top-color:var(--primary); border-radius:50%; animation:spin 1s linear infinite; margin-bottom:16px;"></div>
+                <div style="font-weight:700; color:var(--primary); font-size:14px; letter-spacing:1px; text-transform:uppercase;">${message}</div>
+                <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+            </div>`;
+            document.body.appendChild(loader);
+        }
+        if (loader) loader.style.display = show ? 'flex' : 'none';
+        if (loader && message) loader.querySelector('div:last-child').innerText = message;
     },
 
     showNoProfileUI() {
@@ -231,11 +291,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // Only redirect to index if we are on a page that REQUIRES auth
             if (event === 'SIGNED_OUT' && (isDashboard || isStep)) {
                 window.location.href = 'index.html';
-            }
-
-            // If we are on login/index and we suddenly get a session, go to dashboard
-            if (event === 'SIGNED_IN' && (isLogin || path === '/' || path.includes('index.html'))) {
-                window.location.href = 'dashboard.html';
             }
         });
     }

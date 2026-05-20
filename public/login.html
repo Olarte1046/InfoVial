@@ -7,38 +7,32 @@
     <title>InfoVial - Acceso Seguro</title>
     <link rel="stylesheet" href="/css/main.css">
     <style>
-        .auth-tabs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            background: var(--bg-clinical);
-            padding: 4px;
-            border-radius: 12px;
-            margin-bottom: 24px;
+        .auth-container {
+            padding: 40px 24px;
+            max-width: 420px;
+            margin: 0 auto;
         }
 
-        .auth-tab {
-            padding: 10px;
+        .magic-status {
+            display: none;
             text-align: center;
-            font-weight: 700;
+            padding: 24px;
+            background: var(--primary-soft);
+            border-radius: 20px;
+            margin-top: 24px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .magic-status h3 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .magic-status p {
             font-size: 14px;
             color: var(--text-muted);
-            cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-        }
-
-        .auth-tab.active {
-            background: var(--surface);
-            color: var(--primary);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .auth-form {
-            display: none;
-        }
-
-        .auth-form.active {
-            display: block;
+            line-height: 1.5;
         }
     </style>
 </head>
@@ -51,59 +45,46 @@
             </svg>
         </button>
 
-        <div class="logo-box animate-fade" style="margin-top: 40px;">
+        <div class="logo-box animate-fade" style="margin-top: 60px;">
             <img src="/assets/logo-primary-horizontal.svg" alt="InfoVial" class="logo-main">
         </div>
 
-        <div class="animate-fade" style="animation-delay: 0.1s;">
-            <div class="card" style="padding: 32px;">
-                <div class="auth-tabs">
-                    <div class="auth-tab active" onclick="switchTab('login')">Ingresar</div>
-                    <div class="auth-tab" onclick="switchTab('signup')">Crear Perfil</div>
-                </div>
+        <div class="animate-fade" id="auth-main" style="animation-delay: 0.1s;">
+            <div class="card" style="padding: 32px; border: none; box-shadow: var(--shadow-premium);">
+                <h2 style="margin-bottom: 8px;">Acceso sin contraseña</h2>
+                <p class="description" style="margin-bottom: 32px; font-size: 15px;">Ingresa tu email para recibir un
+                    enlace mágico de acceso instantáneo.</p>
 
-                <form id="login-form" class="auth-form active" onsubmit="handleAuth(event, 'login')">
-                    <h2>Bienvenido de vuelta</h2>
-                    <p class="description" style="margin-bottom: 24px; font-size: 14px;">Ingresa para gestionar tu
-                        identidad médica.</p>
-                    <div style="margin-bottom: 16px;">
-                        <label class="label">Email</label>
-                        <input type="email" id="login-email" placeholder="tu@email.com" required>
-                    </div>
+                <form id="magic-form" onsubmit="handleMagicLink(event)">
                     <div style="margin-bottom: 24px;">
-                        <label class="label">Contraseña</label>
-                        <input type="password" id="login-password" placeholder="••••••••" required>
+                        <label class="label">Email de tu cuenta</label>
+                        <input type="email" id="magic-email" placeholder="tu@email.com" required
+                            style="font-size: 16px; padding: 14px 18px;">
                     </div>
-                    <button type="submit" class="btn btn-primary">Entrar</button>
-                </form>
 
-                <form id="signup-form" class="auth-form" onsubmit="handleAuth(event, 'signup')">
-                    <h2>Únete a InfoVial</h2>
-                    <p class="description" style="margin-bottom: 24px; font-size: 14px;">Protege tu salud con tecnología
-                        de vanguardia.</p>
-                    <div style="margin-bottom: 16px;">
-                        <label class="label">Email</label>
-                        <input type="email" id="signup-email" placeholder="tu@email.com" required>
-                    </div>
-                    <div style="margin-bottom: 24px;">
-                        <label class="label">Contraseña</label>
-                        <input type="password" id="signup-password" placeholder="Mínimo 6 caracteres" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Registrarse</button>
-                </form>
+                    <button type="submit" id="magic-btn" class="btn btn-primary"
+                        style="height: 54px; font-size: 16px;">Enviar enlace de acceso</button>
 
-                <div style="text-align: right; margin-top: 12px;">
-                    <a href="password-reset.html"
-                        style="font-size: 12px; color: var(--text-muted); text-decoration: none;">¿Olvidaste tu
-                        contraseña?</a>
-                </div>
-                <div id="auth-error"
-                    style="color: var(--critical); font-size: 14px; margin-top: 16px; text-align: center; display: none;">
-                </div>
+                    <div id="auth-error"
+                        style="color: var(--critical); font-size: 14px; margin-top: 20px; text-align: center; display: none; font-weight: 600;">
+                    </div>
+                </form>
             </div>
 
-            <p style="text-align: center; margin-top: 32px;"><a href="index.html"
-                    style="color: var(--text-muted); font-size: 14px; text-decoration: none;">← Volver al inicio</a></p>
+            <p style="text-align: center; margin-top: 40px;">
+                <a href="index.html"
+                    style="color: var(--text-muted); font-size: 14px; text-decoration: none; font-weight: 600;">← Volver
+                    al inicio</a>
+            </p>
+        </div>
+
+        <div id="magic-sent" class="magic-status">
+            <div style="font-size: 40px; margin-bottom: 16px;">✉️</div>
+            <h3>¡Enlace enviado!</h3>
+            <p>Hemos enviado un enlace de acceso a <strong id="sent-email-display">...</strong>.<br>Revisa tu bandeja de
+                entrada (y spam) para ingresar.</p>
+            <button onclick="location.reload()" class="btn btn-outline"
+                style="margin-top: 24px; border: none; font-weight: 800; font-size: 13px;">Volver a intentar</button>
         </div>
     </div>
 
@@ -111,38 +92,35 @@
     <script src="/js/supabase-config.js"></script>
     <script src="/js/app.js"></script>
     <script>
-        function switchTab(type) {
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.toggle('active', t.textContent.toLowerCase().includes(type === 'login' ? 'ingresar' : 'crear')));
-            document.getElementById('login-form').classList.toggle('active', type === 'login');
-            document.getElementById('signup-form').classList.toggle('active', type === 'signup');
-            document.getElementById('auth-error').style.display = 'none';
-        }
-
-        async function handleAuth(e, type) {
+        async function handleMagicLink(e) {
             e.preventDefault();
-            const email = document.getElementById(`${type}-email`).value;
-            const password = document.getElementById(`${type}-password`).value;
+            const email = document.getElementById('magic-email').value;
+            const btn = document.getElementById('magic-btn');
             const errorDiv = document.getElementById('auth-error');
+
+            btn.disabled = true;
+            btn.innerText = 'Enviando...';
             errorDiv.style.display = 'none';
 
             try {
-                let result;
-                if (type === 'login') {
-                    result = await supabaseClient.auth.signInWithPassword({ email, password });
-                } else {
-                    result = await supabaseClient.auth.signUp({ email, password });
-                }
+                const { error } = await supabaseClient.auth.signInWithOtp({
+                    email: email,
+                    options: {
+                        emailRedirectTo: 'https://infovial.app/dashboard.html',
+                    }
+                });
 
-                if (result.error) throw result.error;
+                if (error) throw error;
 
-                if (type === 'signup' && !result.data.session) {
-                    alert('Registro exitoso. Por favor revisa tu email para confirmar la cuenta.');
-                } else {
-                    window.location.href = 'dashboard.html';
-                }
+                document.getElementById('auth-main').style.display = 'none';
+                document.getElementById('sent-email-display').textContent = email;
+                document.getElementById('magic-sent').style.display = 'block';
+
             } catch (err) {
                 errorDiv.textContent = err.message;
                 errorDiv.style.display = 'block';
+                btn.disabled = false;
+                btn.innerText = 'Enviar enlace de acceso';
             }
         }
     </script>
