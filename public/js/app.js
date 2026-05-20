@@ -1,24 +1,15 @@
 /**
- * InfoVial Persistence & Navigation Helper
+ * InfoVial Core Engine
+ * Production Grade Authentication & Navigation
  */
+
 const InfoVial = {
     storageKey: 'infovial_registration_data',
 
-    // Load data from localStorage (Temporary registration state)
+    // --- State Management ---
     getData() {
         const data = localStorage.getItem(this.storageKey);
-        return data ? JSON.parse(data) : {
-            nombre: '',
-            edad: '',
-            sangre: '',
-            condiciones: [],
-            medicamentos: '',
-            contacto_nombre: '',
-            contacto_tel: '',
-            contacto_relacion: '',
-            ciudad: '',
-            eps: ''
-        };
+        return data ? JSON.parse(data) : {};
     },
 
     saveData(data) {
@@ -31,7 +22,27 @@ const InfoVial = {
         localStorage.removeItem(this.storageKey);
     },
 
-    // Theme Management
+    // --- Auth Strategy ---
+    async getSession() {
+        if (typeof supabaseClient === 'undefined') return null;
+        const { data: { session }, error } = await supabaseClient.auth.getSession();
+        if (error) console.error('Auth Session Error:', error.message);
+        return session;
+    },
+
+    // Protected Route Middleware (Client-side)
+    async requireAuth() {
+        const session = await this.getSession();
+        if (!session) {
+            const currentPath = window.location.pathname;
+            if (currentPath.includes('dashboard.html')) {
+                window.location.href = 'login.html?redirect=dashboard';
+            }
+        }
+        return session;
+    },
+
+    // --- UI Helpers ---
     initTheme() {
         const savedTheme = localStorage.getItem('infovial_theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
@@ -55,59 +66,46 @@ const InfoVial = {
         }
     },
 
-    nextStep(nextPage) {
-        window.location.href = nextPage;
-    },
-
-    backStep() {
-        window.history.back();
-    },
+    nextStep(nextPage) { window.location.href = nextPage; },
+    backStep() { window.history.back(); },
 
     checkProgress() {
         const data = this.getData();
-        const path = window.location.pathname;
-        if ((path.includes('step2') || path.includes('step3') || path.includes('step4')) && !data.nombre) {
+        if (window.location.pathname === '/' || window.location.pathname.includes('index.html')) return;
+        if (!data.nombre && window.location.pathname.includes('step')) {
             window.location.href = 'step1.html';
         }
     },
 
     maskId(id) {
         if (!id) return '...';
-        return id.length > 10 ? id.substring(0, 7) + '...' + id.substring(id.length - 2) : id;
-    },
-
-    async getSession() {
-        if (typeof supabaseClient === 'undefined') return null;
-        const { data, error } = await supabaseClient.auth.getSession();
-        return data?.session || null;
+        return id.length > 8 ? id.substring(0, 4) + '...' + id.substring(id.length - 2) : id;
     }
 };
 
 /**
- * Dashboard Logic Controller
+ * Dashboard Controller
  */
 const Dashboard = {
     session: null,
     profile: null,
 
     async init() {
-        this.session = await InfoVial.getSession();
-
-        if (!this.session) {
-            window.location.href = 'login.html';
-            return;
-        }
+        this.session = await InfoVial.requireAuth();
+        if (!this.session) return;
 
         if (!navigator.onLine) {
             this.showOfflineError();
             return;
         }
 
+        this.showLoading(true);
         await this.loadProfile();
+        this.showLoading(false);
+
         if (this.profile) {
             this.render();
         } else {
-            // If logged in but no profile, maybe redirect to registration or show "Create Profile"
             this.showNoProfileUI();
         }
     },
@@ -123,65 +121,54 @@ const Dashboard = {
             if (error) throw error;
             this.profile = data;
         } catch (err) {
-            console.error('Error loading profile:', err);
+            console.error('Core Profile Load Error:', err);
         }
-    },
-
-    showNoProfileUI() {
-        document.querySelector('.app-container').innerHTML = `
-            <div style="text-align: center; padding: 40px;">
-                <div class="icon" style="color: var(--primary); font-size: 48px; margin-bottom: 20px;">👤</div>
-                <h1 style="color: var(--primary);">No tienes un perfil aún</h1>
-                <p class="description">Para activar tu InfoVial, primero crea tu perfil médico.</p>
-                <a href="step1.html" class="btn btn-primary" style="margin-top: 24px;">Crear mi perfil</a>
-                <button onclick="Dashboard.logout()" class="btn btn-outline" style="margin-top: 16px;">Cerrar Sesión</button>
-            </div>
-        `;
-    },
-
-    showOfflineError() {
-        document.querySelector('.app-container').innerHTML = `
-            <div style="text-align: center; padding: 40px;">
-                <div class="icon" style="color: var(--critical); font-size: 48px; margin-bottom: 20px;">📶</div>
-                <h2 style="color: var(--critical);">Sin conexión</h2>
-                <p class="description">Necesitas conexión a internet para ver tu panel.</p>
-                <button onclick="location.reload()" class="btn btn-primary" style="margin-top: 24px;">Reintentar</button>
-            </div>
-        `;
     },
 
     render() {
         if (!this.profile) return;
         const p = this.profile;
+        const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || '-'; };
 
-        // Populate elements (Assuming IDs exist in dashboard.html)
-        const safeSet = (id, val) => {
-            const el = document.getElementById(id);
-            if (el) el.textContent = val || '...';
+        set('dash-name', p.nombre);
+        set('dash-meta', `${p.edad} años • ${p.ciudad || 'Colombia'}`);
+        set('dash-blood', p.sangre);
+        set('dash-vial-id', p.vital_id);
+
+        set('val-nombre', p.nombre);
+        set('val-edad', p.edad);
+        set('val-eps', p.eps);
+        set('val-condiciones', p.condiciones || 'Ninguna');
+        set('val-meds', p.medicamentos || 'Ninguno');
+        set('val-contacto', p.contacto_nombre);
+        set('val-relacion', p.contacto_relacion);
+        set('val-tel', p.telefono_emergencia);
+
+        const masked = document.getElementById('masked-vial-id');
+        if (masked) masked.textContent = InfoVial.maskId(p.vital_id);
+    },
+
+    async shareProfile() {
+        const shareData = {
+            title: 'Mi Perfil InfoVial',
+            text: 'En caso de emergencia, escanea mi QR o visita este enlace:',
+            url: window.location.origin + '/u.html?s=' + this.profile.public_slug
         };
 
-        safeSet('dash-name', p.nombre);
-        safeSet('dash-meta', `${p.edad} años • ${p.ciudad || 'Sin ciudad'}`);
-        safeSet('dash-blood', p.sangre);
-        safeSet('dash-vial-id', p.vital_id);
-
-        safeSet('val-nombre', p.nombre);
-        safeSet('val-edad', p.edad);
-        safeSet('val-eps', p.eps);
-        safeSet('val-condiciones', p.condiciones);
-        safeSet('val-meds', p.medicamentos);
-        safeSet('val-contacto', p.contacto_nombre);
-        safeSet('val-relacion', p.contacto_relacion);
-        safeSet('val-tel', p.telefono_emergencia);
-
-        const maskedEl = document.getElementById('masked-vial-id');
-        if (maskedEl) maskedEl.textContent = InfoVial.maskId(p.vital_id);
+        try {
+            if (navigator.share) {
+                await navigator.share(shareData);
+            } else {
+                await navigator.clipboard.writeText(shareData.url);
+                alert('Enlace copiado al portapapeles');
+            }
+        } catch (err) {
+            console.error('Share Error:', err);
+        }
     },
 
-    async logout() {
-        await supabaseClient.auth.signOut();
-        window.location.href = 'index.html';
-    },
+    openModal(id) { document.getElementById(id)?.classList.add('active'); },
+    closeModal(id) { document.getElementById(id)?.classList.remove('active'); },
 
     async updateProfile(formData) {
         try {
@@ -193,14 +180,35 @@ const Dashboard = {
             if (error) throw error;
             this.profile = { ...this.profile, ...formData };
             this.render();
-            alert('Perfil actualizado con éxito');
         } catch (err) {
-            alert('Error al actualizar: ' + err.message);
+            alert('Error: ' + err.message);
         }
+    },
+
+    async logout() {
+        await supabaseClient.auth.signOut();
+        window.location.href = 'index.html';
+    },
+
+    showLoading(show) {
+        // Implement simple loading overlay if needed
+        console.log('Loading state:', show);
+    },
+
+    showNoProfileUI() {
+        document.querySelector('.app-container').innerHTML = `
+            <div style="text-align: center; padding: 60px 24px; animation: fadeIn 0.5s ease;">
+                <div style="font-size: 64px; margin-bottom: 24px;">👋</div>
+                <h1 style="font-family: 'Instrument Serif', serif;">Casi listo, ${this.session.user.email.split('@')[0]}</h1>
+                <p class="description" style="margin-bottom: 32px;">Aún no has configurado tu perfil médico vital.</p>
+                <a href="step1.html" class="btn btn-primary">Completar mi Perfil</a>
+                <button onclick="Dashboard.logout()" class="btn btn-outline" style="margin-top: 16px;">Salir</button>
+            </div>
+        `;
     }
 };
 
-// Initializations
+// Global Listeners
 document.addEventListener('DOMContentLoaded', () => {
     InfoVial.initTheme();
 
@@ -208,8 +216,15 @@ document.addEventListener('DOMContentLoaded', () => {
         Dashboard.init();
     }
 
-    const isStep = /step\d/.test(window.location.pathname);
-    if (isStep) {
+    if (/step\d/.test(window.location.pathname)) {
         InfoVial.checkProgress();
+    }
+
+    // Listen for auth changes (Session refresh/logout)
+    if (typeof supabaseClient !== 'undefined') {
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+            if (event === 'SIGNED_OUT') window.location.href = 'index.html';
+            if (event === 'TOKEN_REFRESHED') console.log('Auth link secured.');
+        });
     }
 });

@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="es" data-theme="light">
 
 <head>
@@ -10,163 +11,146 @@
             background-color: var(--bg-clinical);
         }
 
-        .emergency-action {
+        .emergency-btn {
             background: var(--critical);
             color: white;
-            padding: 20px;
-            border-radius: var(--radius-card);
+            padding: 22px;
+            border-radius: 20px;
             text-decoration: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 14px;
             font-weight: 800;
-            font-size: 18px;
-            box-shadow: 0 8px 24px rgba(230, 57, 70, 0.3);
+            font-size: 20px;
+            box-shadow: 0 10px 30px rgba(230, 57, 70, 0.3);
+            margin-bottom: 32px;
+            border: none;
+            width: 100%;
+        }
+
+        .blood-badge {
+            background: var(--surface);
+            padding: 16px 20px;
+            border-radius: 20px;
+            text-align: center;
+            border: 2px solid var(--border);
+            min-width: 100px;
+        }
+
+        .blood-type {
+            font-size: 40px;
+            font-weight: 900;
+            color: var(--critical);
+            line-height: 1;
+        }
+
+        .clinical-card {
+            border-left: 6px solid var(--critical);
+            padding: 24px;
+            background: var(--surface);
+            border-radius: 20px;
             margin-bottom: 24px;
-            animation: pulse 2s infinite;
+            box-shadow: var(--shadow-soft);
         }
 
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.02);
-            }
-
-            100% {
-                transform: scale(1);
-            }
+        .clinical-item {
+            margin-bottom: 20px;
         }
 
-        .clinical-row {
-            display: flex;
-            gap: 16px;
-            padding: 16px;
-            border-bottom: 1.5px solid var(--border);
+        .clinical-item:last-child {
+            margin-bottom: 0;
         }
 
-        .clinical-row:last-child {
-            border-bottom: none;
-        }
-
-        .clinical-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--bg-clinical);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            color: var(--primary);
-        }
-
-        .clinical-data b {
-            display: block;
+        .clinical-label {
             font-size: 11px;
+            font-weight: 800;
             text-transform: uppercase;
             color: var(--text-muted);
-            margin-bottom: 2px;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
         }
 
-        .clinical-data p {
-            font-size: 16px;
+        .clinical-value {
+            font-size: 19px;
             font-weight: 700;
-            margin: 0;
+            color: var(--text-main);
         }
 
         .vial-footer {
             text-align: center;
-            padding: 32px 0;
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .error-overlay {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            text-align: center;
-            padding: 40px;
+            padding: 60px 0 40px;
+            opacity: 0.5;
         }
     </style>
 </head>
 
 <body>
-    <div class="error-overlay">
+    <div id="error-view"
+        style="display: none; height: 100vh; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px;">
         <h1 style="color: var(--critical);">Perfil no accesible</h1>
-        <p class="description">La información solicitada no existe o es privada.</p>
-        <a href="/" class="btn btn-outline">Volver al inicio</a>
+        <p class="description">Esta información no existe o es privada por seguridad.</p>
+        <a href="/" class="btn btn-outline" style="margin-top: 24px;">Volver al Inicio</a>
     </div>
 
-    <div class="main-content app-container">
-        <div class="vial-footer" style="padding: 20px 0; border-bottom: 5px solid var(--border); margin-bottom: 40px;">
-            PROTOCOLADO DE EMERGENCIA INFOVIAL
+    <div id="main-view" class="app-container animate-fade">
+        <div style="text-align: center; margin: 20px 0 40px;">
+            <div
+                style="font-size: 10px; font-weight: 900; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">
+                Protocolo de Emergencia</div>
+            <img src="/assets/logo-primary-horizontal.svg" alt="InfoVial" style="height: 28px;">
         </div>
 
-        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-            <div>
-                <h1 id="user-name" style="margin: 0; font-size: 24px;">Cargando...</h1>
-                <p id="user-meta" class="description" style="margin: 0;">...</p>
+        <header style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px;">
+            <div style="flex: 1;">
+                <h1 id="user-name" style="margin-bottom: 4px; font-size: 28px;">Cargando...</h1>
+                <p id="user-meta" class="description"
+                    style="font-size: 18px; color: var(--text-main); font-weight: 500;">...</p>
             </div>
-            <div
-                style="background: var(--surface); padding: 12px; border-radius: 12px; text-align: center; border: 1.5px solid var(--border);">
-                <div id="user-blood" style="font-size: 28px; font-weight: 900; color: var(--primary);">--</div>
-                <div style="font-size: 9px; font-weight: 800; color: var(--text-muted);">SANGRE</div>
+            <div class="blood-badge">
+                <div class="blood-type" id="user-blood">--</div>
+                <div class="clinical-label">SANGRE</div>
             </div>
         </header>
 
-        <a id="sos-link" href="#" class="emergency-action">
+        <a id="sos-link" href="#" class="emergency-btn">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                 stroke-linecap="round" stroke-linejoin="round">
                 <path
                     d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
                 </path>
             </svg>
-            Llamar Contacto SOS
+            LLAMAR CONTACTO SOS
         </a>
 
-        <div class="card" style="padding: 0;">
-            <div class="clinical-row">
-                <div class="clinical-icon" style="background: rgba(230, 57, 70, 0.1); color: var(--critical);"><svg
-                        width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <path
-                            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4M12 17h.01">
-                        </path>
-                    </svg></div>
-                <div class="clinical-data"><b>Alergias / Condiciones</b>
-                    <p id="user-conditions">...</p>
-                </div>
+        <div class="clinical-card">
+            <div class="clinical-item">
+                <div class="clinical-label">Alergias / Condiciones</div>
+                <div class="clinical-value" id="user-conditions">...</div>
             </div>
-            <div class="clinical-row">
-                <div class="clinical-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2.5">
-                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                    </svg></div>
-                <div class="clinical-data"><b>Medicamentos</b>
-                    <p id="user-meds">...</p>
-                </div>
+            <div style="height: 1px; background: var(--border); margin: 20px 0;"></div>
+            <div class="clinical-item">
+                <div class="clinical-label">Medicamentos</div>
+                <div class="clinical-value" id="user-meds">...</div>
             </div>
         </div>
 
         <div class="card">
-            <h2 class="label" style="margin-bottom: 16px;">Contacto de Emergencia</h2>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span
-                    class="description">Nombre:</span><span id="user-contact-name" style="font-weight: 700;">...</span>
-            </div>
-            <div style="display: flex; justify-content: space-between;"><span class="description">Relación:</span><span
-                    id="user-contact-rel" style="font-weight: 700;">...</span></div>
+            <h2 style="margin-bottom: 20px; font-size: 20px;">Contacto de Emergencia</h2>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;"><span
+                    class="description">Nombre:</span><span id="user-contact-name"
+                    style="font-weight: 700; color: var(--text-main);">...</span></div>
+            <div style="display: flex; justify-content: space-between;"><span
+                    class="description">Parentesco:</span><span id="user-contact-rel"
+                    style="font-weight: 700; color: var(--text-main);">...</span></div>
         </div>
 
-        <div class="vial-footer">InfoVial Sistema Médico • Emergencias</div>
+        <div class="vial-footer">
+            <img src="/assets/logo-icon-only.svg" style="height: 24px; opacity: 0.3; margin-bottom: 12px;">
+            <div
+                style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">
+                InfoVial Sistema de Respuesta</div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -174,49 +158,41 @@
     <script>
         window.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
-            const slug = urlParams.get('s') || urlParams.get('id'); // Support new 's' param or legacy 'id' (temp)
+            const slug = urlParams.get('s') || urlParams.get('id');
 
             if (!slug) { showError(); return; }
 
             try {
-                // Determine if we look up by slug (secure) or by vital_id (legacy/owner)
-                const isSlug = slug.length > 15; // UUID is 36 chars
+                const isSlug = slug.length > 15;
                 const query = supabaseClient.from('profiles').select('*');
 
-                if (isSlug) {
-                    query.eq('public_slug', slug);
-                } else {
-                    query.eq('vital_id', slug);
-                }
+                if (isSlug) { query.eq('public_slug', slug); }
+                else { query.eq('vital_id', slug); }
 
                 const { data, error } = await query.single();
                 if (error || !data) throw new Error('Not found');
 
-                injectData(data);
+                document.getElementById('user-name').textContent = data.nombre;
+                document.getElementById('user-meta').textContent = `${data.edad} años • ${data.ciudad || 'Colombia'}`;
+                document.getElementById('user-blood').textContent = data.sangre;
+                document.getElementById('user-conditions').textContent = data.condiciones || 'Ninguna reportada';
+                document.getElementById('user-meds').textContent = data.medicamentos || 'Ninguno';
+                document.getElementById('user-contact-name').textContent = data.contacto_nombre;
+                document.getElementById('user-contact-rel').textContent = data.contacto_relacion || 'Familiar';
+
+                if (data.telefono_emergencia) {
+                    document.getElementById('sos-link').href = `tel:${data.telefono_emergencia}`;
+                } else {
+                    document.getElementById('sos-link').style.display = 'none';
+                }
             } catch (err) {
                 showError();
             }
         });
 
-        function injectData(u) {
-            document.getElementById('user-name').textContent = u.nombre;
-            document.getElementById('user-meta').textContent = `${u.edad} años • ${u.ciudad || 'Colombia'}`;
-            document.getElementById('user-blood').textContent = u.sangre;
-            document.getElementById('user-conditions').textContent = u.condiciones || 'Ninguna conocida';
-            document.getElementById('user-meds').textContent = u.medicamentos || 'Ninguno';
-            document.getElementById('user-contact-name').textContent = u.contacto_nombre;
-            document.getElementById('user-contact-rel').textContent = u.contacto_relacion || 'Familiar';
-
-            if (u.telefono_emergencia) {
-                document.getElementById('sos-link').href = `tel:${u.telefono_emergencia}`;
-            } else {
-                document.getElementById('sos-link').style.display = 'none';
-            }
-        }
-
         function showError() {
-            document.querySelector('.main-content').style.display = 'none';
-            document.querySelector('.error-overlay').style.display = 'flex';
+            document.getElementById('main-view').style.display = 'none';
+            document.getElementById('error-view').style.display = 'flex';
         }
     </script>
 </body>

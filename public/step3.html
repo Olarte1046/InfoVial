@@ -4,77 +4,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>InfoVial - Paso 3</title>
+    <title>InfoVial - Contactos</title>
     <link rel="stylesheet" href="/css/main.css">
 </head>
 
 <body>
     <div class="app-container">
-        <button class="theme-toggle" onclick="InfoVial.toggleTheme()" aria-label="Toggle Theme"></button>
-
-        <div class="mb-24" style="display: flex; justify-content: space-between; align-items: center;">
-            <span class="label" style="margin: 0;">Paso 3 de 4</span>
+        <div style="display: flex; align-items: center; margin-bottom: 40px; margin-top: 20px;">
             <div
-                style="height: 4px; flex: 1; background: var(--border); margin-left: 16px; border-radius: 2px; position: relative; overflow: hidden;">
+                style="height: 4px; flex: 1; background: var(--border); border-radius: 2px; position: relative; overflow: hidden;">
                 <div style="position: absolute; left: 0; top: 0; height: 100%; width: 75%; background: var(--primary);">
+                </div>
+            </div>
+            <span
+                style="font-size: 12px; font-weight: 800; color: var(--primary); margin-left: 16px; letter-spacing: 1px;">PASO
+                3/4</span>
+        </div>
+
+        <div class="animate-fade">
+            <h1>Contacto SOS.</h1>
+            <p class="description" style="margin-bottom: 32px;">A quién debemos llamar en caso de que no puedas hablar.
+            </p>
+
+            <div class="card">
+                <div style="margin-bottom: 20px;">
+                    <label class="label">Nombre del contacto</label>
+                    <input type="text" id="contacto_nombre" placeholder="Ej. Juan Pérez">
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label class="label">Parentesco / Relación</label>
+                    <input type="text" id="contacto_relacion" placeholder="Ej. Esposo, Madre, Amigo">
+                </div>
+
+                <div>
+                    <label class="label">Teléfono móvil</label>
+                    <input type="tel" id="contacto_tel" placeholder="Ej. +57 321 ...">
                 </div>
             </div>
         </div>
 
-        <div class="logo-centered" style="margin-bottom: 24px;">
-            <svg width="120" height="32" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg">
-                <g>
-                    <path d="M16 10 L26 36 L36 10" fill="none" stroke="#0052FF" stroke-width="3" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                    <polyline points="18,24 22,24 24,18 27,30 30,22 34,24" fill="none" stroke="#2EC4B6" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                </g>
-                <text x="52" y="30" font-family="Manrope, sans-serif" font-size="20" font-weight="600"
-                    fill="currentColor">Infovial</text>
-            </svg>
-        </div>
-
-        <h1>Medicamentos</h1>
-        <p class="description">Indica si tomas algún medicamento de forma diaria o recurrente.</p>
-
-        <div class="card">
-            <div class="input-group">
-                <label class="label">Lista de medicamentos</label>
-                <textarea id="medicamentos" placeholder="Ej. Insulina diaria 20mg, Losartán..."
-                    style="min-height: 120px;"></textarea>
-            </div>
-
-            <div class="mt-16">
-                <button type="button" onclick="setNoMeds()" class="btn btn-outline"
-                    style="height: 40px; font-size: 14px;">Ninguno</button>
-            </div>
-        </div>
-
-        <div class="mt-auto">
-            <button onclick="InfoVial.backStep()" class="btn btn-back">← Volver</button>
+        <div class="mt-auto animate-fade" style="padding-bottom: 24px;">
             <button onclick="save()" class="btn btn-primary">Continuar</button>
+            <button onclick="InfoVial.backStep()" class="btn btn-back" style="margin-top: 12px; height: auto;">← Volver
+                atrás</button>
         </div>
     </div>
 
     <script src="/js/app.js"></script>
     <script>
-        function setNoMeds() {
-            document.getElementById('medicamentos').value = 'Ninguno';
-            document.getElementById('medicamentos').focus();
-        }
-
         function save() {
-            const meds = document.getElementById('medicamentos').value.trim();
-            if (!meds) {
-                alert('Si no toma medicamentos, escriba "Ninguno" o presione el botón.');
-                return;
-            }
-            InfoVial.saveData({ medicamentos: meds });
+            const c_nombre = document.getElementById('contacto_nombre').value;
+            const c_rel = document.getElementById('contacto_relacion').value;
+            const c_tel = document.getElementById('contacto_tel').value;
+            if (!c_nombre || !c_tel) { alert('El nombre y el teléfono son obligatorios'); return; }
+            InfoVial.saveData({ contacto_nombre: c_nombre, contacto_relacion: c_rel, telefono_emergencia: c_tel });
             InfoVial.nextStep('step4.html');
         }
         window.onload = () => {
             const data = InfoVial.getData();
-            if (data.medicamentos) document.getElementById('medicamentos').value = data.medicamentos;
+            if (data.contacto_nombre) document.getElementById('contacto_nombre').value = data.contacto_nombre;
+            if (data.contacto_relacion) document.getElementById('contacto_relacion').value = data.contacto_relacion;
+            if (data.telefono_emergencia) document.getElementById('contacto_tel').value = data.telefono_emergencia;
         }
     </script>
 </body>

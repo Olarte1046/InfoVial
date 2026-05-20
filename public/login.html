@@ -1,88 +1,109 @@
 <!DOCTYPE html>
 <html lang="es" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>InfoVial - Acceso Seguro</title>
     <link rel="stylesheet" href="/css/main.css">
     <style>
-        .auth-card {
-            max-width: 400px;
-            margin: 60px auto;
-            padding: 32px;
-        }
-        .tabs {
-            display: flex;
-            gap: 16px;
+        .auth-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: var(--bg-clinical);
+            padding: 4px;
+            border-radius: 12px;
             margin-bottom: 24px;
-            border-bottom: 1px solid var(--border);
         }
-        .tab {
-            padding: 8px 16px;
-            cursor: pointer;
+
+        .auth-tab {
+            padding: 10px;
+            text-align: center;
             font-weight: 700;
+            font-size: 14px;
             color: var(--text-muted);
-            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
         }
-        .tab.active {
+
+        .auth-tab.active {
+            background: var(--surface);
             color: var(--primary);
-            border-bottom-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
+
         .auth-form {
             display: none;
         }
+
         .auth-form.active {
             display: block;
         }
     </style>
 </head>
+
 <body>
     <div class="app-container">
-        <button class="theme-toggle" onclick="InfoVial.toggleTheme()" aria-label="Toggle Theme"></button>
-        
-        <div class="logo-centered" style="margin: 40px 0;">
-            <svg width="180" height="40" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg">
-                <g>
-                    <path d="M16 10 L26 36 L36 10" fill="none" stroke="#0052FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-                    <polyline points="18,24 22,24 24,18 27,30 30,22 34,24" fill="none" stroke="#2EC4B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </g>
-                <text x="52" y="30" font-family="Manrope, sans-serif" font-size="20" font-weight="600" fill="currentColor">Infovial</text>
+        <button class="theme-toggle" onclick="InfoVial.toggleTheme()" aria-label="Toggle Theme">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
+        </button>
+
+        <div class="logo-box animate-fade" style="margin-top: 40px;">
+            <img src="/assets/logo-primary-horizontal.svg" alt="InfoVial" class="logo-main">
         </div>
 
-        <div class="card auth-card">
-            <div class="tabs">
-                <div class="tab active" onclick="switchTab('login')">Ingresar</div>
-                <div class="tab" onclick="switchTab('signup')">Registrarse</div>
+        <div class="animate-fade" style="animation-delay: 0.1s;">
+            <div class="card" style="padding: 32px;">
+                <div class="auth-tabs">
+                    <div class="auth-tab active" onclick="switchTab('login')">Ingresar</div>
+                    <div class="auth-tab" onclick="switchTab('signup')">Crear Perfil</div>
+                </div>
+
+                <form id="login-form" class="auth-form active" onsubmit="handleAuth(event, 'login')">
+                    <h2>Bienvenido de vuelta</h2>
+                    <p class="description" style="margin-bottom: 24px; font-size: 14px;">Ingresa para gestionar tu
+                        identidad médica.</p>
+                    <div style="margin-bottom: 16px;">
+                        <label class="label">Email</label>
+                        <input type="email" id="login-email" placeholder="tu@email.com" required>
+                    </div>
+                    <div style="margin-bottom: 24px;">
+                        <label class="label">Contraseña</label>
+                        <input type="password" id="login-password" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Entrar</button>
+                </form>
+
+                <form id="signup-form" class="auth-form" onsubmit="handleAuth(event, 'signup')">
+                    <h2>Únete a InfoVial</h2>
+                    <p class="description" style="margin-bottom: 24px; font-size: 14px;">Protege tu salud con tecnología
+                        de vanguardia.</p>
+                    <div style="margin-bottom: 16px;">
+                        <label class="label">Email</label>
+                        <input type="email" id="signup-email" placeholder="tu@email.com" required>
+                    </div>
+                    <div style="margin-bottom: 24px;">
+                        <label class="label">Contraseña</label>
+                        <input type="password" id="signup-password" placeholder="Mínimo 6 caracteres" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Registrarse</button>
+                </form>
+
+                <div style="text-align: right; margin-top: 12px;">
+                    <a href="password-reset.html"
+                        style="font-size: 12px; color: var(--text-muted); text-decoration: none;">¿Olvidaste tu
+                        contraseña?</a>
+                </div>
+                <div id="auth-error"
+                    style="color: var(--critical); font-size: 14px; margin-top: 16px; text-align: center; display: none;">
+                </div>
             </div>
 
-            <!-- Login Form -->
-            <form id="login-form" class="auth-form active" onsubmit="handleAuth(event, 'login')">
-                <div class="input-group">
-                    <label class="label">Email</label>
-                    <input type="email" id="login-email" placeholder="tu@email.com" required>
-                </div>
-                <div class="input-group">
-                    <label class="label">Contraseña</label>
-                    <input type="password" id="login-password" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Entrar</button>
-            </form>
-
-            <!-- Signup Form -->
-            <form id="signup-form" class="auth-form" onsubmit="handleAuth(event, 'signup')">
-                <div class="input-group">
-                    <label class="label">Email</label>
-                    <input type="email" id="signup-email" placeholder="tu@email.com" required>
-                </div>
-                <div class="input-group">
-                    <label class="label">Contraseña</label>
-                    <input type="password" id="signup-password" placeholder="Mínimo 6 caracteres" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Crear Cuenta</button>
-            </form>
-            
-            <div id="auth-error" style="color: var(--critical); font-size: 14px; margin-top: 16px; text-align: center; display: none;"></div>
+            <p style="text-align: center; margin-top: 32px;"><a href="index.html"
+                    style="color: var(--text-muted); font-size: 14px; text-decoration: none;">← Volver al inicio</a></p>
         </div>
     </div>
 
@@ -91,7 +112,7 @@
     <script src="/js/app.js"></script>
     <script>
         function switchTab(type) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.textContent.toLowerCase().includes(type === 'login' ? 'ingresar' : 'registrar')));
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.toggle('active', t.textContent.toLowerCase().includes(type === 'login' ? 'ingresar' : 'crear')));
             document.getElementById('login-form').classList.toggle('active', type === 'login');
             document.getElementById('signup-form').classList.toggle('active', type === 'signup');
             document.getElementById('auth-error').style.display = 'none';
@@ -126,4 +147,5 @@
         }
     </script>
 </body>
+
 </html>

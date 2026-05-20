@@ -4,68 +4,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>InfoVial - Paso 1</title>
+    <title>InfoVial - Perfil</title>
     <link rel="stylesheet" href="/css/main.css">
+    <style>
+        .blood-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .blood-opt {
+            padding: 16px 8px;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            text-align: center;
+            font-weight: 800;
+            cursor: pointer;
+            background: var(--surface);
+            transition: all 0.2s ease;
+            font-size: 15px;
+        }
+
+        .blood-opt.active {
+            border-color: var(--primary);
+            background: var(--primary-soft);
+            color: var(--primary);
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 
 <body>
     <div class="app-container">
-        <button class="theme-toggle" onclick="InfoVial.toggleTheme()" aria-label="Toggle Theme"></button>
-
-        <div class="mb-24" style="display: flex; justify-content: space-between; align-items: center;">
-            <span class="label" style="margin: 0;">Paso 1 de 4</span>
+        <div style="display: flex; align-items: center; margin-bottom: 40px; margin-top: 20px;">
             <div
-                style="height: 4px; flex: 1; background: var(--border); margin-left: 16px; border-radius: 2px; position: relative; overflow: hidden;">
+                style="height: 4px; flex: 1; background: var(--border); border-radius: 2px; position: relative; overflow: hidden;">
                 <div style="position: absolute; left: 0; top: 0; height: 100%; width: 25%; background: var(--primary);">
                 </div>
             </div>
+            <span
+                style="font-size: 12px; font-weight: 800; color: var(--primary); margin-left: 16px; letter-spacing: 1px;">PASO
+                1/4</span>
         </div>
 
-        <div class="logo-centered" style="margin-bottom: 24px;">
-            <svg width="120" height="32" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg">
-                <g>
-                    <path d="M16 10 L26 36 L36 10" fill="none" stroke="#0052FF" stroke-width="3" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                    <polyline points="18,24 22,24 24,18 27,30 30,22 34,24" fill="none" stroke="#2EC4B6" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                </g>
-                <text x="52" y="30" font-family="Manrope, sans-serif" font-size="20" font-weight="600"
-                    fill="currentColor">Infovial</text>
-            </svg>
-        </div>
+        <div class="animate-fade">
+            <h1>Háblanos de ti.</h1>
+            <p class="description" style="margin-bottom: 32px;">Tu información básica es la base de tu perfil médico.
+            </p>
 
-        <h1>Datos básicos</h1>
-        <p class="description">Estos detalles son fundamentales para tu identificación en el sistema.</p>
+            <div class="card">
+                <div style="margin-bottom: 24px;">
+                    <label class="label">Nombre completo</label>
+                    <input type="text" id="nombre" placeholder="Ej. Ana María Rojas">
+                </div>
 
-        <div class="card">
-            <div class="input-group">
-                <label class="label">Nombre completo</label>
-                <input type="text" id="nombre" placeholder="Ej. Juan Pérez">
-            </div>
+                <div style="margin-bottom: 24px;">
+                    <label class="label">Edad (años)</label>
+                    <input type="number" id="edad" placeholder="Ej. 28">
+                </div>
 
-            <div class="input-group">
-                <label class="label">Edad</label>
-                <input type="number" id="edad" placeholder="Ej. 30">
-            </div>
-
-            <div class="input-group">
-                <label class="label">Tipo de sangre</label>
-                <div class="blood-grid">
-                    <div class="blood-opt" onclick="setBlood('O+')">O+</div>
-                    <div class="blood-opt" onclick="setBlood('O-')">O-</div>
-                    <div class="blood-opt" onclick="setBlood('A+')">A+</div>
-                    <div class="blood-opt" onclick="setBlood('A-')">A-</div>
-                    <div class="blood-opt" onclick="setBlood('B+')">B+</div>
-                    <div class="blood-opt" onclick="setBlood('B-')">B-</div>
-                    <div class="blood-opt" onclick="setBlood('AB+')">AB+</div>
-                    <div class="blood-opt" onclick="setBlood('AB-')">AB-</div>
+                <div>
+                    <label class="label">Grupo Sanguíneo</label>
+                    <div class="blood-grid">
+                        <div class="blood-opt" onclick="setBlood('O+')">O+</div>
+                        <div class="blood-opt" onclick="setBlood('O-')">O-</div>
+                        <div class="blood-opt" onclick="setBlood('A+')">A+</div>
+                        <div class="blood-opt" onclick="setBlood('A-')">A-</div>
+                        <div class="blood-opt" onclick="setBlood('B+')">B+</div>
+                        <div class="blood-opt" onclick="setBlood('B-')">B-</div>
+                        <div class="blood-opt" onclick="setBlood('AB+')">AB+</div>
+                        <div class="blood-opt" onclick="setBlood('AB-')">AB-</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="mt-auto">
-            <button onclick="InfoVial.backStep()" class="btn btn-back">← Volver</button>
+        <div class="mt-auto animate-fade" style="animation-delay: 0.1s; padding-bottom: 24px;">
             <button onclick="save()" class="btn btn-primary">Continuar</button>
+            <p style="text-align: center; margin-top: 20px;"><a href="index.html"
+                    style="color: var(--text-muted); font-size: 14px; text-decoration: none;">Cancelar registro</a></p>
         </div>
     </div>
 
@@ -74,25 +91,14 @@
         let selectedBlood = '';
         function setBlood(b) {
             selectedBlood = b;
-            document.querySelectorAll('.blood-opt').forEach(opt => {
-                opt.classList.toggle('active', opt.textContent === b);
-            });
+            document.querySelectorAll('.blood-opt').forEach(opt => opt.classList.toggle('active', opt.innerText === b));
         }
         function save() {
             const nombre = document.getElementById('nombre').value;
             const edad = document.getElementById('edad').value;
-            if (!nombre || !edad || !selectedBlood) {
-                alert('Por favor completa todos los campos');
-                return;
-            }
+            if (!nombre || !edad || !selectedBlood) { alert('Completa todos los campos para continuar'); return; }
             InfoVial.saveData({ nombre, edad, sangre: selectedBlood });
             InfoVial.nextStep('step2.html');
-        }
-        window.onload = () => {
-            const data = InfoVial.getData();
-            if (data.nombre) document.getElementById('nombre').value = data.nombre;
-            if (data.edad) document.getElementById('edad').value = data.edad;
-            if (data.sangre) setBlood(data.sangre);
         }
     </script>
 </body>
