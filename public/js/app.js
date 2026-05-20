@@ -199,7 +199,7 @@ const Dashboard = {
         document.querySelector('.app-container').innerHTML = `
             <div style="text-align: center; padding: 60px 24px; animation: fadeIn 0.5s ease;">
                 <div style="font-size: 64px; margin-bottom: 24px;">👋</div>
-                <h1 style="font-family: 'Instrument Serif', serif;">Casi listo, ${this.session.user.email.split('@')[0]}</h1>
+                <h1>Casi listo, ${this.session.user.email.split('@')[0]}</h1>
                 <p class="description" style="margin-bottom: 32px;">Aún no has configurado tu perfil médico vital.</p>
                 <a href="step1.html" class="btn btn-primary">Completar mi Perfil</a>
                 <button onclick="Dashboard.logout()" class="btn btn-outline" style="margin-top: 16px;">Salir</button>
