@@ -212,19 +212,31 @@ const Dashboard = {
 document.addEventListener('DOMContentLoaded', () => {
     InfoVial.initTheme();
 
-    if (window.location.pathname.includes('dashboard.html')) {
+    const path = window.location.pathname;
+    const isDashboard = path.includes('dashboard.html');
+    const isLogin = path.includes('login.html');
+    const isStep = /step\d/.test(path);
+
+    if (isDashboard) {
         Dashboard.init();
     }
 
-    if (/step\d/.test(window.location.pathname)) {
+    if (isStep) {
         InfoVial.checkProgress();
     }
 
-    // Listen for auth changes (Session refresh/logout)
+    // Auth Lifecycle Manager
     if (typeof supabaseClient !== 'undefined') {
         supabaseClient.auth.onAuthStateChange((event, session) => {
-            if (event === 'SIGNED_OUT') window.location.href = 'index.html';
-            if (event === 'TOKEN_REFRESHED') console.log('Auth link secured.');
+            // Only redirect to index if we are on a page that REQUIRES auth
+            if (event === 'SIGNED_OUT' && (isDashboard || isStep)) {
+                window.location.href = 'index.html';
+            }
+
+            // If we are on login/index and we suddenly get a session, go to dashboard
+            if (event === 'SIGNED_IN' && (isLogin || path === '/' || path.includes('index.html'))) {
+                window.location.href = 'dashboard.html';
+            }
         });
     }
 });
