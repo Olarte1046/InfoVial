@@ -6,6 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>InfoVial - Perfil</title>
     <link rel="stylesheet" href="/css/main.css">
+
+    <!-- Theme Stabilization Fix -->
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('theme');
+
+            if (savedTheme === 'dark' || savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } else {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute(
+                    'data-theme',
+                    prefersDark ? 'dark' : 'light'
+                );
+            }
+        })();
+    </script>
+
     <style>
         .blood-grid {
             display: grid;
@@ -39,17 +57,20 @@
         <div style="display: flex; align-items: center; margin-bottom: 40px; margin-top: 20px;">
             <div
                 style="height: 4px; flex: 1; background: var(--border); border-radius: 2px; position: relative; overflow: hidden;">
-                <div style="position: absolute; left: 0; top: 0; height: 100%; width: 25%; background: var(--primary);">
+                <div
+                    style="position: absolute; left: 0; top: 0; height: 100%; width: 25%; background: var(--primary);">
                 </div>
             </div>
             <span
-                style="font-size: 12px; font-weight: 800; color: var(--primary); margin-left: 16px; letter-spacing: 1px;">PASO
-                1/4</span>
+                style="font-size: 12px; font-weight: 800; color: var(--primary); margin-left: 16px; letter-spacing: 1px;">
+                PASO 1/4
+            </span>
         </div>
 
         <div class="animate-fade">
             <h1>Háblanos de ti.</h1>
-            <p class="description" style="margin-bottom: 32px;">Tu información básica es la base de tu perfil médico.
+            <p class="description" style="margin-bottom: 32px;">
+                Tu información básica es la base de tu perfil médico.
             </p>
 
             <div class="card">
@@ -81,23 +102,45 @@
 
         <div class="mt-auto animate-fade" style="animation-delay: 0.1s; padding-bottom: 24px;">
             <button onclick="save()" class="btn btn-primary">Continuar</button>
-            <p style="text-align: center; margin-top: 20px;"><a href="index.html"
-                    style="color: var(--text-muted); font-size: 14px; text-decoration: none;">Cancelar registro</a></p>
+
+            <p style="text-align: center; margin-top: 20px;">
+                <a href="index.html"
+                    style="color: var(--text-muted); font-size: 14px; text-decoration: none;">
+                    Cancelar registro
+                </a>
+            </p>
         </div>
     </div>
 
     <script src="/js/app.js"></script>
+
     <script>
         let selectedBlood = '';
+
         function setBlood(b) {
             selectedBlood = b;
-            document.querySelectorAll('.blood-opt').forEach(opt => opt.classList.toggle('active', opt.innerText === b));
+
+            document.querySelectorAll('.blood-opt')
+                .forEach(opt =>
+                    opt.classList.toggle('active', opt.innerText === b)
+                );
         }
+
         function save() {
             const nombre = document.getElementById('nombre').value;
             const edad = document.getElementById('edad').value;
-            if (!nombre || !edad || !selectedBlood) { alert('Completa todos los campos para continuar'); return; }
-            InfoVial.saveData({ nombre, edad, sangre: selectedBlood });
+
+            if (!nombre || !edad || !selectedBlood) {
+                alert('Completa todos los campos para continuar');
+                return;
+            }
+
+            InfoVial.saveData({
+                nombre,
+                edad,
+                sangre: selectedBlood
+            });
+
             InfoVial.nextStep('step2.html');
         }
     </script>

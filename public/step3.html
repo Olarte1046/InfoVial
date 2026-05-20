@@ -6,6 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>InfoVial - Contactos</title>
     <link rel="stylesheet" href="/css/main.css">
+
+    <!-- Theme Stabilization Fix -->
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('theme');
+
+            if (savedTheme === 'dark' || savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } else {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute(
+                    'data-theme',
+                    prefersDark ? 'dark' : 'light'
+                );
+            }
+        })();
+    </script>
 </head>
 
 <body>
@@ -13,17 +30,22 @@
         <div style="display: flex; align-items: center; margin-bottom: 40px; margin-top: 20px;">
             <div
                 style="height: 4px; flex: 1; background: var(--border); border-radius: 2px; position: relative; overflow: hidden;">
-                <div style="position: absolute; left: 0; top: 0; height: 100%; width: 75%; background: var(--primary);">
+                <div
+                    style="position: absolute; left: 0; top: 0; height: 100%; width: 75%; background: var(--primary);">
                 </div>
             </div>
+
             <span
-                style="font-size: 12px; font-weight: 800; color: var(--primary); margin-left: 16px; letter-spacing: 1px;">PASO
-                3/4</span>
+                style="font-size: 12px; font-weight: 800; color: var(--primary); margin-left: 16px; letter-spacing: 1px;">
+                PASO 3/4
+            </span>
         </div>
 
         <div class="animate-fade">
             <h1>Contacto SOS.</h1>
-            <p class="description" style="margin-bottom: 32px;">A quién debemos llamar en caso de que no puedas hablar.
+
+            <p class="description" style="margin-bottom: 32px;">
+                A quién debemos llamar en caso de que no puedas hablar.
             </p>
 
             <div class="card">
@@ -34,39 +56,75 @@
 
                 <div style="margin-bottom: 20px;">
                     <label class="label">Parentesco / Relación</label>
-                    <input type="text" id="contacto_relacion" placeholder="Ej. Esposo, Madre, Amigo">
+                    <input type="text" id="contacto_relacion"
+                        placeholder="Ej. Esposo, Madre, Amigo">
                 </div>
 
                 <div>
                     <label class="label">Teléfono móvil</label>
-                    <input type="tel" id="contacto_tel" placeholder="Ej. +57 321 ...">
+                    <input type="tel" id="contacto_tel"
+                        placeholder="Ej. +57 321 ...">
                 </div>
             </div>
         </div>
 
         <div class="mt-auto animate-fade" style="padding-bottom: 24px;">
-            <button onclick="save()" class="btn btn-primary">Continuar</button>
-            <button onclick="InfoVial.backStep()" class="btn btn-back" style="margin-top: 12px; height: auto;">← Volver
-                atrás</button>
+            <button onclick="save()" class="btn btn-primary">
+                Continuar
+            </button>
+
+            <button onclick="InfoVial.backStep()" class="btn btn-back"
+                style="margin-top: 12px; height: auto;">
+                ← Volver atrás
+            </button>
         </div>
     </div>
 
     <script src="/js/app.js"></script>
+
     <script>
         function save() {
-            const c_nombre = document.getElementById('contacto_nombre').value;
-            const c_rel = document.getElementById('contacto_relacion').value;
-            const c_tel = document.getElementById('contacto_tel').value;
-            if (!c_nombre || !c_tel) { alert('El nombre y el teléfono son obligatorios'); return; }
-            InfoVial.saveData({ contacto_nombre: c_nombre, contacto_relacion: c_rel, telefono_emergencia: c_tel });
+            const c_nombre =
+                document.getElementById('contacto_nombre').value;
+
+            const c_rel =
+                document.getElementById('contacto_relacion').value;
+
+            const c_tel =
+                document.getElementById('contacto_tel').value;
+
+            if (!c_nombre || !c_tel) {
+                alert('El nombre y el teléfono son obligatorios');
+                return;
+            }
+
+            InfoVial.saveData({
+                contacto_nombre: c_nombre,
+                contacto_relacion: c_rel,
+                telefono_emergencia: c_tel
+            });
+
             InfoVial.nextStep('step4.html');
         }
+
         window.onload = () => {
             const data = InfoVial.getData();
-            if (data.contacto_nombre) document.getElementById('contacto_nombre').value = data.contacto_nombre;
-            if (data.contacto_relacion) document.getElementById('contacto_relacion').value = data.contacto_relacion;
-            if (data.telefono_emergencia) document.getElementById('contacto_tel').value = data.telefono_emergencia;
-        }
+
+            if (data.contacto_nombre) {
+                document.getElementById('contacto_nombre').value =
+                    data.contacto_nombre;
+            }
+
+            if (data.contacto_relacion) {
+                document.getElementById('contacto_relacion').value =
+                    data.contacto_relacion;
+            }
+
+            if (data.telefono_emergencia) {
+                document.getElementById('contacto_tel').value =
+                    data.telefono_emergencia;
+            }
+        };
     </script>
 </body>
 

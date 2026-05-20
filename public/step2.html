@@ -6,6 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>InfoVial - Salud</title>
     <link rel="stylesheet" href="/css/main.css">
+
+    <!-- Theme Stabilization Fix -->
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('theme');
+
+            if (savedTheme === 'dark' || savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } else {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute(
+                    'data-theme',
+                    prefersDark ? 'dark' : 'light'
+                );
+            }
+        })();
+    </script>
 </head>
 
 <body>
@@ -13,54 +30,86 @@
         <div style="display: flex; align-items: center; margin-bottom: 40px; margin-top: 20px;">
             <div
                 style="height: 4px; flex: 1; background: var(--border); border-radius: 2px; position: relative; overflow: hidden;">
-                <div style="position: absolute; left: 0; top: 0; height: 100%; width: 50%; background: var(--primary);">
+                <div
+                    style="position: absolute; left: 0; top: 0; height: 100%; width: 50%; background: var(--primary);">
                 </div>
             </div>
+
             <span
-                style="font-size: 12px; font-weight: 800; color: var(--primary); margin-left: 16px; letter-spacing: 1px;">PASO
-                2/4</span>
+                style="font-size: 12px; font-weight: 800; color: var(--primary); margin-left: 16px; letter-spacing: 1px;">
+                PASO 2/4
+            </span>
         </div>
 
         <div class="animate-fade">
             <h1>Salud y Alergias.</h1>
-            <p class="description" style="margin-bottom: 32px;">Información crítica que puede salvar tu vida en
-                segundos.</p>
+
+            <p class="description" style="margin-bottom: 32px;">
+                Información crítica que puede salvar tu vida en segundos.
+            </p>
 
             <div class="card">
                 <div style="margin-bottom: 24px;">
                     <label class="label">Alergias o condiciones</label>
-                    <textarea id="condiciones" placeholder="Ej. Alérgico a la Penicilina, Diabético tipo 2..."
+
+                    <textarea id="condiciones"
+                        placeholder="Ej. Alérgico a la Penicilina, Diabético tipo 2..."
                         style="width: 100%; min-height: 100px; padding: 16px; border-radius: 16px; border: 1.5px solid var(--border); background: var(--surface); color: var(--text-main); font-family: inherit; font-size: 16px; resize: none;"></textarea>
                 </div>
 
                 <div>
                     <label class="label">Medicamentos actuales</label>
-                    <textarea id="medicamentos" placeholder="Ej. Metformina 500mg, Losartán..."
+
+                    <textarea id="medicamentos"
+                        placeholder="Ej. Metformina 500mg, Losartán..."
                         style="width: 100%; min-height: 100px; padding: 16px; border-radius: 16px; border: 1.5px solid var(--border); background: var(--surface); color: var(--text-main); font-family: inherit; font-size: 16px; resize: none;"></textarea>
                 </div>
             </div>
         </div>
 
         <div class="mt-auto animate-fade" style="padding-bottom: 24px;">
-            <button onclick="save()" class="btn btn-primary">Continuar</button>
-            <button onclick="InfoVial.backStep()" class="btn btn-back" style="margin-top: 12px; height: auto;">← Volver
-                atrás</button>
+            <button onclick="save()" class="btn btn-primary">
+                Continuar
+            </button>
+
+            <button onclick="InfoVial.backStep()" class="btn btn-back"
+                style="margin-top: 12px; height: auto;">
+                ← Volver atrás
+            </button>
         </div>
     </div>
 
     <script src="/js/app.js"></script>
+
     <script>
         function save() {
-            const condiciones = document.getElementById('condiciones').value;
-            const medicamentos = document.getElementById('medicamentos').value;
-            InfoVial.saveData({ condiciones, medicamentos });
+            const condiciones =
+                document.getElementById('condiciones').value;
+
+            const medicamentos =
+                document.getElementById('medicamentos').value;
+
+            InfoVial.saveData({
+                condiciones,
+                medicamentos
+            });
+
             InfoVial.nextStep('step3.html');
         }
+
         window.onload = () => {
             const data = InfoVial.getData();
-            if (data.condiciones) document.getElementById('condiciones').value = data.condiciones;
-            if (data.medicamentos) document.getElementById('medicamentos').value = data.medicamentos;
-        }
+
+            if (data.condiciones) {
+                document.getElementById('condiciones').value =
+                    data.condiciones;
+            }
+
+            if (data.medicamentos) {
+                document.getElementById('medicamentos').value =
+                    data.medicamentos;
+            }
+        };
     </script>
 </body>
 
