@@ -4,7 +4,7 @@
 const InfoVial = {
     storageKey: 'infovial_registration_data',
 
-    // Load data from localStorage
+    // Load data from localStorage (Temporary registration state)
     getData() {
         const data = localStorage.getItem(this.storageKey);
         return data ? JSON.parse(data) : {
@@ -21,14 +21,12 @@ const InfoVial = {
         };
     },
 
-    // Save data to localStorage
     saveData(data) {
         const currentData = this.getData();
         const newData = { ...currentData, ...data };
         localStorage.setItem(this.storageKey, JSON.stringify(newData));
     },
 
-    // Clear data
     clearData() {
         localStorage.removeItem(this.storageKey);
     },
@@ -57,7 +55,6 @@ const InfoVial = {
         }
     },
 
-    // Navigation helper
     nextStep(nextPage) {
         window.location.href = nextPage;
     },
@@ -66,21 +63,23 @@ const InfoVial = {
         window.history.back();
     },
 
-    // Guard to ensure user doesn't skip steps
     checkProgress() {
         const data = this.getData();
         const path = window.location.pathname;
-
-        if (path.includes('step2') && !data.nombre) window.location.href = 'step1.html';
-        if (path.includes('step3') && !data.nombre) window.location.href = 'step1.html';
-        if (path.includes('step4') && !data.nombre) window.location.href = 'step1.html';
-        if (path.includes('step5') && !localStorage.getItem('infovial_last_id')) window.location.href = 'index.html';
+        if ((path.includes('step2') || path.includes('step3') || path.includes('step4')) && !data.nombre) {
+            window.location.href = 'step1.html';
+        }
     },
 
-    // Mask ID for privacy
     maskId(id) {
         if (!id) return '...';
         return id.length > 10 ? id.substring(0, 7) + '...' + id.substring(id.length - 2) : id;
+    },
+
+    async getSession() {
+        if (typeof supabaseClient === 'undefined') return null;
+        const { data, error } = await supabaseClient.auth.getSession();
+        return data?.session || null;
     }
 };
 
@@ -88,214 +87,100 @@ const InfoVial = {
  * Dashboard Logic Controller
  */
 const Dashboard = {
-    currentId: localStorage.getItem('infovial_last_id'),
+    session: null,
     profile: null,
-    historyKey: 'infovial_history',
 
     async init() {
-        // Migration/Sync: Ensure currentId is in history
-        if (this.currentId) this.addToHistory(this.currentId);
+        this.session = await InfoVial.getSession();
 
-        // If no ID in localStorage, check URL params as fallback
-        if (!this.currentId) {
-            const urlParams = new URLSearchParams(window.location.search);
-            const urlId = urlParams.get('id');
-            if (urlId && urlId.startsWith('VIAL-')) {
-                this.currentId = urlId;
-                localStorage.setItem('infovial_last_id', urlId);
-                this.addToHistory(urlId);
-            }
-        }
-
-        if (!this.currentId) {
-            this.showClaimUI();
+        if (!this.session) {
+            window.location.href = 'login.html';
             return;
         }
-        await this.loadProfile();
-        this.render();
-    },
 
-    addToHistory(vialId) {
-        let history = JSON.parse(localStorage.getItem(this.historyKey) || '[]');
-        if (!history.includes(vialId)) {
-            history.push(vialId);
-            localStorage.setItem(this.historyKey, JSON.stringify(history));
+        if (!navigator.onLine) {
+            this.showOfflineError();
+            return;
         }
-    },
 
-    getHistory() {
-        return JSON.parse(localStorage.getItem(this.historyKey) || '[]');
-    },
-
-    switchProfile(vialId) {
-        localStorage.setItem('infovial_last_id', vialId);
-        window.location.reload();
+        await this.loadProfile();
+        if (this.profile) {
+            this.render();
+        } else {
+            // If logged in but no profile, maybe redirect to registration or show "Create Profile"
+            this.showNoProfileUI();
+        }
     },
 
     async loadProfile() {
-        if (typeof supabaseClient === 'undefined') {
-            console.error('Supabase client not loaded');
-            return;
-        }
         try {
             const { data, error } = await supabaseClient
                 .from('profiles')
                 .select('*')
-                .eq('vital_id', this.currentId)
-                .single();
+                .eq('user_id', this.session.user.id)
+                .maybeSingle();
 
-            if (error || !data) {
-                this.showClaimUI();
-                return;
-            };
+            if (error) throw error;
             this.profile = data;
         } catch (err) {
             console.error('Error loading profile:', err);
-            this.showClaimUI();
         }
     },
 
-    showClaimUI() {
-        document.querySelector('.app-container').style.display = 'none';
-        document.getElementById('claim-view').style.display = 'flex';
+    showNoProfileUI() {
+        document.querySelector('.app-container').innerHTML = `
+            <div style="text-align: center; padding: 40px;">
+                <div class="icon" style="color: var(--primary); font-size: 48px; margin-bottom: 20px;">👤</div>
+                <h1 style="color: var(--primary);">No tienes un perfil aún</h1>
+                <p class="description">Para activar tu InfoVial, primero crea tu perfil médico.</p>
+                <a href="step1.html" class="btn btn-primary" style="margin-top: 24px;">Crear mi perfil</a>
+                <button onclick="Dashboard.logout()" class="btn btn-outline" style="margin-top: 16px;">Cerrar Sesión</button>
+            </div>
+        `;
     },
 
-    async claimProfile(vialId) {
-        if (!vialId) return;
-        const normalizedId = vialId.trim().toUpperCase();
-
-        if (!normalizedId.startsWith('VIAL-')) {
-            alert('Por favor ingresa un VIAL-ID válido (Ej: VIAL-ABCDEF)');
-            return;
-        }
-
-        try {
-            const { data, error } = await supabaseClient
-                .from('profiles')
-                .select('vital_id')
-                .eq('vital_id', normalizedId)
-                .single();
-
-            if (error || !data) {
-                alert('No se encontró ningún perfil con ese ID.');
-                return;
-            }
-
-            localStorage.setItem('infovial_last_id', normalizedId);
-            window.location.reload();
-        } catch (err) {
-            alert('Error al verificar el ID: ' + err.message);
-        }
+    showOfflineError() {
+        document.querySelector('.app-container').innerHTML = `
+            <div style="text-align: center; padding: 40px;">
+                <div class="icon" style="color: var(--critical); font-size: 48px; margin-bottom: 20px;">📶</div>
+                <h2 style="color: var(--critical);">Sin conexión</h2>
+                <p class="description">Necesitas conexión a internet para ver tu panel.</p>
+                <button onclick="location.reload()" class="btn btn-primary" style="margin-top: 24px;">Reintentar</button>
+            </div>
+        `;
     },
 
     render() {
         if (!this.profile) return;
         const p = this.profile;
 
-        // Header
-        document.getElementById('dash-name').textContent = p.nombre;
-        document.getElementById('dash-meta').textContent = `${p.edad} años • ${p.ciudad || 'Sin ciudad'}`;
-        document.getElementById('dash-blood').textContent = p.sangre;
-        document.getElementById('dash-vial-id').textContent = p.vital_id;
+        // Populate elements (Assuming IDs exist in dashboard.html)
+        const safeSet = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = val || '...';
+        };
 
-        // Sections
-        document.getElementById('val-nombre').textContent = p.nombre;
-        document.getElementById('val-edad').textContent = p.edad;
-        document.getElementById('val-eps').textContent = p.eps || 'No registrada';
+        safeSet('dash-name', p.nombre);
+        safeSet('dash-meta', `${p.edad} años • ${p.ciudad || 'Sin ciudad'}`);
+        safeSet('dash-blood', p.sangre);
+        safeSet('dash-vial-id', p.vital_id);
 
-        document.getElementById('val-condiciones').textContent = p.condiciones || 'Ninguna';
-        document.getElementById('val-meds').textContent = p.medicamentos || 'Ninguno';
+        safeSet('val-nombre', p.nombre);
+        safeSet('val-edad', p.edad);
+        safeSet('val-eps', p.eps);
+        safeSet('val-condiciones', p.condiciones);
+        safeSet('val-meds', p.medicamentos);
+        safeSet('val-contacto', p.contacto_nombre);
+        safeSet('val-relacion', p.contacto_relacion);
+        safeSet('val-tel', p.telefono_emergencia);
 
-        document.getElementById('val-contacto').textContent = p.contacto_nombre;
-        document.getElementById('val-relacion').textContent = p.contacto_relacion;
-        document.getElementById('val-tel').textContent = p.telefono_emergencia;
-
-        // Masked ID
-        document.getElementById('masked-vial-id').textContent = InfoVial.maskId(p.vital_id);
+        const maskedEl = document.getElementById('masked-vial-id');
+        if (maskedEl) maskedEl.textContent = InfoVial.maskId(p.vital_id);
     },
 
-    openModal(id) {
-        const modal = document.getElementById(id);
-        if (modal) {
-            modal.classList.add('active');
-            // Specific Modal Logic
-            if (id === 'modal-identity') {
-                document.getElementById('edit-nombre').value = this.profile.nombre;
-                document.getElementById('edit-edad').value = this.profile.edad;
-                document.getElementById('edit-eps').value = this.profile.eps || '';
-            }
-            if (id === 'modal-history') {
-                this.renderHistory();
-            }
-            if (id === 'modal-share-new') {
-                this.renderShareUI();
-            }
-        }
-    },
-
-    closeModal(id) {
-        const modal = document.getElementById(id);
-        if (modal) modal.classList.remove('active');
-    },
-
-    renderHistory() {
-        const history = this.getHistory();
-        const container = document.getElementById('history-list-items');
-        container.innerHTML = '';
-
-        if (history.length === 0) {
-            container.innerHTML = '<p class="description">No hay perfiles guardados.</p>';
-            return;
-        }
-
-        history.forEach(id => {
-            const item = document.createElement('div');
-            item.className = `history-item ${id === this.currentId ? 'active' : ''}`;
-            item.onclick = () => this.switchProfile(id);
-            item.innerHTML = `
-                <div class="history-avatar">${id.substring(5, 6)}</div>
-                <div style="flex: 1; text-align: left;">
-                    <div style="font-weight: 700; font-size: 14px;">${id}</div>
-                    <div style="font-size: 11px; color: var(--text-muted);">Toca para cambiar</div>
-                </div>
-                ${id === this.currentId ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>' : ''}
-            `;
-            container.appendChild(item);
-        });
-    },
-
-    renderShareUI() {
-        const url = window.location.origin + '/u.html?id=' + this.currentId;
-        document.getElementById('share-url-text').textContent = url;
-
-        // Render QR in share modal
-        const container = document.getElementById('share-qr-preview');
-        container.innerHTML = '';
-        new QRCode(container, {
-            text: url,
-            width: 480,
-            height: 480,
-            colorDark: "#121212",
-            colorLight: "#FFFFFF",
-            correctLevel: QRCode.CorrectLevel.H
-        });
-    },
-
-    async copyShareLink() {
-        const url = window.location.origin + '/u.html?id=' + this.currentId;
-        const btn = document.getElementById('btn-copy-link');
-        try {
-            await navigator.clipboard.writeText(url);
-            const originalText = btn.textContent;
-            btn.textContent = '¡Copiado!';
-            btn.classList.add('success');
-            setTimeout(() => {
-                btn.textContent = originalText;
-                btn.classList.remove('success');
-            }, 2000);
-        } catch (err) {
-            alert('Error al copiar');
-        }
+    async logout() {
+        await supabaseClient.auth.signOut();
+        window.location.href = 'index.html';
     },
 
     async updateProfile(formData) {
@@ -303,39 +188,14 @@ const Dashboard = {
             const { error } = await supabaseClient
                 .from('profiles')
                 .update(formData)
-                .eq('vital_id', this.currentId);
+                .eq('user_id', this.session.user.id);
 
             if (error) throw error;
-
             this.profile = { ...this.profile, ...formData };
             this.render();
             alert('Perfil actualizado con éxito');
         } catch (err) {
             alert('Error al actualizar: ' + err.message);
-        }
-    },
-
-    async deleteProfile() {
-        if (!confirm('¿Estás SEGURO de que deseas eliminar tu perfil médico permanentemente? Esta acción no se puede deshacer.')) return;
-
-        try {
-            const { error } = await supabaseClient
-                .from('profiles')
-                .delete()
-                .eq('vital_id', this.currentId);
-
-            if (error) throw error;
-
-            // Remove from history too
-            let history = this.getHistory().filter(id => id !== this.currentId);
-            localStorage.setItem(this.historyKey, JSON.stringify(history));
-
-            localStorage.removeItem('infovial_last_id');
-            InfoVial.clearData();
-            alert('Perfil eliminado correctamente');
-            window.location.href = 'index.html';
-        } catch (err) {
-            alert('Error al eliminar: ' + err.message);
         }
     }
 };
@@ -344,26 +204,12 @@ const Dashboard = {
 document.addEventListener('DOMContentLoaded', () => {
     InfoVial.initTheme();
 
-    // Dashboard init if page matches
     if (window.location.pathname.includes('dashboard.html')) {
         Dashboard.init();
     }
 
-    // Auto-check on registration steps
     const isStep = /step\d/.test(window.location.pathname);
     if (isStep) {
         InfoVial.checkProgress();
-    }
-
-    // Sync newly created IDs into history on step 5
-    if (window.location.pathname.includes('step5.html')) {
-        const lastId = localStorage.getItem('infovial_last_id');
-        if (lastId) {
-            let history = JSON.parse(localStorage.getItem('infovial_history') || '[]');
-            if (!history.includes(lastId)) {
-                history.push(lastId);
-                localStorage.setItem('infovial_history', JSON.stringify(history));
-            }
-        }
     }
 });

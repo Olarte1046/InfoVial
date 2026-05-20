@@ -1,0 +1,64 @@
+<svg width="1080" height="1350" viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1080" height="1350" fill="#F8FAFC"/>
+  <rect x="80" y="200" width="920" height="950" rx="40" fill="#FFFFFF"/>
+  <rect x="80" y="200" width="920" height="950" rx="40" fill="none" stroke="#EDF2F7" stroke-width="1"/>
+  
+  <!-- Final Payoff Title -->
+  <text x="540" y="400" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="64" font-weight="900" fill="#121212" letter-spacing="-0.02em">
+    <tspan x="540" dy="0">Listo cuando</tspan>
+    <tspan x="540" dy="80">más importa</tspan>
+  </text>
+  <text x="540" y="550" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="500" fill="#5F6368">Tu información crítica disponible en segundos.</text>
+  
+  <!-- Realistic Public Profile Screenshot Mockup (u.html) -->
+  <g transform="translate(360, 620)">
+    <rect width="360" height="420" rx="24" fill="#F8FAFC" stroke="#EDF2F7" stroke-width="1.5"/>
+    
+    <!-- Profile Header Simulation -->
+    <g transform="translate(25, 25)">
+      <text y="15" font-family="Helvetica, Arial, sans-serif" font-size="16" font-weight="800" fill="#121212">Alejandro Olarte</text>
+      <text y="35" font-family="Helvetica, Arial, sans-serif" font-size="10" font-weight="500" fill="#5F6368">21 años • Medellín</text>
+      
+      <!-- Blood Card -->
+      <g transform="translate(240, 0)">
+        <rect width="70" height="60" rx="12" fill="#FFFFFF" stroke="#EDF2F7" stroke-width="1"/>
+        <text x="35" y="32" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" font-weight="900" fill="#0052FF">O+</text>
+        <text x="35" y="48" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="8" font-weight="800" fill="#5F6368">SANGRE</text>
+      </g>
+    </g>
+    
+    <!-- SOS CALL BUTTON (Red) -->
+    <g transform="translate(25, 110)">
+      <rect width="310" height="64" rx="16" fill="#E63946"/>
+      <text x="155" y="40" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="16" font-weight="800" fill="#FFFFFF">📞 LLAMAR CONTACTO SOS</text>
+    </g>
+    
+    <!-- Info Rows -->
+    <g transform="translate(25, 200)">
+      <rect width="310" height="150" rx="16" fill="#FFFFFF" stroke="#EDF2F7" stroke-width="1"/>
+      
+      <g transform="translate(20, 40)">
+        <text font-family="Helvetica, Arial, sans-serif" font-size="8" font-weight="800" fill="#5F6368">ALERGIAS / CONDICIONES</text>
+        <text y="25" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#121212">Asma moderado</text>
+      </g>
+      
+      <g transform="translate(20, 100)">
+        <text font-family="Helvetica, Arial, sans-serif" font-size="8" font-weight="800" fill="#5F6368">MEDICAMENTOS</text>
+        <text y="25" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#121212">Inhalador Salbutamol SOS</text>
+      </g>
+    </g>
+  </g>
+  
+  <g transform="translate(540, 1100)">
+    <g transform="translate(-87, 0)">
+      <circle cx="0" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="25" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="50" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="75" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="100" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="125" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="150" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="175" cy="0" r="5" fill="#0052FF"/>
+    </g>
+  </g>
+</svg>

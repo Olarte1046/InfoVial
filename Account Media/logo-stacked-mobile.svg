@@ -1,0 +1,17 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Layout Centrado -->
+  <g transform="translate(34, 15)">
+    <g>
+      <path d="M16 10 L26 36 L36 10" fill="none" stroke="#0052FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M23 14 H29 M26 11 V17" fill="none" stroke="#E63946" stroke-width="3" stroke-linecap="round"/>
+      <polyline points="18,25 22,25 24,19 27,31 30,23 34,25" fill="none" stroke="#9eeb47" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+  
+  <text x="60" y="85" font-family="Manrope" font-size="18" font-weight="800" fill="#121212" text-anchor="middle" letter-spacing="-0.02em">
+    Infovial
+  </text>
+  <text x="60" y="102" font-family="Manrope" font-size="8" font-weight="600" fill="#5F6368" text-anchor="middle" text-transform="uppercase" letter-spacing="0.1em">
+    Identidad Médica
+  </text>
+</svg>

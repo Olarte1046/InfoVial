@@ -1,0 +1,51 @@
+<svg width="1080" height="1350" viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1080" height="1350" fill="#F8FAFC"/>
+  
+  <!-- Main Premium Card -->
+  <rect x="80" y="200" width="920" height="950" rx="40" fill="#FFFFFF"/>
+  <rect x="80" y="200" width="920" height="950" rx="40" fill="none" stroke="#EDF2F7" stroke-width="1"/>
+  
+  <!-- Typography Stack -->
+  <text x="540" y="320" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#0052FF" letter-spacing="0.2em">PASO 1</text>
+  <text x="540" y="400" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="56" font-weight="900" fill="#121212" letter-spacing="-0.02em">Abre el enlace</text>
+  <text x="540" y="460" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" font-weight="500" fill="#5F6368">Entra desde nuestra historia o perfil.</text>
+  
+  <!-- Visual Area: iPhone Mockup with Tap Interaction -->
+  <g transform="translate(390, 520)">
+    <!-- Phone Body -->
+    <rect width="300" height="580" rx="36" fill="#121212"/>
+    <rect x="10" y="10" width="280" height="560" rx="28" fill="#FFFFFF"/>
+    
+    <!-- Dynamic Island -->
+    <rect x="100" y="25" width="100" height="12" rx="6" fill="#121212"/>
+    
+    <!-- Story Content Simulation -->
+    <rect x="25" y="80" width="250" height="420" rx="12" fill="#F8FAFC"/>
+    <text x="150" y="280" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#0052FF">INF O V I A L</text>
+    
+    <!-- Link Sticker -->
+    <g transform="translate(75, 420)">
+      <rect width="150" height="40" rx="20" fill="#FFFFFF" stroke="#0052FF" stroke-width="2"/>
+      <text x="75" y="25" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#0052FF">infovial.com.co</text>
+      <circle cx="140" cy="10" r="25" fill="#0052FF" fill-opacity="0.1">
+        <animate attributeName="r" values="25;35;25" dur="1.5s" repeatCount="indefinite" />
+      </circle>
+      <path d="M140 10 L135 25 L145 25 Z" fill="#0052FF"/>
+    </g>
+  </g>
+  
+  <!-- Footer -->
+  <g transform="translate(540, 1100)">
+    <g transform="translate(-87, 0)">
+      <circle cx="0" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="25" cy="0" r="5" fill="#0052FF"/>
+      <circle cx="50" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="75" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="100" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="125" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="150" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="175" cy="0" r="5" fill="#DBEAFE"/>
+    </g>
+  </g>
+</svg>

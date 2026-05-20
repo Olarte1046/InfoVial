@@ -1,0 +1,20 @@
+<svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg">
+  <!-- V con pulso y Cruz Médica Profesional -->
+  <g>
+    <!-- V Icon -->
+    <path d="M16 10 L26 36 L36 10" fill="none" stroke="#0052FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Professional Medical Cross (Elevated to avoid beat) -->
+    <!-- Proportions: Vertical 11-17, Horizontal 23-29 (3px each arm from center 26,14) -->
+    <path d="M23 14 H29 M26 11 V17" fill="none" stroke="#E63946" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Pulse/Beat (Lime Green from Web) -->
+    <!-- Shifted slightly down or compressed to ensure clear negative space below cross -->
+    <polyline points="18,25 22,25 24,19 27,31 30,23 34,25" fill="none" stroke="#9eeb47" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Wordmark -->
+  <text x="52" y="30" font-family="Manrope" font-size="20" font-weight="800" fill="#121212" letter-spacing="-0.04em">
+    Infovial
+  </text>
+</svg>

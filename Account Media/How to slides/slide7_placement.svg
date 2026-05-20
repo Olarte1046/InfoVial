@@ -1,0 +1,55 @@
+<svg width="1080" height="1350" viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1080" height="1350" fill="#F8FAFC"/>
+  <rect x="80" y="200" width="920" height="950" rx="40" fill="#FFFFFF"/>
+  <rect x="80" y="200" width="920" height="950" rx="40" fill="none" stroke="#EDF2F7" stroke-width="1"/>
+  
+  <text x="540" y="320" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#0052FF" letter-spacing="0.2em">PASO 6</text>
+  <text x="540" y="400" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="56" font-weight="900" fill="#121212" letter-spacing="-0.02em">Llévalo contigo</text>
+  <text x="540" y="460" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" font-weight="500" fill="#5F6368">Casco, billetera, celular o llaves.</text>
+  
+  <!-- Visual Area: Usage Grid Mockups -->
+  <g transform="translate(180, 520)">
+    <!-- Helmet Mock -->
+    <rect width="340" height="240" rx="20" fill="#F8FAFC"/>
+    <circle cx="170" cy="100" r="60" fill="#121212"/> <!-- Helmet shape -->
+    <rect x="190" y="90" width="30" height="30" rx="4" fill="#FFFFFF"/> <!-- QR tag -->
+    <text x="170" y="210" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#5F6368">CASCO</text>
+    
+    <!-- Phone Mock -->
+    <g transform="translate(380, 0)">
+      <rect width="340" height="240" rx="20" fill="#F8FAFC"/>
+      <rect x="130" y="40" width="80" height="150" rx="12" fill="#121212"/> <!-- Phone -->
+      <rect x="155" y="140" width="30" height="30" rx="4" fill="#FFFFFF" stroke="#EDF2F7" stroke-width="1"/> <!-- Case QR -->
+      <text x="170" y="210" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#5F6368">CELULAR</text>
+    </g>
+    
+    <!-- Wallet Mock -->
+    <g transform="translate(0, 280)">
+      <rect width="340" height="240" rx="20" fill="#F8FAFC"/>
+      <rect x="110" y="60" width="120" height="100" rx="8" fill="#5F6368" fill-opacity="0.2"/> <!-- Wallet -->
+      <rect x="155" y="95" width="30" height="30" rx="4" fill="#121212"/> <!-- Card QR -->
+      <text x="170" y="210" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#5F6368">BILLETERA</text>
+    </g>
+    
+    <!-- LLaves Mock -->
+    <g transform="translate(380, 280)">
+      <rect width="340" height="240" rx="20" fill="#F8FAFC"/>
+      <circle cx="150" cy="100" r="10" fill="none" stroke="#5F6368" stroke-width="2"/> <!-- Key ring -->
+      <rect x="160" y="90" width="40" height="40" rx="6" fill="#0052FF"/> <!-- QR keychain -->
+      <text x="170" y="210" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#5F6368">LLAVERO</text>
+    </g>
+  </g>
+  
+  <g transform="translate(540, 1100)">
+    <g transform="translate(-87, 0)">
+      <circle cx="0" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="25" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="50" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="75" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="100" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="125" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="150" cy="0" r="5" fill="#0052FF"/>
+      <circle cx="175" cy="0" r="5" fill="#DBEAFE"/>
+    </g>
+  </g>
+</svg>

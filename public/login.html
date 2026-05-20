@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>InfoVial - Acceso Seguro</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <style>
+        .auth-card {
+            max-width: 400px;
+            margin: 60px auto;
+            padding: 32px;
+        }
+        .tabs {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        .tab {
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--text-muted);
+            border-bottom: 2px solid transparent;
+        }
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        .auth-form {
+            display: none;
+        }
+        .auth-form.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <button class="theme-toggle" onclick="InfoVial.toggleTheme()" aria-label="Toggle Theme"></button>
+        
+        <div class="logo-centered" style="margin: 40px 0;">
+            <svg width="180" height="40" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg">
+                <g>
+                    <path d="M16 10 L26 36 L36 10" fill="none" stroke="#0052FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                    <polyline points="18,24 22,24 24,18 27,30 30,22 34,24" fill="none" stroke="#2EC4B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </g>
+                <text x="52" y="30" font-family="Manrope, sans-serif" font-size="20" font-weight="600" fill="currentColor">Infovial</text>
+            </svg>
+        </div>
+
+        <div class="card auth-card">
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('login')">Ingresar</div>
+                <div class="tab" onclick="switchTab('signup')">Registrarse</div>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form active" onsubmit="handleAuth(event, 'login')">
+                <div class="input-group">
+                    <label class="label">Email</label>
+                    <input type="email" id="login-email" placeholder="tu@email.com" required>
+                </div>
+                <div class="input-group">
+                    <label class="label">Contraseña</label>
+                    <input type="password" id="login-password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Entrar</button>
+            </form>
+
+            <!-- Signup Form -->
+            <form id="signup-form" class="auth-form" onsubmit="handleAuth(event, 'signup')">
+                <div class="input-group">
+                    <label class="label">Email</label>
+                    <input type="email" id="signup-email" placeholder="tu@email.com" required>
+                </div>
+                <div class="input-group">
+                    <label class="label">Contraseña</label>
+                    <input type="password" id="signup-password" placeholder="Mínimo 6 caracteres" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Crear Cuenta</button>
+            </form>
+            
+            <div id="auth-error" style="color: var(--critical); font-size: 14px; margin-top: 16px; text-align: center; display: none;"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/supabase-config.js"></script>
+    <script src="/js/app.js"></script>
+    <script>
+        function switchTab(type) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.textContent.toLowerCase().includes(type === 'login' ? 'ingresar' : 'registrar')));
+            document.getElementById('login-form').classList.toggle('active', type === 'login');
+            document.getElementById('signup-form').classList.toggle('active', type === 'signup');
+            document.getElementById('auth-error').style.display = 'none';
+        }
+
+        async function handleAuth(e, type) {
+            e.preventDefault();
+            const email = document.getElementById(`${type}-email`).value;
+            const password = document.getElementById(`${type}-password`).value;
+            const errorDiv = document.getElementById('auth-error');
+            errorDiv.style.display = 'none';
+
+            try {
+                let result;
+                if (type === 'login') {
+                    result = await supabaseClient.auth.signInWithPassword({ email, password });
+                } else {
+                    result = await supabaseClient.auth.signUp({ email, password });
+                }
+
+                if (result.error) throw result.error;
+
+                if (type === 'signup' && !result.data.session) {
+                    alert('Registro exitoso. Por favor revisa tu email para confirmar la cuenta.');
+                } else {
+                    window.location.href = 'dashboard.html';
+                }
+            } catch (err) {
+                errorDiv.textContent = err.message;
+                errorDiv.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

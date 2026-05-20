@@ -1,0 +1,62 @@
+<svg width="1080" height="1350" viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1080" height="1350" fill="#F8FAFC"/>
+  <rect x="80" y="200" width="920" height="950" rx="40" fill="#FFFFFF"/>
+  <rect x="80" y="200" width="920" height="950" rx="40" fill="none" stroke="#EDF2F7" stroke-width="1"/>
+  
+  <text x="540" y="320" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#0052FF" letter-spacing="0.2em">PASO 5</text>
+  <text x="540" y="400" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="56" font-weight="900" fill="#121212" letter-spacing="-0.02em">Genera tu QR</text>
+  <text x="540" y="460" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" font-weight="500" fill="#5F6368">Tu perfil listo para cuando lo necesites.</text>
+  
+  <!-- Realistic Step 5 Screenshot Mockup (QR Ready) -->
+  <g transform="translate(360, 520)">
+    <rect width="360" height="520" rx="24" fill="#F8FAFC" stroke="#EDF2F7" stroke-width="1.5"/>
+    
+    <g transform="translate(180, 60)">
+      <circle r="30" fill="#0052FF"/>
+      <path d="M-8 0 L-2 8 L10 -8" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+    </g>
+    
+    <text x="180" y="120" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" fill="#121212">¡Perfil listo!</text>
+    
+    <!-- QR Card Container (From Step 5) -->
+    <g transform="translate(40, 160)">
+      <rect width="280" height="300" rx="32" fill="#FFFFFF" filter="drop-shadow(0 4px 12px rgba(0,0,0,0.1))"/>
+      
+      <!-- Inner QR Frame -->
+      <g transform="translate(40, 40)">
+        <rect width="200" height="200" rx="16" fill="#F8FAFC" stroke="#EDF2F7" stroke-width="1"/>
+        
+        <!-- Simulation of exact QR code with Infovial Identity -->
+        <g transform="translate(20, 20)">
+          <rect width="30" height="30" fill="#121212"/>
+          <rect x="130" width="30" height="30" fill="#121212"/>
+          <rect y="130" width="30" height="30" fill="#121212"/>
+          <!-- Branded center -->
+          <g transform="translate(68, 68) scale(0.6)">
+            <path d="M16 10 L26 36 L36 10" fill="none" stroke="#0052FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M23 14 H29 M26 11 V17" fill="none" stroke="#E63946" stroke-width="3" stroke-linecap="round"/>
+          </g>
+        </g>
+      </g>
+      
+      <!-- Vital ID Badge -->
+      <g transform="translate(70, 250)">
+        <rect width="140" height="30" rx="15" fill="#F0F4F8"/>
+        <text x="70" y="20" text-anchor="middle" font-family="monospace" font-size="12" font-weight="800" fill="#0052FF">VIAL-AL-OL-21</text>
+      </g>
+    </g>
+  </g>
+  
+  <g transform="translate(540, 1100)">
+    <g transform="translate(-87, 0)">
+      <circle cx="0" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="25" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="50" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="75" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="100" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="125" cy="0" r="5" fill="#0052FF"/>
+      <circle cx="150" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="175" cy="0" r="5" fill="#DBEAFE"/>
+    </g>
+  </g>
+</svg>

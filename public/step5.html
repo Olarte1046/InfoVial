@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>InfoVial - Código QR</title>
+    <title>InfoVial - Tu QR Médico</title>
     <link rel="stylesheet" href="/css/main.css">
     <style>
         .success-hero {
@@ -96,32 +96,26 @@
 <body>
     <div class="app-container">
         <button class="theme-toggle" onclick="InfoVial.toggleTheme()" aria-label="Toggle Theme"></button>
-
         <div class="success-hero">
-            <div class="icon-check">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                    stroke-linecap="round" stroke-linejoin="round">
+            <div class="icon-check"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-            </div>
-            <h1>¡Perfil listo!</h1>
-            <p class="description">Tu perfil médico ha sido guardado exitosamente.</p>
+                </svg></div>
+            <h1>¡Todo listo!</h1>
+            <p class="description">Tu código QR ha sido vinculado de forma segura.</p>
         </div>
 
         <div class="qr-outer-frame">
             <div class="qr-inner-container">
-                <div class="qr-code">
-                    <img id="qr-display" src="" alt="Código QR Vital">
-                </div>
-                <div class="id-badge" id="vital-id-display">VIAL-XXXXXX</div>
+                <div class="qr-code"><img id="qr-display" src="" alt="Código QR Médico"></div>
+                <div class="id-badge" id="vital-id-display">IDENTIFICANDO...</div>
             </div>
         </div>
 
         <div class="mt-auto">
-            <button onclick="InfoVial.backStep()" class="btn btn-back">← Volver al resumen</button>
             <a id="qr-download" href="#" download="InfoVial-QR.png" class="btn btn-success mb-16"
-                style="background-color: #1dbe31;">Guardar QR</a>
-            <a href="index.html" class="btn btn-outline">Finalizar</a>
+                style="background-color: #1dbe31;">Guardar Imagen QR</a>
+            <a href="dashboard.html" class="btn btn-primary">Ir a mi Panel</a>
         </div>
     </div>
 
@@ -130,32 +124,22 @@
     <script>
         window.onload = () => {
             const lastId = localStorage.getItem('infovial_last_id');
-            if (lastId) {
-                // Mask ID: VIAL-ABCDEF -> VIAL-AB...EF
-                const maskedId = lastId.length > 10
-                    ? lastId.substring(0, 7) + '...' + lastId.substring(lastId.length - 2)
-                    : lastId;
+            const lastSlug = localStorage.getItem('infovial_last_slug');
 
-                document.getElementById('vital-id-display').textContent = maskedId;
-                const domain = window.location.origin;
-                const profileUrl = `${domain}/u.html?id=${lastId}`;
-
+            if (lastId && lastSlug) {
+                document.getElementById('vital-id-display').textContent = InfoVial.maskId(lastId);
+                const profileUrl = `${window.location.origin}/u.html?s=${lastSlug}`;
                 const temp = document.createElement('div');
-                new QRCode(temp, {
-                    text: profileUrl,
-                    width: 480,
-                    height: 480,
-                    colorDark: "#121212",
-                    colorLight: "#FFFFFF",
-                    correctLevel: QRCode.CorrectLevel.H
-                });
+                new QRCode(temp, { text: profileUrl, width: 480, height: 480, colorDark: "#121212", colorLight: "#FFFFFF", correctLevel: QRCode.CorrectLevel.H });
 
                 setTimeout(() => {
                     const canvas = temp.querySelector('canvas');
                     const qrDataUrl = canvas ? canvas.toDataURL("image/png") : temp.querySelector('img').src;
                     document.getElementById('qr-display').src = qrDataUrl;
                     document.getElementById('qr-download').href = qrDataUrl;
-                }, 200);
+                }, 250);
+            } else {
+                window.location.href = 'index.html';
             }
         };
     </script>

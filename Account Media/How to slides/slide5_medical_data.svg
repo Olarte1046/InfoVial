@@ -1,0 +1,59 @@
+<svg width="1080" height="1350" viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1080" height="1350" fill="#F8FAFC"/>
+  <rect x="80" y="200" width="920" height="950" rx="40" fill="#FFFFFF"/>
+  <rect x="80" y="200" width="920" height="950" rx="40" fill="none" stroke="#EDF2F7" stroke-width="1"/>
+  
+  <text x="540" y="320" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#0052FF" letter-spacing="0.2em">PASO 4</text>
+  <text x="540" y="400" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="56" font-weight="900" fill="#121212" letter-spacing="-0.02em">Agrega info médica</text>
+  <text x="540" y="460" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" font-weight="500" fill="#5F6368">Lo que realmente importa en una emergencia.</text>
+  
+  <!-- Realistic Step 2 & 3 Hybrid Screenshot Mockup -->
+  <g transform="translate(360, 520)">
+    <rect width="360" height="520" rx="24" fill="#F8FAFC" stroke="#EDF2F7" stroke-width="1.5"/>
+    
+    <g transform="translate(30, 30)">
+      <text font-family="Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#5F6368">Pasos 2 e 3</text>
+      <rect x="70" y="-8" width="230" height="4" rx="2" fill="#EDF2F7"/>
+      <rect x="70" y="-8" width="170" height="4" rx="2" fill="#0052FF"/>
+    </g>
+    
+    <text x="180" y="100" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="800" fill="#121212">Condiciones y Meds</text>
+    
+    <g transform="translate(30, 140)">
+      <!-- Step 2 Simulation (Conditions) -->
+      <rect width="300" height="40" rx="8" fill="#E63946" fill-opacity="0.1" stroke="#E63946" stroke-width="1"/>
+      <text x="35" y="25" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#E63946">Asma moderado</text>
+      <circle cx="15" cy="20" r="4" fill="#E63946"/>
+      
+      <rect y="50" width="300" height="40" rx="8" fill="#FFFFFF" stroke="#EDF2F7" stroke-width="1"/>
+      <text x="35" y="75" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#5F6368">Hipertensión</text>
+      <circle cx="15" cy="70" r="4" fill="#EDF2F7"/>
+      
+      <!-- Step 3 Simulation (Meds) -->
+      <g transform="translate(0, 120)">
+        <text font-family="Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#5F6368">LISTA DE MEDICAMENTOS</text>
+        <rect y="10" width="300" height="80" rx="8" fill="#FFFFFF" stroke="#EDF2F7" stroke-width="1"/>
+        <text x="10" y="30" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#121212">Inhalador Salbutamol SOS,</text>
+        <text x="10" y="50" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#121212">Multivitaminas...</text>
+      </g>
+      
+      <g transform="translate(0, 240)">
+        <rect width="300" height="48" rx="24" fill="#0052FF"/>
+        <text x="150" y="30" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="800" fill="#FFFFFF">CONTINUAR →</text>
+      </g>
+    </g>
+  </g>
+  
+  <g transform="translate(540, 1100)">
+    <g transform="translate(-87, 0)">
+      <circle cx="0" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="25" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="50" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="75" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="100" cy="0" r="5" fill="#0052FF"/>
+      <circle cx="125" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="150" cy="0" r="5" fill="#DBEAFE"/>
+      <circle cx="175" cy="0" r="5" fill="#DBEAFE"/>
+    </g>
+  </g>
+</svg>
