@@ -6,72 +6,108 @@
 const InfoVial = {
     storageKey: 'infovial_registration_data',
 
-    // --- State Management ---
     getData() {
-        const data = localStorage.getItem(this.storageKey);
-        return data ? JSON.parse(data) : {};
+        const data =
+            localStorage.getItem(
+                this.storageKey
+            );
+
+        return data
+            ? JSON.parse(data)
+            : {};
     },
 
     saveData(data) {
-        const currentData = this.getData();
-        const newData = { ...currentData, ...data };
-        localStorage.setItem(this.storageKey, JSON.stringify(newData));
+        const currentData =
+            this.getData();
+
+        const newData = {
+            ...currentData,
+            ...data
+        };
+
+        localStorage.setItem(
+            this.storageKey,
+            JSON.stringify(newData)
+        );
     },
 
     clearData() {
-        localStorage.removeItem(this.storageKey);
+        localStorage.removeItem(
+            this.storageKey
+        );
     },
 
-    // --- Auth Strategy ---
     async getSession() {
-        if (typeof supabaseClient === 'undefined') return null;
+        if (
+            typeof supabaseClient ===
+            'undefined'
+        )
+            return null;
 
         const {
             data: { session },
             error
-        } = await supabaseClient.auth.getSession();
+        } =
+            await supabaseClient.auth.getSession();
 
         if (error) {
-            console.error('Auth Session Error:', error.message);
+            console.error(
+                'Auth Session Error:',
+                error.message
+            );
         }
 
         return session;
     },
 
-    // Protected Route Middleware (Client-side)
     async requireAuth() {
-        const session = await this.getSession();
+        const session =
+            await this.getSession();
 
         if (!session) {
-            const currentPath = window.location.pathname;
+            const currentPath =
+                window.location.pathname;
 
-            if (currentPath.includes('dashboard.html')) {
-                window.location.href = 'login.html?redirect=dashboard';
+            if (
+                currentPath.includes(
+                    'dashboard.html'
+                )
+            ) {
+                window.location.href =
+                    'login.html?redirect=dashboard';
             }
         }
 
         return session;
     },
 
-    // --- UI Helpers ---
     initTheme() {
         const savedTheme =
-            localStorage.getItem('infovial_theme') || 'light';
+            localStorage.getItem(
+                'infovial_theme'
+            ) || 'light';
 
         document.documentElement.setAttribute(
             'data-theme',
             savedTheme
         );
 
-        this.updateThemeToggleIcon(savedTheme);
+        this.updateThemeToggleIcon(
+            savedTheme
+        );
     },
 
     toggleTheme() {
         const currentTheme =
-            document.documentElement.getAttribute('data-theme');
+            document.documentElement.getAttribute(
+                'data-theme'
+            );
 
         const newTheme =
-            currentTheme === 'dark' ? 'light' : 'dark';
+            currentTheme === 'dark'
+                ? 'light'
+                : 'dark';
 
         document.documentElement.setAttribute(
             'data-theme',
@@ -83,12 +119,16 @@ const InfoVial = {
             newTheme
         );
 
-        this.updateThemeToggleIcon(newTheme);
+        this.updateThemeToggleIcon(
+            newTheme
+        );
     },
 
     updateThemeToggleIcon(theme) {
         const toggle =
-            document.querySelector('.theme-toggle');
+            document.querySelector(
+                '.theme-toggle'
+            );
 
         if (!toggle) return;
 
@@ -103,80 +143,125 @@ const InfoVial = {
     },
 
     nextStep(nextPage) {
-        window.location.href = nextPage;
+        window.location.href =
+            nextPage;
     },
 
-    // FIXED: No more history loop issues
     backStep() {
-        const path = window.location.pathname;
-        const fileName = path.split('/').pop();
+        const path =
+            window.location.pathname;
+
+        const fileName =
+            path.split('/').pop();
 
         const routes = {
-            'step2.html': 'step1.html',
-            'step3.html': 'step2.html',
-            'step4.html': 'step3.html',
-            'step5.html': 'step4.html'
+            'step2.html':
+                'step1.html',
+            'step3.html':
+                'step2.html',
+            'step4.html':
+                'step3.html',
+            'step5.html':
+                'step4.html'
         };
 
-        if (routes[fileName]) {
-            window.location.href = routes[fileName];
+        if (
+            routes[fileName]
+        ) {
+            window.location.href =
+                routes[fileName];
         }
     },
 
-    // FIXED: Safe step routing
     checkProgress() {
-        const path = window.location.pathname;
-        const fileName = path.split('/').pop();
-        const data = this.getData();
+        const path =
+            window.location.pathname;
 
-        // Ignore non-step pages
-        if (!fileName.startsWith('step')) return;
+        const fileName =
+            path.split('/').pop();
 
-        // Step1 always allowed
-        if (fileName === 'step1.html') return;
+        const data =
+            this.getData();
 
-        // Step2+ requires profile basics
         if (
-            ['step2.html', 'step3.html', 'step4.html', 'step5.html'].includes(fileName)
-            && !data.nombre
+            !fileName.startsWith(
+                'step'
+            )
+        )
+            return;
+
+        if (
+            fileName ===
+            'step1.html'
+        )
+            return;
+
+        if (
+            [
+                'step2.html',
+                'step3.html',
+                'step4.html',
+                'step5.html'
+            ].includes(fileName) &&
+            !data.nombre
         ) {
-            window.location.replace('step1.html');
+            window.location.replace(
+                'step1.html'
+            );
+
             return;
         }
 
-        // Step3+ requires health data
         if (
-            ['step3.html', 'step4.html', 'step5.html'].includes(fileName)
-            && !('condiciones' in data || 'medicamentos' in data)
+            [
+                'step3.html',
+                'step4.html',
+                'step5.html'
+            ].includes(fileName) &&
+            !(
+                'condiciones' in
+                    data ||
+                'medicamentos' in
+                    data
+            )
         ) {
-            window.location.replace('step2.html');
+            window.location.replace(
+                'step2.html'
+            );
+
             return;
         }
 
-        // Step4+ requires SOS contact
         if (
-            ['step4.html', 'step5.html'].includes(fileName)
-            && !data.contacto_nombre
+            [
+                'step4.html',
+                'step5.html'
+            ].includes(fileName) &&
+            !data.contacto_nombre
         ) {
-            window.location.replace('step3.html');
+            window.location.replace(
+                'step3.html'
+            );
+
             return;
         }
     },
 
     maskId(id) {
-        if (!id) return '...';
+        if (!id)
+            return '...';
 
         return id.length > 8
-            ? id.substring(0, 4) +
-                  '...' +
-                  id.substring(id.length - 2)
+            ? `${id.substring(
+                  0,
+                  4
+              )}...${id.substring(
+                  id.length - 2
+              )}`
             : id;
     }
 };
 
-/**
- * Dashboard Controller
- */
 const Dashboard = {
     session: null,
     profile: null,
@@ -185,7 +270,8 @@ const Dashboard = {
         this.session =
             await InfoVial.requireAuth();
 
-        if (!this.session) return;
+        if (!this.session)
+            return;
 
         const urlParams =
             new URLSearchParams(
@@ -193,25 +279,37 @@ const Dashboard = {
             );
 
         if (
-            urlParams.get('action') ===
+            urlParams.get(
+                'action'
+            ) ===
             'complete_registration'
         ) {
             await this.finalizeRegistration();
             return;
         }
 
-        if (!navigator.onLine) {
-            this.showOfflineError?.();
+        if (
+            !navigator.onLine
+        ) {
+            alert(
+                'Sin conexión.'
+            );
             return;
         }
 
-        this.showLoading(true);
+        this.showLoading(
+            true
+        );
 
         await this.loadProfile();
 
-        this.showLoading(false);
+        this.showLoading(
+            false
+        );
 
-        if (this.profile) {
+        if (
+            this.profile
+        ) {
             this.render();
         } else {
             this.showNoProfileUI();
@@ -222,9 +320,12 @@ const Dashboard = {
         const regData =
             InfoVial.getData();
 
-        if (!regData.pending_profile) {
+        if (
+            !regData.pending_profile
+        ) {
             window.location.href =
                 'dashboard.html';
+
             return;
         }
 
@@ -240,89 +341,354 @@ const Dashboard = {
             const vital_id =
                 'IV-' +
                 Math.random()
-                    .toString(36)
-                    .substring(2, 7)
+                    .toString(
+                        36
+                    )
+                    .substring(
+                        2,
+                        7
+                    )
                     .toUpperCase();
 
-            const { error } =
+            const {
+                error
+            } =
                 await supabaseClient
-                    .from('profiles')
+                    .from(
+                        'profiles'
+                    )
                     .insert({
                         user_id:
-                            this.session.user.id,
-                        nombre:
-                            regData.nombre,
-                        edad:
-                            regData.edad,
-                        sangre:
-                            regData.sangre,
-                        condiciones:
-                            regData.condiciones,
-                        medicamentos:
-                            regData.medicamentos,
-                        contacto_nombre:
-                            regData.contacto_nombre,
-                        contacto_relacion:
-                            regData.contacto_relacion,
-                        telefono_emergencia:
-                            regData.telefono_emergencia,
-                        ciudad:
-                            regData.ciudad,
-                        eps:
-                            regData.eps,
+                            this
+                                .session
+                                .user
+                                .id,
+                        ...regData,
                         public_slug,
                         vital_id
                     });
 
-            if (error) throw error;
+            if (error)
+                throw error;
 
             InfoVial.clearData();
 
             window.location.href =
-                'step5.html?s=' +
-                public_slug;
+                `step5.html?s=${public_slug}`;
         } catch (err) {
             console.error(
-                'Finalization Error:',
                 err
             );
 
             alert(
-                'Error al activar perfil: ' +
+                'Error activando perfil: ' +
                     err.message
             );
-
-            this.showNoProfileUI();
         } finally {
-            this.showLoading(false);
+            this.showLoading(
+                false
+            );
         }
     },
 
     async loadProfile() {
         try {
-            const { data, error } =
+            const {
+                data,
+                error
+            } =
                 await supabaseClient
-                    .from('profiles')
+                    .from(
+                        'profiles'
+                    )
                     .select('*')
                     .eq(
                         'user_id',
-                        this.session.user.id
+                        this
+                            .session
+                            .user.id
                     )
                     .maybeSingle();
 
-            if (error) throw error;
+            if (error)
+                throw error;
 
-            this.profile = data;
+            this.profile =
+                data;
         } catch (err) {
             console.error(
-                'Core Profile Load Error:',
+                'Profile Error:',
                 err
             );
         }
+    },
+
+    showLoading(
+        show,
+        text = 'Cargando...'
+    ) {
+        let loader =
+            document.getElementById(
+                'dashboard-loader'
+            );
+
+        if (!loader) {
+            loader =
+                document.createElement(
+                    'div'
+                );
+
+            loader.id =
+                'dashboard-loader';
+
+            loader.style.cssText =
+                `
+                position:fixed;
+                inset:0;
+                background:rgba(255,255,255,.85);
+                backdrop-filter:blur(10px);
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                z-index:99999;
+            `;
+
+            loader.innerHTML =
+                `
+                <div style="text-align:center">
+                    <div style="
+                        width:38px;
+                        height:38px;
+                        border:3px solid rgba(0,82,255,.15);
+                        border-top-color:#0052FF;
+                        border-radius:50%;
+                        animation:spin .7s linear infinite;
+                        margin:auto auto 12px;
+                    "></div>
+                    <div id="loader-text">
+                        ${text}
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(
+                loader
+            );
+
+            const style =
+                document.createElement(
+                    'style'
+                );
+
+            style.innerHTML =
+                `
+                @keyframes spin{
+                    to{
+                        transform:rotate(360deg)
+                    }
+                }
+            `;
+
+            document.head.appendChild(
+                style
+            );
+        }
+
+        document.getElementById(
+            'loader-text'
+        ).textContent =
+            text;
+
+        loader.style.display =
+            show
+                ? 'flex'
+                : 'none';
+    },
+
+    render() {
+        const p =
+            this.profile;
+
+        if (!p)
+            return;
+
+        const set =
+            (
+                id,
+                value
+            ) => {
+                const el =
+                    document.getElementById(
+                        id
+                    );
+
+                if (el) {
+                    el.textContent =
+                        value ||
+                        'No definido';
+                }
+            };
+
+        set(
+            'dash-name',
+            p.nombre
+        );
+        set(
+            'dash-meta',
+            `${p.edad || '--'} años`
+        );
+        set(
+            'dash-blood',
+            p.sangre
+        );
+        set(
+            'dash-vial-id',
+            p.vital_id
+        );
+        set(
+            'val-nombre',
+            p.nombre
+        );
+        set(
+            'val-edad',
+            p.edad
+        );
+        set(
+            'val-eps',
+            p.eps
+        );
+        set(
+            'val-condiciones',
+            p.condiciones
+        );
+        set(
+            'val-meds',
+            p.medicamentos
+        );
+        set(
+            'val-contacto',
+            p.contacto_nombre
+        );
+        set(
+            'val-relacion',
+            p.contacto_relacion
+        );
+        set(
+            'val-tel',
+            p.telefono_emergencia
+        );
+    },
+
+    showNoProfileUI() {
+        document.getElementById(
+            'dash-name'
+        ).textContent =
+            'Perfil no encontrado';
+
+        document.getElementById(
+            'dash-meta'
+        ).textContent =
+            'Completa tu perfil';
+    },
+
+    openModal(id) {
+        document.getElementById(
+            id
+        ).style.display =
+            'flex';
+    },
+
+    closeModal(id) {
+        document.getElementById(
+            id
+        ).style.display =
+            'none';
+    },
+
+    async updateProfile(
+        formData
+    ) {
+        try {
+            this.showLoading(
+                true,
+                'Guardando...'
+            );
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from(
+                        'profiles'
+                    )
+                    .update(
+                        formData
+                    )
+                    .eq(
+                        'user_id',
+                        this
+                            .session
+                            .user.id
+                    );
+
+            if (error)
+                throw error;
+
+            await this.loadProfile();
+
+            this.render();
+        } catch (err) {
+            console.error(
+                err
+            );
+
+            alert(
+                'No se pudo actualizar.'
+            );
+        } finally {
+            this.showLoading(
+                false
+            );
+        }
+    },
+
+    shareProfile() {
+        if (
+            !this.profile
+                ?.public_slug
+        )
+            return;
+
+        const url =
+            `${window.location.origin}/u.html?s=${this.profile.public_slug}`;
+
+        if (
+            navigator.share
+        ) {
+            navigator.share({
+                title:
+                    'Mi perfil InfoVial',
+                url
+            });
+        } else {
+            navigator.clipboard.writeText(
+                url
+            );
+
+            alert(
+                'Link copiado'
+            );
+        }
+    },
+
+    async logout() {
+        await supabaseClient.auth.signOut();
+
+        window.location.href =
+            '/login.html';
     }
 };
 
-// Global Listeners
 document.addEventListener(
     'DOMContentLoaded',
     () => {
@@ -337,36 +703,43 @@ document.addEventListener(
             );
 
         const isStep =
-            /step\d/.test(path);
+            /step\d/.test(
+                path
+            );
 
-        if (isDashboard) {
+        if (
+            isDashboard
+        ) {
             Dashboard.init();
         }
 
-        // FIXED: safe execution
         if (isStep) {
             try {
                 InfoVial.checkProgress();
-            } catch (err) {
+            } catch (
+                err
+            ) {
                 console.error(
-                    'Step navigation error:',
                     err
                 );
             }
         }
 
-        // Auth Lifecycle Manager
         if (
             typeof supabaseClient !==
             'undefined'
         ) {
             supabaseClient.auth.onAuthStateChange(
-                (event) => {
+                (
+                    event
+                ) => {
                     if (
                         event ===
                             'SIGNED_OUT' &&
-                        (isDashboard ||
-                            isStep)
+                        (
+                            isDashboard ||
+                            isStep
+                        )
                     ) {
                         window.location.href =
                             'index.html';
