@@ -349,47 +349,52 @@ const Dashboard = {
                         7
                     )
                     .toUpperCase();
+const {
+    error
+} =
+    await supabaseClient
+        .from('profiles')
+        .insert({
 
-            const {
-                error
-            } =
-                await supabaseClient
-                    .from(
-                        'profiles'
-                    )
-                    .insert({
-                        user_id:
-                            this
-                                .session
-                                .user
-                                .id,
-                        ...regData,
-                        public_slug,
-                        vital_id
-                    });
+            user_id:
+                this.session.user.id,
 
-            if (error)
-                throw error;
+            email:
+                this.session.user.email,
 
-            InfoVial.clearData();
+            nombre:
+                regData.nombre || '',
 
-            window.location.href =
-                `step5.html?s=${public_slug}`;
-        } catch (err) {
-            console.error(
-                err
-            );
+            edad:
+                regData.edad || null,
 
-            alert(
-                'Error activando perfil: ' +
-                    err.message
-            );
-        } finally {
-            this.showLoading(
-                false
-            );
-        }
-    },
+            sangre:
+                regData.sangre || '',
+
+            condiciones:
+                regData.condiciones || '',
+
+            medicamentos:
+                regData.medicamentos || '',
+
+            contacto_nombre:
+                regData.contacto_nombre || '',
+
+            contacto_relacion:
+                regData.contacto_relacion || '',
+
+            telefono_emergencia:
+                regData.telefono_emergencia || '',
+
+            ciudad:
+                regData.ciudad || '',
+
+            eps:
+                regData.eps || '',
+
+            public_slug,
+            vital_id
+        });
 
     async loadProfile() {
         try {
