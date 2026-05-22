@@ -316,117 +316,135 @@ const Dashboard = {
         }
     },
 
-    async finalizeRegistration() {
-        const regData =
-            InfoVial.getData();
+async finalizeRegistration() {
+    const regData =
+        InfoVial.getData();
 
-        if (
-            !regData.pending_profile
-        ) {
-            window.location.href =
-                'dashboard.html';
+    if (!regData?.nombre) {
+        window.location.href =
+            'step1.html';
+        return;
+    }
 
-            return;
+    this.showLoading(
+        true,
+        'Finalizando activación...'
+    );
+
+    try {
+        const public_slug =
+            crypto.randomUUID();
+
+        const vital_id =
+            'IV-' +
+            Math.random()
+                .toString(36)
+                .substring(2, 7)
+                .toUpperCase();
+
+        const { error } =
+            await supabaseClient
+                .from('profiles')
+                .insert({
+                    user_id:
+                        this.session.user.id,
+
+                    nombre:
+                        regData.nombre || '',
+
+                    edad:
+                        regData.edad || null,
+
+                    sangre:
+                        regData.sangre || '',
+
+                    condiciones:
+                        regData.condiciones || '',
+
+                    medicamentos:
+                        regData.medicamentos || '',
+
+                    contacto_nombre:
+                        regData.contacto_nombre || '',
+
+                    contacto_relacion:
+                        regData.contacto_relacion || '',
+
+                    telefono_emergencia:
+                        regData.telefono_emergencia || '',
+
+                    ciudad:
+                        regData.ciudad || '',
+
+                    eps:
+                        regData.eps || '',
+
+                    public_slug,
+                    vital_id
+                });
+
+        if (error) {
+            throw error;
         }
 
-        this.showLoading(
-            true,
-            'Finalizando activación...'
+        InfoVial.clearData();
+
+        window.history.replaceState(
+            {},
+            '',
+            '/dashboard.html'
         );
 
-        try {
-            const public_slug =
-                crypto.randomUUID();
+        await this.loadProfile();
 
-            const vital_id =
-                'IV-' +
-                Math.random()
-                    .toString(
-                        36
-                    )
-                    .substring(
-                        2,
-                        7
-                    )
-                    .toUpperCase();
-const {
-    error
-} =
-    await supabaseClient
-        .from('profiles')
-        .insert({
+        this.showLoading(
+            false
+        );
 
-            user_id:
-                this.session.user.id,
+        this.render();
+    } catch (err) {
+        console.error(
+            'Registration Error:',
+            err
+        );
 
-            email:
-                this.session.user.email,
+        this.showLoading(
+            false
+        );
 
-            nombre:
-                regData.nombre || '',
+        alert(
+            'No se pudo finalizar el registro.'
+        );
+    }
+},
 
-            edad:
-                regData.edad || null,
+async loadProfile() {
+    try {
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from('profiles')
+                .select('*')
+                .eq(
+                    'user_id',
+                    this.session.user.id
+                )
+                .maybeSingle();
 
-            sangre:
-                regData.sangre || '',
+        if (error)
+            throw error;
 
-            condiciones:
-                regData.condiciones || '',
-
-            medicamentos:
-                regData.medicamentos || '',
-
-            contacto_nombre:
-                regData.contacto_nombre || '',
-
-            contacto_relacion:
-                regData.contacto_relacion || '',
-
-            telefono_emergencia:
-                regData.telefono_emergencia || '',
-
-            ciudad:
-                regData.ciudad || '',
-
-            eps:
-                regData.eps || '',
-
-            public_slug,
-            vital_id
-        });
-
-    async loadProfile() {
-        try {
-            const {
-                data,
-                error
-            } =
-                await supabaseClient
-                    .from(
-                        'profiles'
-                    )
-                    .select('*')
-                    .eq(
-                        'user_id',
-                        this
-                            .session
-                            .user.id
-                    )
-                    .maybeSingle();
-
-            if (error)
-                throw error;
-
-            this.profile =
-                data;
-        } catch (err) {
-            console.error(
-                'Profile Error:',
-                err
-            );
-        }
-    },
+        this.profile =
+            data;
+    } catch (err) {
+        console.error(
+            'Profile Error:',
+            err
+        );
+    }
+},
 
     showLoading(
         show,
