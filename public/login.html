@@ -102,28 +102,38 @@
             btn.innerText = 'Enviando...';
             errorDiv.style.display = 'none';
 
-            try {
-                const { error } = await supabaseClient.auth.signInWithOtp({
-                    email: email,
-                    options: {
-                        emailRedirectTo: 'https://infovial.app/dashboard.html',
-                    }
-                });
+           try {
 
-                if (error) throw error;
-
-                document.getElementById('auth-main').style.display = 'none';
-                document.getElementById('sent-email-display').textContent = email;
-                document.getElementById('magic-sent').style.display = 'block';
-
-            } catch (err) {
-                errorDiv.textContent = err.message;
-                errorDiv.style.display = 'block';
-                btn.disabled = false;
-                btn.innerText = 'Enviar enlace de acceso';
+    const { error } =
+        await supabaseClient.auth.signInWithOtp({
+            email: email,
+            options: {
+                emailRedirectTo:
+                    'https://infovial.app/dashboard.html?action=complete_registration'
             }
-        }
-    </script>
-</body>
+        });
 
-</html>
+    if (error) throw error;
+
+    document.getElementById('auth-main')
+        .style.display = 'none';
+
+    document.getElementById('sent-email-display')
+        .textContent = email;
+
+    document.getElementById('magic-sent')
+        .style.display = 'block';
+
+} catch (err) {
+
+    errorDiv.textContent =
+        err.message;
+
+    errorDiv.style.display =
+        'block';
+
+    btn.disabled = false;
+
+    btn.innerText =
+        'Enviar enlace de acceso';
+}
