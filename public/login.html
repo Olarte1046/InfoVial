@@ -88,9 +88,9 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/js/supabase-config.js"></script>
-    <script src="/js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="/js/supabase-config.js" defer></script>
+    <script src="/js/app.js" defer></script>
     <script>
         async function handleMagicLink(e) {
             e.preventDefault();
@@ -102,38 +102,43 @@
             btn.innerText = 'Enviando...';
             errorDiv.style.display = 'none';
 
-           try {
+            try {
 
-    const { error } =
-        await supabaseClient.auth.signInWithOtp({
-            email: email,
-            options: {
-                emailRedirectTo:
-                    'https://infovial.app/dashboard.html?action=complete_registration'
+                const { error } =
+                    await supabaseClient.auth.signInWithOtp({
+                        email: email,
+                        options: {
+                            emailRedirectTo:
+                                'https://infovial.app/dashboard.html?action=complete_registration'
+                        }
+                    });
+
+                if (error) throw error;
+
+                document.getElementById('auth-main')
+                    .style.display = 'none';
+
+                document.getElementById('sent-email-display')
+                    .textContent = email;
+
+                document.getElementById('magic-sent')
+                    .style.display = 'block';
+
+            } catch (err) {
+
+                errorDiv.textContent =
+                    err.message;
+
+                errorDiv.style.display =
+                    'block';
+
+                btn.disabled = false;
+
+                btn.innerText =
+                    'Enviar enlace de acceso';
             }
-        });
+        }
+    </script>
+</body>
 
-    if (error) throw error;
-
-    document.getElementById('auth-main')
-        .style.display = 'none';
-
-    document.getElementById('sent-email-display')
-        .textContent = email;
-
-    document.getElementById('magic-sent')
-        .style.display = 'block';
-
-} catch (err) {
-
-    errorDiv.textContent =
-        err.message;
-
-    errorDiv.style.display =
-        'block';
-
-    btn.disabled = false;
-
-    btn.innerText =
-        'Enviar enlace de acceso';
-}
+</html>

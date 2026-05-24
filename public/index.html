@@ -5,129 +5,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>InfoVial - Bienvenida</title>
-    <style>
-        :root {
-            --medical-blue: #12324A;
-            --text-main: #0F1720;
-            --text-muted: #060707;
-            --bg-clinical: #F8FAFC;
-            --surface: #FFFFFF;
-            --radius: 20px;
-            --shadow: 0 10px 40px rgba(18, 50, 74, 0.08);
-            --border: #D8E0E7;
-        }
+    <link rel="stylesheet" href="/css/main.css">
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: -apple-system, system-ui, sans-serif;
-            background: var(--bg-clinical);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-        }
-
-        .iphone {
-            width: 100%;
-            max-width: 414px;
-            height: 100dvh;
-            background: radial-gradient(at 0% 0%, #F8FAFC 0%, #FFFFFF 50%, #D8E0E7 100%);
-            display: flex;
-            flex-direction: column;
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .iphone::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 70% 30%, rgba(18, 50, 74, 0.04) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .content {
-            flex: 1;
-            padding: 40px 24px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .logo {
-            width: 72px;
-            height: 72px;
-            background: var(--medical-blue);
-            border-radius: 20px;
-            margin: 0 auto 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        h1 {
-            font-size: 32px;
-            font-weight: 800;
-            color: var(--text-main);
-            margin: 0;
-            letter-spacing: -1px;
-        }
-
-        p {
-            font-size: 18px;
-            color: var(--muted);
-            line-height: 1.5;
-            margin: 16px 0 40px;
-        }
-
-        .footer {
-            padding: 24px;
-        }
-
-        .btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--medical-blue);
-            color: white;
-            text-decoration: none;
-            padding: 20px;
-            border-radius: var(--radius);
-            font-weight: 700;
-            font-size: 17px;
-        }
-    </style>
+    <!-- Theme Stabilization Fix -->
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('infovial_theme');
+            if (savedTheme === 'dark' || savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } else {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+            }
+        })();
+    </script>
 </head>
 
 <body>
-    <div class="iphone">
-        <div class="content">
-            <div class="logo">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="white">
-                    <path
-                        d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
-                </svg>
-            </div>
+    <div class="app-container"
+        style="display: flex; flex-direction: column; justify-content: center; min-height: 100dvh;">
+
+        <button class="theme-toggle" onclick="InfoVial.toggleTheme()" aria-label="Cambiar tema visual">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
+
+        <div class="animate-fade" style="text-align: center; margin-bottom: 24px;">
+            <img src="/assets/logo-icon-only.svg" alt="InfoVial Logo"
+                style="width: 80px; height: 80px; margin-bottom: 24px; filter: drop-shadow(0 10px 20px rgba(0,82,255,0.2));"
+                onerror="this.src='/logo-icon-only.svg'">
             <h1>InfoVial</h1>
-            <p>Crea tu perfil médico en minutos y genera un código QR para emergencias.</p>
+            <p class="description" style="margin-top: 16px; margin-bottom: 0;">
+                Crea tu perfil médico de emergencia en minutos y genera tu <strong>Vial-ID QR</strong>.
+            </p>
         </div>
-        <div class="footer">
-            <a href="step1.html" class="btn">Crear mi perfil</a>
+
+        <div class="card animate-fade"
+            style="animation-delay: 0.1s; padding: 24px; text-align: center; margin-bottom: 0;">
+            <a href="step1.html" class="btn btn-primary" style="margin-bottom: 16px;">
+                Crear nuevo perfil
+            </a>
+            <a href="login.html" class="btn btn-outline" style="background: transparent;">
+                Ingresar a mi cuenta
+            </a>
         </div>
+
+        <div style="text-align: center; margin-top: 32px;" class="animate-fade" style="animation-delay: 0.2s;">
+            <p style="font-size: 13px; color: var(--text-muted);">Seguridad de grado médico.</p>
+        </div>
+
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="/js/supabase-config.js" defer></script>
-    <script src="/js/app.js"></script>
-    
+    <script src="/js/app.js" defer></script>
 </body>
 
 </html>

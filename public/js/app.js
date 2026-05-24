@@ -757,31 +757,19 @@ const Dashboard = {
     },
 
     shareProfile() {
-        if (
-            !this.profile
-                ?.public_slug
-        )
-            return;
+        if (!this.profile?.public_slug) return;
 
-        const url =
-            `${window.location.origin}/u.html?s=${this.profile.public_slug}`;
+        const url = `${window.location.origin}/u.html?s=${this.profile.public_slug}`;
+        const shareText = `Mi perfil médico de emergencia InfoVial:\n${url}`;
 
-        if (
-            navigator.share
-        ) {
+        if (navigator.share) {
             navigator.share({
-                title:
-                    'Mi perfil InfoVial',
-                url
-            });
+                title: 'InfoVial - Perfil de Emergencia',
+                text: shareText
+            }).catch(console.error);
         } else {
-            navigator.clipboard.writeText(
-                url
-            );
-
-            alert(
-                'Link copiado'
-            );
+            navigator.clipboard.writeText(shareText);
+            alert('Enlace del perfil copiado en el portapapeles');
         }
     },
 
