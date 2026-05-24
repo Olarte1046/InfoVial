@@ -267,39 +267,102 @@ const Dashboard = {
     profile: null,
 
     async init() {
-        this.session =
-            await InfoVial.requireAuth();
 
-        if (!this.session)
+    this.showLoading(
+        true,
+        'Verificando acceso...'
+    );
+
+    try {
+
+        // Esperar a que Supabase
+        // termine de restaurar sesión
+        let attempts = 0;
+
+        while (
+            !this.session &&
+            attempts < 20
+        ) {
+
+            const {
+                data: { session }
+            } =
+                await supabaseClient
+                    .auth
+                    .getSession();
+
+            if (session) {
+                this.session =
+                    session;
+                break;
+            }
+
+            await new Promise(
+                resolve =>
+                    setTimeout(
+                        resolve,
+                        300
+                    )
+            );
+
+            attempts++;
+        }
+
+        if (!this.session) {
+            window.location.href =
+                'login.html';
             return;
+        }
 
         const urlParams =
             new URLSearchParams(
                 window.location.search
             );
 
-        if (
+        const shouldComplete =
             urlParams.get(
                 'action'
             ) ===
-            'complete_registration'
-        ) {
-            await this.finalizeRegistration();
-            return;
-        }
+            'complete_registration';
 
         if (
-            !navigator.onLine
+            shouldComplete
         ) {
-            alert(
-                'Sin conexión.'
-            );
-            return;
-        }
 
-        this.showLoading(
-            true
-        );
+            const regData =
+                InfoVial.getData();
+
+            // evitar doble insert
+            const {
+                data: existing
+            } =
+                await supabaseClient
+                    .from(
+                        'profiles'
+                    )
+                    .select(
+                        'id'
+                    )
+                    .eq(
+                        'user_id',
+                        this.session
+                            .user.id
+                    )
+                    .maybeSingle();
+
+            if (
+                !existing &&
+                regData?.nombre
+            ) {
+                await this.finalizeRegistration();
+            }
+
+            window.history.replaceState(
+                {},
+                '',
+                '/dashboard.html'
+            );
+        }
 
         await this.loadProfile();
 
@@ -314,7 +377,19 @@ const Dashboard = {
         } else {
             this.showNoProfileUI();
         }
-    },
+
+    } catch (err) {
+
+        console.error(
+            'Dashboard Init Error:',
+            err
+        );
+
+        this.showLoading(
+            false
+        );
+    }
+}
 
 async finalizeRegistration() {
     const regData =
