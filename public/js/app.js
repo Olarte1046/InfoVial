@@ -267,6 +267,8 @@ const Dashboard = {
     profile: null,
 
     async init() {
+        if (this._isInitializing) return;
+        this._isInitializing = true;
 
         this.showLoading(
             true,
@@ -347,6 +349,7 @@ const Dashboard = {
                             this.session
                                 .user.id
                         )
+                        .limit(1)
                         .maybeSingle();
 
                 if (
@@ -391,6 +394,9 @@ const Dashboard = {
     },
 
     async finalizeRegistration() {
+        if (this._isFinalizing) return;
+        this._isFinalizing = true;
+
         const regData =
             InfoVial.getData();
 
@@ -505,6 +511,7 @@ const Dashboard = {
                         'user_id',
                         this.session.user.id
                     )
+                    .limit(1)
                     .maybeSingle();
 
             if (error)
