@@ -220,9 +220,9 @@ const InfoVial = {
             ].includes(fileName) &&
             !(
                 'condiciones' in
-                    data ||
+                data ||
                 'medicamentos' in
-                    data
+                data
             )
         ) {
             window.location.replace(
@@ -253,11 +253,11 @@ const InfoVial = {
 
         return id.length > 8
             ? `${id.substring(
-                  0,
-                  4
-              )}...${id.substring(
-                  id.length - 2
-              )}`
+                0,
+                4
+            )}...${id.substring(
+                id.length - 2
+            )}`
             : id;
     }
 };
@@ -268,258 +268,258 @@ const Dashboard = {
 
     async init() {
 
-    this.showLoading(
-        true,
-        'Verificando acceso...'
-    );
+        this.showLoading(
+            true,
+            'Verificando acceso...'
+        );
 
-    try {
+        try {
 
-        // Esperar a que Supabase
-        // termine de restaurar sesión
-        let attempts = 0;
+            // Esperar a que Supabase
+            // termine de restaurar sesión
+            let attempts = 0;
 
-        while (
-            !this.session &&
-            attempts < 20
-        ) {
+            while (
+                !this.session &&
+                attempts < 20
+            ) {
 
-            const {
-                data: { session }
-            } =
-                await supabaseClient
-                    .auth
-                    .getSession();
+                const {
+                    data: { session }
+                } =
+                    await supabaseClient
+                        .auth
+                        .getSession();
 
-            if (session) {
-                this.session =
-                    session;
-                break;
+                if (session) {
+                    this.session =
+                        session;
+                    break;
+                }
+
+                await new Promise(
+                    resolve =>
+                        setTimeout(
+                            resolve,
+                            300
+                        )
+                );
+
+                attempts++;
             }
 
-            await new Promise(
-                resolve =>
-                    setTimeout(
-                        resolve,
-                        300
-                    )
+            if (!this.session) {
+                window.location.href =
+                    'login.html';
+                return;
+            }
+
+            const urlParams =
+                new URLSearchParams(
+                    window.location.search
+                );
+
+            const shouldComplete =
+                urlParams.get(
+                    'action'
+                ) ===
+                'complete_registration';
+
+            if (
+                shouldComplete
+            ) {
+
+                const regData =
+                    InfoVial.getData();
+
+                // evitar doble insert
+                const {
+                    data: existing
+                } =
+                    await supabaseClient
+                        .from(
+                            'profiles'
+                        )
+                        .select(
+                            'id'
+                        )
+                        .eq(
+                            'user_id',
+                            this.session
+                                .user.id
+                        )
+                        .maybeSingle();
+
+                if (
+                    !existing &&
+                    regData?.nombre
+                ) {
+                    await this.finalizeRegistration();
+                }
+
+                window.history.replaceState(
+                    {},
+                    '',
+                    '/dashboard.html'
+                );
+            }
+
+            await this.loadProfile();
+
+            this.showLoading(
+                false
             );
 
-            attempts++;
-        }
+            if (
+                this.profile
+            ) {
+                this.render();
+            } else {
+                this.showNoProfileUI();
+            }
 
-        if (!this.session) {
+        } catch (err) {
+
+            console.error(
+                'Dashboard Init Error:',
+                err
+            );
+
+            this.showLoading(
+                false
+            );
+        }
+    },
+
+    async finalizeRegistration() {
+        const regData =
+            InfoVial.getData();
+
+        if (!regData?.nombre) {
             window.location.href =
-                'login.html';
+                'step1.html';
             return;
         }
 
-        const urlParams =
-            new URLSearchParams(
-                window.location.search
-            );
+        this.showLoading(
+            true,
+            'Finalizando activación...'
+        );
 
-        const shouldComplete =
-            urlParams.get(
-                'action'
-            ) ===
-            'complete_registration';
+        try {
+            const public_slug =
+                crypto.randomUUID();
 
-        if (
-            shouldComplete
-        ) {
+            const vital_id =
+                'IV-' +
+                Math.random()
+                    .toString(36)
+                    .substring(2, 7)
+                    .toUpperCase();
 
-            const regData =
-                InfoVial.getData();
-
-            // evitar doble insert
-            const {
-                data: existing
-            } =
+            const { error } =
                 await supabaseClient
-                    .from(
-                        'profiles'
-                    )
-                    .select(
-                        'id'
-                    )
-                    .eq(
-                        'user_id',
-                        this.session
-                            .user.id
-                    )
-                    .maybeSingle();
+                    .from('profiles')
+                    .insert({
+                        user_id:
+                            this.session.user.id,
 
-            if (
-                !existing &&
-                regData?.nombre
-            ) {
-                await this.finalizeRegistration();
+                        nombre:
+                            regData.nombre || '',
+
+                        edad:
+                            regData.edad || null,
+
+                        sangre:
+                            regData.sangre || '',
+
+                        condiciones:
+                            regData.condiciones || '',
+
+                        medicamentos:
+                            regData.medicamentos || '',
+
+                        contacto_nombre:
+                            regData.contacto_nombre || '',
+
+                        contacto_relacion:
+                            regData.contacto_relacion || '',
+
+                        telefono_emergencia:
+                            regData.telefono_emergencia || '',
+
+                        ciudad:
+                            regData.ciudad || '',
+
+                        eps:
+                            regData.eps || '',
+
+                        public_slug,
+                        vital_id
+                    });
+
+            if (error) {
+                throw error;
             }
+
+            InfoVial.clearData();
 
             window.history.replaceState(
                 {},
                 '',
                 '/dashboard.html'
             );
-        }
 
-        await this.loadProfile();
+            await this.loadProfile();
 
-        this.showLoading(
-            false
-        );
+            this.showLoading(
+                false
+            );
 
-        if (
-            this.profile
-        ) {
             this.render();
-        } else {
-            this.showNoProfileUI();
+        } catch (err) {
+            console.error(
+                'Registration Error:',
+                err
+            );
+
+            this.showLoading(
+                false
+            );
+
+            alert(
+                'No se pudo finalizar el registro.'
+            );
         }
+    },
 
-    } catch (err) {
+    async loadProfile() {
+        try {
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from('profiles')
+                    .select('*')
+                    .eq(
+                        'user_id',
+                        this.session.user.id
+                    )
+                    .maybeSingle();
 
-        console.error(
-            'Dashboard Init Error:',
-            err
-        );
+            if (error)
+                throw error;
 
-        this.showLoading(
-            false
-        );
-    }
-}
-
-async finalizeRegistration() {
-    const regData =
-        InfoVial.getData();
-
-    if (!regData?.nombre) {
-        window.location.href =
-            'step1.html';
-        return;
-    }
-
-    this.showLoading(
-        true,
-        'Finalizando activación...'
-    );
-
-    try {
-        const public_slug =
-            crypto.randomUUID();
-
-        const vital_id =
-            'IV-' +
-            Math.random()
-                .toString(36)
-                .substring(2, 7)
-                .toUpperCase();
-
-        const { error } =
-            await supabaseClient
-                .from('profiles')
-                .insert({
-                    user_id:
-                        this.session.user.id,
-
-                    nombre:
-                        regData.nombre || '',
-
-                    edad:
-                        regData.edad || null,
-
-                    sangre:
-                        regData.sangre || '',
-
-                    condiciones:
-                        regData.condiciones || '',
-
-                    medicamentos:
-                        regData.medicamentos || '',
-
-                    contacto_nombre:
-                        regData.contacto_nombre || '',
-
-                    contacto_relacion:
-                        regData.contacto_relacion || '',
-
-                    telefono_emergencia:
-                        regData.telefono_emergencia || '',
-
-                    ciudad:
-                        regData.ciudad || '',
-
-                    eps:
-                        regData.eps || '',
-
-                    public_slug,
-                    vital_id
-                });
-
-        if (error) {
-            throw error;
+            this.profile =
+                data;
+        } catch (err) {
+            console.error(
+                'Profile Error:',
+                err
+            );
         }
-
-        InfoVial.clearData();
-
-        window.history.replaceState(
-            {},
-            '',
-            '/dashboard.html'
-        );
-
-        await this.loadProfile();
-
-        this.showLoading(
-            false
-        );
-
-        this.render();
-    } catch (err) {
-        console.error(
-            'Registration Error:',
-            err
-        );
-
-        this.showLoading(
-            false
-        );
-
-        alert(
-            'No se pudo finalizar el registro.'
-        );
-    }
-},
-
-async loadProfile() {
-    try {
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from('profiles')
-                .select('*')
-                .eq(
-                    'user_id',
-                    this.session.user.id
-                )
-                .maybeSingle();
-
-        if (error)
-            throw error;
-
-        this.profile =
-            data;
-    } catch (err) {
-        console.error(
-            'Profile Error:',
-            err
-        );
-    }
-},
+    },
 
     showLoading(
         show,
@@ -815,7 +815,7 @@ document.addEventListener(
             try {
                 InfoVial.checkProgress();
             } catch (
-                err
+            err
             ) {
                 console.error(
                     err
@@ -833,7 +833,7 @@ document.addEventListener(
                 ) => {
                     if (
                         event ===
-                            'SIGNED_OUT' &&
+                        'SIGNED_OUT' &&
                         (
                             isDashboard ||
                             isStep
