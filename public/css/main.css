@@ -10,12 +10,10 @@
     --accent: #7C3AED;
 
     --primary-gradient:
-        linear-gradient(
-            135deg,
+        linear-gradient(135deg,
             #0052FF 0%,
             #2563EB 55%,
-            #3B82F6 100%
-        );
+            #3B82F6 100%);
 
     --bg-clinical: #F8FAFC;
     --surface: #FFFFFF;
@@ -32,10 +30,10 @@
         0 20px 48px rgba(0, 82, 255, 0.10);
 
     --glass-bg:
-        rgba(255,255,255,0.72);
+        rgba(255, 255, 255, 0.72);
 
     --glass-border:
-        rgba(255,255,255,0.35);
+        rgba(255, 255, 255, 0.35);
 
     --radius-card: 28px;
     --radius-btn: 18px;
@@ -54,24 +52,22 @@
     --border: #242933;
 
     --shadow-soft:
-        0 8px 28px rgba(0,0,0,.35);
+        0 8px 28px rgba(0, 0, 0, .35);
 
     --shadow-premium:
-        0 24px 60px rgba(0,0,0,.55);
+        0 24px 60px rgba(0, 0, 0, .55);
 
     --glass-bg:
-        rgba(21,25,34,.72);
+        rgba(21, 25, 34, .72);
 
     --glass-border:
-        rgba(255,255,255,.06);
+        rgba(255, 255, 255, .06);
 
     --primary-gradient:
-        linear-gradient(
-            135deg,
+        linear-gradient(135deg,
             #0037B3 0%,
             #0047E1 55%,
-            #0052FF 100%
-        );
+            #0052FF 100%);
 }
 
 * {
@@ -262,7 +258,7 @@ h2 {
     background: var(--primary);
     color: white;
     box-shadow:
-        0 8px 24px rgba(0,82,255,.25);
+        0 8px 24px rgba(0, 82, 255, .25);
 }
 
 .btn-primary:hover {
@@ -273,6 +269,26 @@ h2 {
     background: transparent;
     border: 1.5px solid var(--border);
     color: var(--text-main);
+}
+
+.btn-back {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 700;
+    justify-content: flex-start;
+    padding: 0 16px;
+    height: 48px;
+    opacity: 0.85;
+    transition: 0.2s ease;
+    box-shadow: none;
+}
+
+.btn-back:hover {
+    opacity: 1;
+    color: var(--text-main);
+    transform: translateX(-4px);
 }
 
 .btn-edit-small {
@@ -299,6 +315,17 @@ select {
     font-size: 16px;
     font-family: inherit;
     -webkit-appearance: none;
+    appearance: none;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
 }
 
 input,
@@ -317,7 +344,7 @@ select:focus {
     outline: none;
     border-color: var(--primary);
     box-shadow:
-        0 0 0 5px rgba(0,82,255,.08);
+        0 0 0 5px rgba(0, 82, 255, .08);
 }
 
 /* ---------- MODALS ---------- */
@@ -325,7 +352,7 @@ select:focus {
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,.45);
+    background: rgba(0, 0, 0, .45);
     display: none;
     align-items: center;
     justify-content: center;
@@ -374,8 +401,8 @@ select:focus {
     margin-top: 30px;
     padding: 24px;
     border-radius: 24px;
-    border: 1px dashed rgba(230,57,70,.2);
-    background: rgba(230,57,70,.03);
+    border: 1px dashed rgba(230, 57, 70, .2);
+    background: rgba(230, 57, 70, .03);
 }
 
 /* ---------- THEME TOGGLE ---------- */
@@ -387,8 +414,8 @@ select:focus {
     width: 46px;
     height: 46px;
     border-radius: 50%;
-    border: 1px solid rgba(255,255,255,.15);
-    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255, 255, 255, .15);
+    background: rgba(255, 255, 255, .15);
     color: white;
     display: flex;
     align-items: center;

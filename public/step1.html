@@ -57,8 +57,7 @@
         <div style="display: flex; align-items: center; margin-bottom: 40px; margin-top: 20px;">
             <div
                 style="height: 4px; flex: 1; background: var(--border); border-radius: 2px; position: relative; overflow: hidden;">
-                <div
-                    style="position: absolute; left: 0; top: 0; height: 100%; width: 25%; background: var(--primary);">
+                <div style="position: absolute; left: 0; top: 0; height: 100%; width: 25%; background: var(--primary);">
                 </div>
             </div>
             <span
@@ -81,7 +80,8 @@
 
                 <div style="margin-bottom: 24px;">
                     <label class="label">Edad (años)</label>
-                    <input type="number" id="edad" placeholder="Ej. 28">
+                    <input type="number" id="edad" placeholder="Ej. 28" min="0" max="120"
+                        oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) <= 120 ? Math.abs(this.value) : 120 : null">
                 </div>
 
                 <div>
@@ -104,8 +104,7 @@
             <button onclick="save()" class="btn btn-primary">Continuar</button>
 
             <p style="text-align: center; margin-top: 20px;">
-                <a href="index.html"
-                    style="color: var(--text-muted); font-size: 14px; text-decoration: none;">
+                <a href="index.html" style="color: var(--text-muted); font-size: 14px; text-decoration: none;">
                     Cancelar registro
                 </a>
             </p>
