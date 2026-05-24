@@ -39,14 +39,28 @@
 
 <body>
     <div class="app-container">
-        <button class="theme-toggle" onclick="InfoVial.toggleTheme()" aria-label="Toggle Theme">
+        <button class="theme-toggle" onclick="InfoVial.toggleTheme()" aria-label="Toggle Theme"
+            style="position: absolute; top: 20px; right: 20px; z-index: 1000; background: var(--surface, #fff); border: 1px solid var(--border, #eaeaea); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text, #121212); padding: 0; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
         </button>
 
         <div class="logo-box animate-fade" style="margin-top: 60px;">
-            <img src="/assets/logo-primary-horizontal.svg" alt="InfoVial" class="logo-main">
+            <svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg" class="logo-main">
+                <!--V con pulso-->
+                <g>
+                    <path d="M16 10 L26 36 L36 10" fill="none" stroke="#0052FF" stroke-width="3" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <!--Pulso-->
+                    <polyline points="18,24 22,24 24,18 27,30 30,22 34,24" fill="none" stroke="#2EC4B6" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </g>
+                <!--Texto-->
+                <text x="52" y="30" font-family="Manrope" font-size="20" font-weight="600" fill="#121212">
+                    Infovial
+                </text>
+            </svg>
         </div>
 
         <div class="animate-fade" id="auth-main" style="animation-delay: 0.1s;">
@@ -109,7 +123,8 @@
                         email: email,
                         options: {
                             emailRedirectTo:
-                                'https://infovial.app/dashboard.html?action=complete_registration'
+                                'https://infovial.app/dashboard.html?action=complete_registration',
+                            shouldCreateUser: false
                         }
                     });
 
