@@ -275,37 +275,36 @@ const Dashboard = {
 
         try {
 
-            // Esperar a que Supabase
-            // termine de restaurar sesión
-            let attempts = 0;
+            // Esperar a que Supabase termine de restaurar sesión
+            const {
+                data: { session }
+            } = await supabaseClient.auth.getSession();
 
-            while (
-                !this.session &&
-                attempts < 20
-            ) {
-
-                const {
-                    data: { session }
-                } =
-                    await supabaseClient
-                        .auth
-                        .getSession();
-
-                if (session) {
-                    this.session =
-                        session;
-                    break;
-                }
-
+            if (session) {
+                this.session = session;
+            } else {
                 await new Promise(
-                    resolve =>
-                        setTimeout(
-                            resolve,
-                            300
-                        )
-                );
+                    (resolve) => {
+                        const {
+                            data: { subscription }
+                        } = supabaseClient.auth.onAuthStateChange(
+                            (event, newSession) => {
+                                if (newSession) {
+                                    this.session = newSession;
+                                    subscription.unsubscribe();
+                                    resolve();
+                                }
+                            }
+                        );
 
-                attempts++;
+                        setTimeout(() => {
+                            if (subscription) {
+                                subscription.unsubscribe();
+                            }
+                            resolve();
+                        }, 6000);
+                    }
+                );
             }
 
             if (!this.session) {
