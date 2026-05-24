@@ -55,9 +55,9 @@
 
         <div class="card animate-fade"
             style="animation-delay: 0.1s; padding: 24px; text-align: center; margin-bottom: 0;">
-            <a href="step1.html" class="btn btn-primary" style="margin-bottom: 16px;">
+            <button onclick="startFresh()" class="btn btn-primary" style="margin-bottom: 16px;">
                 Crear nuevo perfil
-            </a>
+            </button>
             <a href="login.html" class="btn btn-outline" style="background: transparent;">
                 Ingresar a mi cuenta
             </a>
@@ -72,6 +72,12 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="/js/supabase-config.js" defer></script>
     <script src="/js/app.js" defer></script>
+    <script>
+        function startFresh() {
+            localStorage.removeItem('infovial_registration_data');
+            window.location.href = 'step1.html';
+        }
+    </script>
 </body>
 
 </html>
