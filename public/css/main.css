@@ -414,15 +414,35 @@ select:focus {
     width: 46px;
     height: 46px;
     border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, .15);
-    background: rgba(255, 255, 255, .15);
-    color: white;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-main);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 999;
     cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.theme-toggle:hover {
+    background: var(--primary-soft);
+    color: var(--primary);
+}
+
+/* Inside the dashboard gradient header, override to white */
+.dash-header .theme-toggle {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: white;
     backdrop-filter: blur(10px);
+    box-shadow: none;
+}
+
+.dash-header .theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
 }
 
 /* ---------- ANIMATIONS ---------- */

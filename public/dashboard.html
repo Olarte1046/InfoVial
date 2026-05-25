@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -9,6 +9,18 @@
     <title>InfoVial - Mi Panel</title>
 
     <link rel="stylesheet" href="/css/main.css">
+
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('infovial_theme');
+            if (savedTheme === 'dark' || savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } else {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+            }
+        })();
+    </script>
 
     <style>
         .qr-preview-small {
@@ -53,15 +65,6 @@
 
     <div class="app-container" style="padding-top: 0;">
 
-        <button class="theme-toggle" onclick="InfoVial.toggleTheme()" aria-label="Cambiar tema visual">
-
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-
-            </svg>
-        </button>
-
         <header class="dash-header animate-fade">
 
             <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;">
@@ -78,10 +81,19 @@
                         fill="white">Infovial</text>
                 </svg>
 
-                <button onclick="Dashboard.logout()"
-                    style="background:rgba(0,0,0,0.2);color:white;border:none;padding:6px 14px;border-radius:12px;font-size:11px;font-weight:800;cursor:pointer;text-transform:uppercase;">
-                    Cerrar Sesión
-                </button>
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <button class="theme-toggle" onclick="InfoVial.toggleTheme()" aria-label="Cambiar tema visual"
+                        style="position:static;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+                    <button onclick="Dashboard.logout()"
+                        style="background:rgba(0,0,0,0.2);color:white;border:none;padding:6px 14px;border-radius:12px;font-size:11px;font-weight:800;cursor:pointer;text-transform:uppercase;">
+                        Cerrar Sesión
+                    </button>
+                </div>
 
             </div>
 
@@ -119,7 +131,7 @@
                 style="box-shadow:0 10px 25px rgba(0,0,0,.08);">
 
                 <div style="background:var(--primary-soft);padding:12px;border-radius:16px;">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
                         stroke-width="2.5">
 
                         <rect x="3" y="3" width="18" height="18" rx="2"></rect>
@@ -137,7 +149,7 @@
             <div class="action-card" onclick="Dashboard.shareProfile()" style="box-shadow:0 10px 25px rgba(0,0,0,.08);">
 
                 <div style="background:var(--primary-soft);padding:12px;border-radius:16px;">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
                         stroke-width="2.5">
 
                         <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"></path>
@@ -148,22 +160,72 @@
                 <span>Compartir</span>
             </div>
 
-            <div id="btn-view-public" class="action-card" style="box-shadow:0 10px 25px rgba(0,0,0,.08);">
+            <div class="action-card" onclick="Dashboard.openModal('modal-edit')"
+                style="box-shadow:0 10px 25px rgba(0,0,0,.08);">
 
-                <div style="background:rgba(230,57,70,.05);padding:12px;border-radius:16px;">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--critical)"
+                <div style="background:var(--primary-soft);padding:12px;border-radius:16px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
                         stroke-width="2.5">
 
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
 
                     </svg>
                 </div>
 
-                <span style="color:var(--critical);">
-                    Vista SOS
-                </span>
+                <span>Editar Perfil</span>
             </div>
+        </div>
+
+        <!-- Profile Info Card -->
+        <div class="card animate-fade" style="margin-top:20px;animation-delay:.15s;">
+            <div class="section-header">
+                <h2>Mi Perfil Médico</h2>
+            </div>
+            <div class="info-row">
+                <span class="label" style="margin-bottom:0;">Nombre</span>
+                <span class="value" id="val-nombre">...</span>
+            </div>
+            <div class="info-row">
+                <span class="label" style="margin-bottom:0;">Edad</span>
+                <span class="value" id="val-edad">...</span>
+            </div>
+            <div class="info-row">
+                <span class="label" style="margin-bottom:0;">EPS</span>
+                <span class="value" id="val-eps">...</span>
+            </div>
+            <div class="info-row">
+                <span class="label" style="margin-bottom:0;">Condiciones</span>
+                <span class="value" id="val-condiciones">...</span>
+            </div>
+            <div class="info-row">
+                <span class="label" style="margin-bottom:0;">Medicamentos</span>
+                <span class="value" id="val-meds">...</span>
+            </div>
+            <div class="info-row">
+                <span class="label" style="margin-bottom:0;">Contacto SOS</span>
+                <span class="value" id="val-contacto">...</span>
+            </div>
+            <div class="info-row">
+                <span class="label" style="margin-bottom:0;">Relación</span>
+                <span class="value" id="val-relacion">...</span>
+            </div>
+            <div class="info-row" style="border-bottom:none;">
+                <span class="label" style="margin-bottom:0;">Teléfono SOS</span>
+                <span class="value" id="val-tel">...</span>
+            </div>
+        </div>
+
+        <!-- Vista SOS Button -->
+        <div class="animate-fade" style="margin-top:12px;padding:0 4px;animation-delay:.2s;">
+            <button id="btn-view-public" class="btn btn-outline"
+                style="border-color:var(--critical);color:var(--critical);font-weight:800;font-size:13px;height:50px;gap:10px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                Ver Vista SOS Pública
+            </button>
         </div>
 
         <div style="height:60px;"></div>
@@ -204,6 +266,78 @@
             <a id="qr-modal-download" href="#" class="btn btn-primary" download="InfoVial-QR.png">
                 Descargar QR
             </a>
+        </div>
+    </div>
+
+    <!-- EDIT PROFILE MODAL -->
+
+    <div id="modal-edit" class="modal-overlay" onclick="Dashboard.closeModal?.('modal-edit')">
+        <div class="modal-content" onclick="event.stopPropagation()"
+            style="max-height:85vh;overflow-y:auto;-webkit-overflow-scrolling:touch;">
+
+            <div class="modal-header">
+                <h2>Editar Perfil</h2>
+                <button class="modal-close" onclick="Dashboard.closeModal?.('modal-edit')">×</button>
+            </div>
+
+            <form id="edit-profile-form" onsubmit="handleEditProfile(event)">
+                <div style="margin-bottom:18px;">
+                    <label class="label">Nombre completo</label>
+                    <input type="text" id="edit-nombre" placeholder="Nombre completo">
+                </div>
+                <div style="margin-bottom:18px;">
+                    <label class="label">Edad</label>
+                    <input type="number" id="edit-edad" placeholder="Edad" min="0" max="120">
+                </div>
+                <div style="margin-bottom:18px;">
+                    <label class="label">Grupo Sanguíneo</label>
+                    <select id="edit-sangre">
+                        <option value="">Seleccionar...</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                    </select>
+                </div>
+                <div style="margin-bottom:18px;">
+                    <label class="label">Condiciones / Alergias</label>
+                    <textarea id="edit-condiciones" rows="3"
+                        style="min-height:80px;padding:14px;resize:none;"></textarea>
+                </div>
+                <div style="margin-bottom:18px;">
+                    <label class="label">Medicamentos</label>
+                    <textarea id="edit-medicamentos" rows="3"
+                        style="min-height:80px;padding:14px;resize:none;"></textarea>
+                </div>
+                <div style="margin-bottom:18px;">
+                    <label class="label">Contacto de Emergencia</label>
+                    <input type="text" id="edit-contacto-nombre" placeholder="Nombre del contacto">
+                </div>
+                <div style="margin-bottom:18px;">
+                    <label class="label">Relación</label>
+                    <input type="text" id="edit-contacto-relacion" placeholder="Ej. Madre, Esposo">
+                </div>
+                <div style="margin-bottom:18px;">
+                    <label class="label">Teléfono SOS</label>
+                    <input type="tel" id="edit-telefono" placeholder="+57 321...">
+                </div>
+                <div style="margin-bottom:18px;">
+                    <label class="label">Ciudad</label>
+                    <input type="text" id="edit-ciudad" placeholder="Ej. Medellín">
+                </div>
+                <div style="margin-bottom:24px;">
+                    <label class="label">EPS / Seguro</label>
+                    <input type="text" id="edit-eps" placeholder="Ej. Sura, Sanitas">
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="edit-save-btn">Guardar Cambios</button>
+                <button type="button" onclick="Dashboard.closeModal('modal-edit')" class="btn btn-outline"
+                    style="margin-top:10px;">Cancelar</button>
+            </form>
         </div>
     </div>
 
@@ -263,6 +397,50 @@
             }, 300);
         }
 
+        function populateEditForm() {
+            const p = Dashboard.profile;
+            if (!p) return;
+            document.getElementById('edit-nombre').value = p.nombre || '';
+            document.getElementById('edit-edad').value = p.edad || '';
+            document.getElementById('edit-sangre').value = p.sangre || '';
+            document.getElementById('edit-condiciones').value = p.condiciones || '';
+            document.getElementById('edit-medicamentos').value = p.medicamentos || '';
+            document.getElementById('edit-contacto-nombre').value = p.contacto_nombre || '';
+            document.getElementById('edit-contacto-relacion').value = p.contacto_relacion || '';
+            document.getElementById('edit-telefono').value = p.telefono_emergencia || '';
+            document.getElementById('edit-ciudad').value = p.ciudad || '';
+            document.getElementById('edit-eps').value = p.eps || '';
+        }
+
+        async function handleEditProfile(e) {
+            e.preventDefault();
+            const btn = document.getElementById('edit-save-btn');
+            btn.disabled = true;
+            btn.textContent = 'Guardando...';
+
+            try {
+                await Dashboard.updateProfile({
+                    nombre: document.getElementById('edit-nombre').value,
+                    edad: document.getElementById('edit-edad').value || null,
+                    sangre: document.getElementById('edit-sangre').value,
+                    condiciones: document.getElementById('edit-condiciones').value,
+                    medicamentos: document.getElementById('edit-medicamentos').value,
+                    contacto_nombre: document.getElementById('edit-contacto-nombre').value,
+                    contacto_relacion: document.getElementById('edit-contacto-relacion').value,
+                    telefono_emergencia: document.getElementById('edit-telefono').value,
+                    ciudad: document.getElementById('edit-ciudad').value,
+                    eps: document.getElementById('edit-eps').value
+                });
+
+                Dashboard.closeModal('modal-edit');
+            } catch (err) {
+                console.error('Edit error:', err);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Guardar Cambios';
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', async () => {
 
             try {
@@ -282,6 +460,10 @@
 
                     if (id === 'modal-qr') {
                         renderQrModal();
+                    }
+
+                    if (id === 'modal-edit') {
+                        populateEditForm();
                     }
                 };
 

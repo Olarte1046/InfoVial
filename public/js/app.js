@@ -330,10 +330,43 @@ const Dashboard = {
                 shouldComplete
             ) {
 
-                const regData =
+                // Try localStorage first, fall back to user_metadata
+                // (user_metadata survives cross-device magic link opens)
+                let regData =
                     InfoVial.getData();
 
-                // evitar doble insert
+                if (!regData?.nombre) {
+                    const meta =
+                        this.session.user
+                            .user_metadata;
+
+                    if (meta?.nombre) {
+                        regData = {
+                            nombre:
+                                meta.nombre || '',
+                            edad:
+                                meta.edad || null,
+                            sangre:
+                                meta.sangre || '',
+                            condiciones:
+                                meta.condiciones || '',
+                            medicamentos:
+                                meta.medicamentos || '',
+                            contacto_nombre:
+                                meta.contacto_nombre || '',
+                            contacto_relacion:
+                                meta.contacto_relacion || '',
+                            telefono_emergencia:
+                                meta.telefono_emergencia || '',
+                            ciudad:
+                                meta.ciudad || '',
+                            eps:
+                                meta.eps || ''
+                        };
+                    }
+                }
+
+                // Prevent double insert
                 const {
                     data: existing
                 } =
@@ -356,7 +389,9 @@ const Dashboard = {
                     !existing &&
                     regData?.nombre
                 ) {
-                    await this.finalizeRegistration();
+                    await this.finalizeRegistration(
+                        regData
+                    );
                 }
 
                 window.history.replaceState(
@@ -393,16 +428,50 @@ const Dashboard = {
         }
     },
 
-    async finalizeRegistration() {
+    async finalizeRegistration(
+        externalData
+    ) {
         if (this._isFinalizing) return;
         this._isFinalizing = true;
 
-        const regData =
+        // Use provided data, localStorage, or user_metadata
+        let regData =
+            externalData ||
             InfoVial.getData();
 
         if (!regData?.nombre) {
-            window.location.href =
-                'step1.html';
+            const meta =
+                this.session?.user
+                    ?.user_metadata;
+
+            if (meta?.nombre) {
+                regData = {
+                    nombre:
+                        meta.nombre || '',
+                    edad:
+                        meta.edad || null,
+                    sangre:
+                        meta.sangre || '',
+                    condiciones:
+                        meta.condiciones || '',
+                    medicamentos:
+                        meta.medicamentos || '',
+                    contacto_nombre:
+                        meta.contacto_nombre || '',
+                    contacto_relacion:
+                        meta.contacto_relacion || '',
+                    telefono_emergencia:
+                        meta.telefono_emergencia || '',
+                    ciudad:
+                        meta.ciudad || '',
+                    eps:
+                        meta.eps || ''
+                };
+            }
+        }
+
+        if (!regData?.nombre) {
+            this._isFinalizing = false;
             return;
         }
 
@@ -693,6 +762,35 @@ const Dashboard = {
             'dash-meta'
         ).textContent =
             'Completa tu perfil';
+
+        const actionGrid =
+            document.querySelector(
+                '.action-grid'
+            );
+
+        if (actionGrid) {
+            actionGrid.innerHTML = `
+                <div style="
+                    grid-column: 1 / -1;
+                    text-align: center;
+                    padding: 32px 24px;
+                ">
+                    <p style="
+                        color: var(--text-muted);
+                        font-size: 14px;
+                        margin-bottom: 16px;
+                    ">
+                        No se encontraron datos de perfil.
+                        Inicia el registro para crear tu Vial-ID.
+                    </p>
+                    <a href="step1.html"
+                        class="btn btn-primary"
+                        style="max-width: 280px; margin: 0 auto;">
+                        Crear perfil
+                    </a>
+                </div>
+            `;
+        }
     },
 
     openModal(id) {

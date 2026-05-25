@@ -6,12 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>InfoVial - Activar Perfil</title>
     <link rel="stylesheet" href="/css/main.css">
+
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('infovial_theme');
+            if (savedTheme === 'dark' || savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } else {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+            }
+        })();
+    </script>
 </head>
 
 <body>
     <div class="app-container">
         <div class="logo-box animate-fade" style="margin-top: 40px;">
-            <img src="/assets/logo-stacked-mobile.svg" alt="InfoVial" style="height: 60px;">
+            <svg width="170" height="48" viewBox="0 0 170 48" xmlns="http://www.w3.org/2000/svg"
+                style="display:block;margin:0 auto;">
+                <g>
+                    <path d="M4 10 L14 36 L24 10" fill="none" stroke="#0052FF" stroke-width="3" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <polyline points="6,24 10,24 12,18 15,30 18,22 22,24" fill="none" stroke="#2EC4B6" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </g>
+                <text x="36" y="31" font-family="Manrope, sans-serif" font-size="22" font-weight="800"
+                    fill="currentColor">Infovial</text>
+            </svg>
         </div>
 
         <div class="animate-fade" id="reg-main" style="animation-delay: 0.1s;">
@@ -66,19 +88,30 @@
             errDiv.style.display = 'none';
 
             try {
-                // Store registration data temporary in a way that survives the magic link bounce
-                // Supabase doesn't easily store metadata for OTP signups before verification,
-                // so we use localStorage with a specific key.
                 const regData = InfoVial.getData();
                 regData.email = email;
                 regData.pending_profile = true;
                 InfoVial.saveData(regData);
 
+                // Pass registration data via user_metadata so it survives
+                // cross-device magic link opens (localStorage won't be there)
                 const { error } = await supabaseClient.auth.signInWithOtp({
                     email: email,
                     options: {
-                        // Redirect back to dashboard where we'll finish the profile creation
                         emailRedirectTo: 'https://infovial.app/dashboard.html?action=complete_registration',
+                        data: {
+                            nombre: regData.nombre || '',
+                            edad: regData.edad || null,
+                            sangre: regData.sangre || '',
+                            condiciones: regData.condiciones || '',
+                            medicamentos: regData.medicamentos || '',
+                            contacto_nombre: regData.contacto_nombre || '',
+                            contacto_relacion: regData.contacto_relacion || '',
+                            telefono_emergencia: regData.telefono_emergencia || '',
+                            ciudad: regData.ciudad || '',
+                            eps: regData.eps || '',
+                            pending_profile: true
+                        }
                     }
                 });
 
