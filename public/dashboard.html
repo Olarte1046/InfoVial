@@ -341,22 +341,28 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="/js/supabase-config.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/supabase-config.js"></script>
     <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
-    <script src="/js/app.js" defer></script>
+    <script src="/js/app.js"></script>
 
     <script>
+        // Global reference for QR
+        let currentQRCode = null;
 
         async function renderQrModal() {
-            if (!Dashboard.profile) return;
+            if (!Dashboard.profile) {
+                console.error("No profile found for QR");
+                return;
+            }
 
             const container = document.getElementById('qr-modal-display');
             container.innerHTML = '';
 
             const profileUrl = `${window.location.origin}/u.html?s=${Dashboard.profile.public_slug}`;
+            console.log("Generating QR for:", profileUrl);
 
-            const qrCode = new QRCodeStyling({
+            currentQRCode = new QRCodeStyling({
                 width: 600,
                 height: 600,
                 type: "svg",
@@ -383,25 +389,29 @@
                 }
             });
 
-            qrCode.append(container);
+            currentQRCode.append(container);
 
+            // UI adjustments
             setTimeout(() => {
                 const svg = container.querySelector('svg');
                 if (svg) {
                     svg.style.width = '100%';
                     svg.style.height = 'auto';
+                    svg.style.display = 'block';
                 }
-
-                const downloadBtn = document.getElementById('qr-modal-download');
-                if (downloadBtn) {
-                    downloadBtn.onclick = (e) => {
-                        e.preventDefault();
-                        const name = (Dashboard.profile.nombre || 'vial-id').replace(/\s+/g, '-');
-                        qrCode.download({ name: `InfoVial-QR-${name}`, extension: "png" });
-                    };
-                }
-            }, 200);
+            }, 100);
         }
+
+        // Handle download button separately to ensure currentQRCode is ready
+        document.getElementById('qr-modal-download').addEventListener('click', (e) => {
+            e.preventDefault();
+            if (currentQRCode) {
+                const name = (Dashboard.profile?.nombre || 'vial-id').replace(/\s+/g, '-');
+                currentQRCode.download({ name: `InfoVial-QR-${name}`, extension: "png" });
+            } else {
+                console.error("QR not generated yet");
+            }
+        });
 
         function populateEditForm() {
             const p = Dashboard.profile;
@@ -447,54 +457,34 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', async () => {
-
+        // Initialize dashboard bridge
+        window.addEventListener('load', async () => {
             try {
+                // Ensure app.js theme init
+                if (typeof InfoVial !== 'undefined') InfoVial.initTheme();
 
-                InfoVial.initTheme();
-
-                if (typeof Dashboard !== 'undefined') {
-                    await Dashboard.init();
-                }
-
-                const originalOpen =
-                    Dashboard.openModal?.bind(Dashboard);
-
+                // Override modal logic to trigger QR generation
+                const originalOpen = Dashboard.openModal;
                 Dashboard.openModal = function (id) {
+                    if (typeof originalOpen === 'function') originalOpen.call(Dashboard, id);
+                    else document.getElementById(id).style.display = 'flex';
 
-                    originalOpen?.(id);
+                    if (id === 'modal-qr') renderQrModal();
+                    if (id === 'modal-edit') populateEditForm();
+                };
 
-                    if (id === 'modal-qr') {
-                        renderQrModal();
-                    }
-
-                    if (id === 'modal-edit') {
-                        populateEditForm();
+                // SOS Button click
+                document.getElementById('btn-view-public').onclick = () => {
+                    if (Dashboard.profile?.public_slug) {
+                        window.location.href = `/u.html?s=${Dashboard.profile.public_slug}`;
                     }
                 };
 
-                document.getElementById('btn-view-public')
-                    .onclick = () => {
-
-                        if (!Dashboard.profile?.public_slug)
-                            return;
-
-                        window.location.href =
-                            `/u.html?s=${Dashboard.profile.public_slug}`;
-                    };
-
             } catch (err) {
-
-                console.error('Dashboard Error:', err);
-
-                document.getElementById('dash-name')
-                    .textContent = 'Error al cargar';
-
-                document.getElementById('dash-meta')
-                    .textContent =
-                    'Recarga la página';
+                console.error('Bridge Error:', err);
             }
         });
+    </script>
 
     </script>
 
