@@ -22,8 +22,7 @@
 </head>
 
 <body>
-    <div class="app-container"
-        style="display: flex; flex-direction: column; justify-content: center; min-height: 100dvh;">
+    <div class="app-container" style="justify-content: center;">
 
         <button class="theme-toggle" onclick="InfoVial.toggleTheme()" aria-label="Cambiar tema visual"
             style="position: absolute; top: 20px; right: 20px; z-index: 1000; background: var(--surface, #fff); border: 1px solid var(--border, #eaeaea); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text, #121212); padding: 0; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
@@ -32,19 +31,19 @@
             </svg>
         </button>
 
-        <div class="animate-fade" style="text-align: center; margin-bottom: 24px;">
-            <svg width="170" height="48" viewBox="0 0 170 48" xmlns="http://www.w3.org/2000/svg"
-                style="margin: 0 auto 24px auto; display: block; filter: drop-shadow(0 10px 20px rgba(0,82,255,0.2));">
+        <div class="animate-fade" style="text-align: center; margin-bottom: 32px; width: 100%;">
+            <svg width="180" height="48" viewBox="0 0 180 48" xmlns="http://www.w3.org/2000/svg"
+                style="margin: 0 auto 16px auto; display: block; filter: drop-shadow(0 10px 20px rgba(0,82,255,0.15));">
                 <!--V con pulso-->
-                <g>
+                <g transform="translate(10,0)">
                     <path d="M4 10 L14 36 L24 10" fill="none" stroke="#0052FF" stroke-width="3" stroke-linecap="round"
                         stroke-linejoin="round" />
                     <!--Pulso-->
                     <polyline points="6,24 10,24 12,18 15,30 18,22 22,24" fill="none" stroke="#2EC4B6" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round" />
                 </g>
-                <!--Texto-->
-                <text x="36" y="31" font-family="Manrope, sans-serif" font-size="22" font-weight="800"
+                <!--Texto centrado con respecto al logo completo-->
+                <text x="40" y="31" font-family="Manrope, sans-serif" font-size="24" font-weight="800"
                     fill="currentColor">Infovial</text>
             </svg>
             <p class="description" style="margin-top: 16px; margin-bottom: 0;">
