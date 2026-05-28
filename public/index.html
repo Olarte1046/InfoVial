@@ -177,12 +177,36 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="/js/supabase-config.js" defer></script>
+    <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
     <script src="/js/app.js" defer></script>
     <script>
         function startFresh() {
             localStorage.removeItem('infovial_registration_data');
             window.location.href = 'step1.html';
         }
+
+        // Render Demo QR
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('demo-qr-container');
+            if (container) {
+                const qrCode = new QRCodeStyling({
+                    width: 300,
+                    height: 300,
+                    type: "svg",
+                    data: window.location.origin + "/u.html?s=ana-rojas-demo",
+                    image: "/img/logo-sq.svg",
+                    dotsOptions: { color: "#0052FF", type: "rounded" },
+                    cornersSquareOptions: { type: "extra-rounded", color: "#0052FF" },
+                    imageOptions: { margin: 5, imageSize: 0.4 },
+                    qrOptions: { errorCorrectionLevel: "H" }
+                });
+                qrCode.append(container);
+                setTimeout(() => {
+                    const svg = container.querySelector('svg');
+                    if (svg) { svg.style.width = '100%'; svg.style.height = 'auto'; }
+                }, 100);
+            }
+        });
     </script>
 </body>
 
