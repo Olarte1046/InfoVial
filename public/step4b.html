@@ -95,10 +95,13 @@
 
                 // Pass registration data via user_metadata so it survives
                 // cross-device magic link opens (localStorage won't be there)
+                const redirectUrl = window.location.origin + '/dashboard.html?action=complete_registration';
+                console.log('Sending Magic Link with redirect:', redirectUrl);
+
                 const { error } = await supabaseClient.auth.signInWithOtp({
                     email: email,
                     options: {
-                        emailRedirectTo: 'https://infovial.app/dashboard.html?action=complete_registration',
+                        emailRedirectTo: redirectUrl,
                         data: {
                             nombre: regData.nombre || '',
                             edad: regData.edad || null,

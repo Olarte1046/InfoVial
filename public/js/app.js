@@ -332,37 +332,30 @@ const Dashboard = {
 
                 // Try localStorage first, fall back to user_metadata
                 // (user_metadata survives cross-device magic link opens)
-                let regData =
-                    InfoVial.getData();
+                let regData = InfoVial.getData();
+
+                console.log('Auth Action: complete_registration detected');
 
                 if (!regData?.nombre) {
-                    const meta =
-                        this.session.user
-                            .user_metadata;
+                    console.log('No local data found, checking user_metadata...');
+                    const meta = this.session.user.user_metadata || {};
 
-                    if (meta?.nombre) {
+                    if (meta.nombre) {
+                        console.log('Found registration names in metadata:', meta.nombre);
                         regData = {
-                            nombre:
-                                meta.nombre || '',
-                            edad:
-                                meta.edad || null,
-                            sangre:
-                                meta.sangre || '',
-                            condiciones:
-                                meta.condiciones || '',
-                            medicamentos:
-                                meta.medicamentos || '',
-                            contacto_nombre:
-                                meta.contacto_nombre || '',
-                            contacto_relacion:
-                                meta.contacto_relacion || '',
-                            telefono_emergencia:
-                                meta.telefono_emergencia || '',
-                            ciudad:
-                                meta.ciudad || '',
-                            eps:
-                                meta.eps || ''
+                            nombre: meta.nombre || '',
+                            edad: meta.edad || null,
+                            sangre: meta.sangre || '',
+                            condiciones: meta.condiciones || '',
+                            medicamentos: meta.medicamentos || '',
+                            contacto_nombre: meta.contacto_nombre || '',
+                            contacto_relacion: meta.contacto_relacion || '',
+                            telefono_emergencia: meta.telefono_emergencia || '',
+                            ciudad: meta.ciudad || '',
+                            eps: meta.eps || ''
                         };
+                    } else {
+                        console.warn('Critical: No registration data in metadata either.');
                     }
                 }
 
