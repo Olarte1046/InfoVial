@@ -83,6 +83,13 @@
 
             if (!email) { alert('Ingresa tu email para continuar'); return; }
 
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                errDiv.textContent = 'Ingresa un correo electrónico válido';
+                errDiv.style.display = 'block';
+                return;
+            }
+
             btn.disabled = true;
             btn.innerText = 'Preparando activación...';
             errDiv.style.display = 'none';

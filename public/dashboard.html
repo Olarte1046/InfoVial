@@ -352,60 +352,55 @@
 
         async function renderQrModal() {
             if (!Dashboard.profile) {
-                console.error("No profile found for QR");
+                console.error("QR Error: No Profile");
                 return;
             }
 
             const container = document.getElementById('qr-modal-display');
-            container.innerHTML = '';
+            if (!container) {
+                console.error("QR Error: No Container Found");
+                return;
+            }
+            container.innerHTML = 'Cargando QR...';
 
             const profileUrl = `${window.location.origin}/u.html?s=${Dashboard.profile.public_slug}`;
-            console.log("Generating QR for:", profileUrl);
+            console.log("Rendering QR for:", profileUrl);
 
-            currentQRCode = new QRCodeStyling({
-                width: 600,
-                height: 600,
-                type: "svg",
-                data: profileUrl,
-                image: "/img/logo-sq.svg",
-                dotsOptions: {
-                    color: "#0052FF",
-                    type: "rounded"
-                },
-                backgroundOptions: {
-                    color: "#ffffff",
-                },
-                imageOptions: {
-                    crossOrigin: "anonymous",
-                    margin: 12,
-                    imageSize: 0.4
-                },
-                cornersSquareOptions: {
-                    type: "extra-rounded",
-                    color: "#0052FF"
-                },
-                qrOptions: {
-                    errorCorrectionLevel: "H"
+            try {
+                currentQRCode = new QRCodeStyling({
+                    width: 500,
+                    height: 500,
+                    type: "canvas", // Change to canvas for max compatibility
+                    data: profileUrl,
+                    image: "/img/logo-sq.svg",
+                    dotsOptions: { color: "#0052FF", type: "rounded" },
+                    backgroundOptions: { color: "#ffffff" },
+                    imageOptions: { crossOrigin: "anonymous", margin: 10, imageSize: 0.4 },
+                    cornersSquareOptions: { type: "extra-rounded", color: "#0052FF" },
+                    qrOptions: { errorCorrectionLevel: "H" }
+                });
+
+                container.innerHTML = '';
+                await currentQRCode.append(container);
+                console.log("QR successfully appended to DOM");
+
+                const canvas = container.querySelector('canvas');
+                if (canvas) {
+                    canvas.style.width = '100%';
+                    canvas.style.height = 'auto';
+                    canvas.style.display = 'block';
                 }
-            });
-
-            currentQRCode.append(container);
-
-            // UI adjustments
-            setTimeout(() => {
-                const svg = container.querySelector('svg');
-                if (svg) {
-                    svg.style.width = '100%';
-                    svg.style.height = 'auto';
-                    svg.style.display = 'block';
-                }
-            }, 100);
+            } catch (err) {
+                console.error("QR Generation Failed:", err);
+                container.innerHTML = '<p style="color:red; font-size:12px;">Error al generar QR. Por favor recarga.</p>';
+            }
         }
 
         // Handle download button separately to ensure currentQRCode is ready
         document.getElementById('qr-modal-download').addEventListener('click', (e) => {
             e.preventDefault();
             if (currentQRCode) {
+                console.log("Downloading QR...");
                 const name = (Dashboard.profile?.nombre || 'vial-id').replace(/\s+/g, '-');
                 currentQRCode.download({ name: `InfoVial-QR-${name}`, extension: "png" });
             } else {
@@ -467,25 +462,29 @@
                 const originalOpen = Dashboard.openModal;
                 Dashboard.openModal = function (id) {
                     if (typeof originalOpen === 'function') originalOpen.call(Dashboard, id);
-                    else document.getElementById(id).style.display = 'flex';
+                    else {
+                        const el = document.getElementById(id);
+                        if (el) el.style.display = 'flex';
+                    }
 
-                    if (id === 'modal-qr') renderQrModal();
+                    if (id === 'modal-qr') setTimeout(renderQrModal, 50);
                     if (id === 'modal-edit') populateEditForm();
                 };
 
                 // SOS Button click
-                document.getElementById('btn-view-public').onclick = () => {
-                    if (Dashboard.profile?.public_slug) {
-                        window.location.href = `/u.html?s=${Dashboard.profile.public_slug}`;
-                    }
-                };
+                const sosBtn = document.getElementById('btn-view-public');
+                if (sosBtn) {
+                    sosBtn.onclick = () => {
+                        if (Dashboard.profile?.public_slug) {
+                            window.location.href = `/u.html?s=${Dashboard.profile.public_slug}`;
+                        }
+                    };
+                }
 
             } catch (err) {
                 console.error('Bridge Error:', err);
             }
         });
-    </script>
-
     </script>
 
 </body>

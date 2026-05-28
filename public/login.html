@@ -138,6 +138,13 @@
             const btn = document.getElementById('magic-btn');
             const errorDiv = document.getElementById('auth-error');
 
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                errorDiv.textContent = 'Correo electrónico no válido';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
             btn.disabled = true;
             btn.innerText = 'Enviando...';
             errorDiv.style.display = 'none';
