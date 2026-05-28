@@ -31,30 +31,35 @@
             </svg>
         </button>
 
-        <div class="animate-fade" style="text-align: center; margin-bottom: 32px; width: 100%;">
+        <div class="animate-fade" style="text-align: center; margin-top: 40px; margin-bottom: 40px; width: 100%;">
             <svg width="180" height="48" viewBox="0 0 180 48" xmlns="http://www.w3.org/2000/svg"
-                style="margin: 0 auto 16px auto; display: block; filter: drop-shadow(0 10px 20px rgba(0,82,255,0.15));">
+                style="margin: 0 auto 16px auto; display: block; filter: drop-shadow(0 10px 20px rgba(0,82,255,0.12));">
                 <!--V con pulso-->
-                <g transform="translate(10,0)">
-                    <path d="M4 10 L14 36 L24 10" fill="none" stroke="#0052FF" stroke-width="3" stroke-linecap="round"
+                <g transform="translate(15,0)">
+                    <path d="M4 10 L14 36 L24 10" fill="none" stroke="#0052FF" stroke-width="3.5" stroke-linecap="round"
                         stroke-linejoin="round" />
                     <!--Pulso-->
-                    <polyline points="6,24 10,24 12,18 15,30 18,22 22,24" fill="none" stroke="#2EC4B6" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
+                    <polyline points="6,24 10,24 12,18 15,30 18,22 22,24" fill="none" stroke="#2EC4B6"
+                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
                 </g>
-                <!--Texto centrado con respecto al logo completo-->
-                <text x="40" y="31" font-family="Manrope, sans-serif" font-size="24" font-weight="800"
+                <!--Texto perfectamente equilibrado-->
+                <text x="50" y="32" font-family="Manrope, sans-serif" font-size="26" font-weight="800"
                     fill="currentColor">Infovial</text>
             </svg>
-            <p class="description" style="margin-top: 16px; margin-bottom: 0;">
-                Crea tu perfil médico de emergencia en minutos y genera tu <strong>Vial-ID QR</strong>.
+            <p class="description"
+                style="margin-top: 20px; font-size: 16px; font-weight: 500; color: var(--text-main);">
+                Tu identidad médica para emergencias.
+            </p>
+            <p class="description" style="margin-top: 8px; font-size: 14px;">
+                Crea tu perfil y genera tu <strong>Vial-ID QR</strong> en segundos.
             </p>
         </div>
 
         <!-- CTA Principal -->
         <div class="card animate-fade"
-            style="animation-delay: 0.1s; padding: 24px; text-align: center; margin-bottom: 40px; border: 2px solid var(--primary-soft);">
-            <button onclick="startFresh()" class="btn btn-primary" style="margin-bottom: 16px; font-size: 18px;">
+            style="animation-delay: 0.1s; padding: 32px 24px; text-align: center; margin-bottom: 48px; border: 1.5px solid var(--border); box-shadow: var(--shadow-premium);">
+            <button onclick="startFresh()" class="btn btn-primary"
+                style="margin-bottom: 20px; font-size: 17px; height: 62px;">
                 Crear mi perfil de emergencia
             </button>
             <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Toma menos de 1 minuto</p>

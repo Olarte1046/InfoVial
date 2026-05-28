@@ -58,19 +58,16 @@
             </svg>
         </button>
 
-        <div class="logo-box animate-fade" style="margin-top: 60px;">
-            <svg width="170" height="48" viewBox="0 0 170 48" xmlns="http://www.w3.org/2000/svg" class="logo-main"
-                style="display: block; margin: 0 auto;">
-                <!--V con pulso-->
-                <g>
-                    <path d="M4 10 L14 36 L24 10" fill="none" stroke="#0052FF" stroke-width="3" stroke-linecap="round"
+        <div class="logo-box animate-fade" style="margin-top: 40px; margin-bottom: 40px; text-align: center;">
+            <svg width="180" height="48" viewBox="0 0 180 48" xmlns="http://www.w3.org/2000/svg" class="logo-main"
+                style="display: block; margin: 0 auto; filter: drop-shadow(0 10px 20px rgba(0,82,255,0.12));">
+                <g transform="translate(15,0)">
+                    <path d="M4 10 L14 36 L24 10" fill="none" stroke="#0052FF" stroke-width="3.5" stroke-linecap="round"
                         stroke-linejoin="round" />
-                    <!--Pulso-->
-                    <polyline points="6,24 10,24 12,18 15,30 18,22 22,24" fill="none" stroke="#2EC4B6" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
+                    <polyline points="6,24 10,24 12,18 15,30 18,22 22,24" fill="none" stroke="#2EC4B6"
+                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
                 </g>
-                <!--Texto-->
-                <text x="36" y="31" font-family="Manrope, sans-serif" font-size="22" font-weight="800"
+                <text x="50" y="32" font-family="Manrope, sans-serif" font-size="26" font-weight="800"
                     fill="currentColor">Infovial</text>
             </svg>
         </div>
@@ -147,12 +144,14 @@
 
             try {
 
+                const targetUrl = window.location.origin + '/dashboard.html?action=complete_registration';
+                console.log('Sending Magic Link to:', email, 'Redirecting to:', targetUrl);
+
                 const { error } =
                     await supabaseClient.auth.signInWithOtp({
                         email: email,
                         options: {
-                            emailRedirectTo:
-                                'https://infovial.app/dashboard.html?action=complete_registration',
+                            emailRedirectTo: targetUrl,
                             shouldCreateUser: false
                         }
                     });
