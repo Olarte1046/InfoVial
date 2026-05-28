@@ -34,11 +34,13 @@
         rgba(255, 255, 255, 0.72);
 
     --glass-border:
-        rgba(255, 255, 255, 0.35);
-
-    --radius-card: 28px;
+        --radius-card: 28px;
     --radius-btn: 18px;
     --radius-input: 18px;
+
+    --shadow-premium: 0 15px 35px rgba(0, 0, 0, 0.08), 0 5px 15px rgba(0, 0, 0, 0.04);
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.4);
 
     --max-width: min(100%, 480px);
 }
@@ -246,32 +248,36 @@ h2 {
 /* ---------- BUTTONS ---------- */
 
 .btn {
-    width: 100%;
-    border: none;
-    border-radius: var(--radius-btn);
-    height: 58px;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    height: 54px;
+    border-radius: 18px;
+    font-size: 16px;
     font-weight: 700;
     cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
     text-decoration: none;
-    transition: .2s ease;
+    gap: 10px;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .btn:active {
-    transform: scale(.98);
+    transform: scale(0.97);
 }
 
 .btn-primary {
     background: var(--primary);
     color: white;
-    box-shadow:
-        0 8px 24px rgba(0, 82, 255, .25);
+    box-shadow: 0 10px 20px rgba(0, 82, 255, 0.2);
 }
 
 .btn-primary:hover {
-    background: var(--primary-dark);
+    box-shadow: 0 15px 30px rgba(0, 82, 255, 0.3);
+    filter: brightness(1.1);
 }
 
 .btn-outline {

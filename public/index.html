@@ -190,18 +190,28 @@
             const container = document.getElementById('demo-qr-container');
             if (container) {
                 const qrCode = new QRCodeStyling({
-                    width: 300,
-                    height: 300,
-                    type: "svg",
+                    width: 320,
+                    height: 320,
+                    type: "canvas",
                     data: window.location.origin + "/u.html?s=ana-rojas-demo",
                     image: "/img/logo-sq.svg",
                     dotsOptions: { color: "#0052FF", type: "rounded" },
                     backgroundOptions: { color: "#ffffff" },
                     cornersSquareOptions: { type: "extra-rounded", color: "#0052FF" },
-                    imageOptions: { margin: 5, imageSize: 0.4 },
+                    imageOptions: { margin: 8, imageSize: 0.4, crossOrigin: "anonymous" },
                     qrOptions: { errorCorrectionLevel: "H" }
                 });
-                qrCode.append(container);
+
+                qrCode.append(document.getElementById('qr-demo-container'));
+
+                setTimeout(() => {
+                    const canvas = document.querySelector('#qr-demo-container canvas');
+                    if (canvas) {
+                        canvas.style.width = '100%';
+                        canvas.style.height = 'auto';
+                        canvas.style.borderRadius = '24px';
+                    }
+                }, 100);
                 setTimeout(() => {
                     const svg = container.querySelector('svg');
                     if (svg) { svg.style.width = '100%'; svg.style.height = 'auto'; }
