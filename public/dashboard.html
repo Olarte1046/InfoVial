@@ -349,52 +349,58 @@
     <script>
 
         async function renderQrModal() {
-
             if (!Dashboard.profile) return;
 
-            const container =
-                document.getElementById('qr-modal-display');
-
+            const container = document.getElementById('qr-modal-display');
             container.innerHTML = '';
 
-            const profileUrl =
-                `${window.location.origin}/u.html?s=${Dashboard.profile.public_slug}`;
+            const profileUrl = `${window.location.origin}/u.html?s=${Dashboard.profile.public_slug}`;
 
-            new QRCode(container, {
-                text: profileUrl,
-                width: 512,
-                height: 512,
-                correctLevel: QRCode.CorrectLevel.H
+            const qrCode = new QRCodeStyling({
+                width: 600,
+                height: 600,
+                type: "svg",
+                data: profileUrl,
+                image: "/img/logo-sq.svg",
+                dotsOptions: {
+                    color: "#0052FF",
+                    type: "rounded"
+                },
+                backgroundOptions: {
+                    color: "#ffffff",
+                },
+                imageOptions: {
+                    crossOrigin: "anonymous",
+                    margin: 12,
+                    imageSize: 0.4
+                },
+                cornersSquareOptions: {
+                    type: "extra-rounded",
+                    color: "#0052FF"
+                },
+                qrOptions: {
+                    errorCorrectionLevel: "H"
+                }
             });
 
+            qrCode.append(container);
+
             setTimeout(() => {
+                const svg = container.querySelector('svg');
+                if (svg) {
+                    svg.style.width = '100%';
+                    svg.style.height = 'auto';
+                }
 
-                const canvas =
-                    container.querySelector('canvas');
-
-                if (!canvas) return;
-
-                canvas.style.width = '100%';
-                canvas.style.height = 'auto';
-
-                document.getElementById('qr-modal-download')
-                    .onclick = (e) => {
+                const downloadBtn = document.getElementById('qr-modal-download');
+                if (downloadBtn) {
+                    downloadBtn.onclick = (e) => {
                         e.preventDefault();
-
-                        const link =
-                            document.createElement('a');
-
-                        link.download =
-                            `InfoVial-QR-${(Dashboard.profile.nombre || 'perfil')
-                                .replace(/\s+/g, '-')}.png`;
-
-                        link.href =
-                            canvas.toDataURL('image/png');
-
-                        link.click();
+                        const name = (Dashboard.profile.nombre || 'vial-id').replace(/\s+/g, '-');
+                        qrCode.download({ name: `InfoVial-QR-${name}`, extension: "png" });
                     };
-
-            }, 300);
+                }
+            }, 200);
         }
 
         function populateEditForm() {
