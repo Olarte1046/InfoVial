@@ -199,6 +199,8 @@
     <script src="/js/supabase-config.js"></script>
 
     <script>
+        const CACHE_PREFIX = 'infovial_emergency_cache_';
+
         window.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const slug = urlParams.get('s') || urlParams.get('id');
@@ -208,9 +210,40 @@
                 return;
             }
 
+            // 1. Intentar cargar desde caché para respuesta instantánea
+            const cachedData = localStorage.getItem(CACHE_PREFIX + slug);
+            if (cachedData) {
+                try {
+                    const data = JSON.parse(cachedData);
+                    renderProfile(data);
+                    console.log('Emergency data loaded from cache');
+                } catch (e) {
+                    console.error('Error parsing cache', e);
+                }
+            }
+
+            // 2. Intentar cargar desde servidor para datos actualizados
             try {
-                const isSlug = slug.length > 15;
+                const isSlug = slug.length > 15 || slug.includes('-');
                 const query = supabaseClient.from('profiles').select('*');
+
+                if (slug === 'ana-rojas-demo') {
+                    // Cargar perfil demo ficticio
+                    const demoData = {
+                        nombre: 'Ana María Rojas',
+                        edad: 34,
+                        ciudad: 'Medellín',
+                        sangre: 'O+',
+                        condiciones: 'Alergia severa a la Penicilina. Asma crónica.',
+                        medicamentos: 'Inhalador Salbutamol SOS',
+                        contacto_nombre: 'Carlos Rojas',
+                        contacto_relacion: 'Esposo',
+                        telefono_emergencia: '3001234567'
+                    };
+                    renderProfile(demoData);
+                    localStorage.setItem(CACHE_PREFIX + slug, JSON.stringify(demoData));
+                    return;
+                }
 
                 if (isSlug) {
                     query.eq('public_slug', slug);
@@ -220,31 +253,48 @@
 
                 const { data, error } = await query.single();
 
-                if (error || !data) throw new Error('Not found');
-
-                document.getElementById('user-name').textContent = data.nombre;
-                document.getElementById('user-meta').textContent =
-                    `${data.edad} años • ${data.ciudad || 'Colombia'}`;
-                document.getElementById('user-blood').textContent = data.sangre;
-                document.getElementById('user-conditions').textContent =
-                    data.condiciones || 'Ninguna reportada';
-                document.getElementById('user-meds').textContent =
-                    data.medicamentos || 'Ninguno';
-                document.getElementById('user-contact-name').textContent =
-                    data.contacto_nombre;
-                document.getElementById('user-contact-rel').textContent =
-                    data.contacto_relacion || 'Familiar';
-
-                if (data.telefono_emergencia) {
-                    document.getElementById('sos-link').href =
-                        `tel:${data.telefono_emergencia}`;
-                } else {
-                    document.getElementById('sos-link').style.display = 'none';
+                if (error || !data) {
+                    if (!cachedData) throw new Error('Not found');
+                    return; // Si falló servidor pero hay caché, nos quedamos con caché
                 }
+
+                // Actualizar UI con datos frescos y guardar en caché
+                renderProfile(data);
+                localStorage.setItem(CACHE_PREFIX + slug, JSON.stringify(data));
+
             } catch (err) {
-                showError();
+                if (!cachedData) showError();
             }
         });
+
+        function renderProfile(data) {
+            document.getElementById('user-name').textContent = data.nombre;
+            document.getElementById('user-meta').textContent =
+                `${data.edad} años • ${data.ciudad || 'Colombia'}`;
+            document.getElementById('user-blood').textContent = data.sangre;
+
+            // Priorizar visualmente condiciones críticas
+            const condEl = document.getElementById('user-conditions');
+            condEl.textContent = data.condiciones || 'Ninguna reportada';
+            if (data.condiciones && data.condiciones.length > 5) {
+                condEl.style.color = 'var(--critical)';
+            }
+
+            document.getElementById('user-meds').textContent =
+                data.medicamentos || 'Ninguno';
+            document.getElementById('user-contact-name').textContent =
+                data.contacto_nombre;
+            document.getElementById('user-contact-rel').textContent =
+                data.contacto_relacion || 'Familiar';
+
+            if (data.telefono_emergencia) {
+                document.getElementById('sos-link').href =
+                    `tel:${data.telefono_emergencia}`;
+                document.getElementById('sos-link').style.display = 'flex';
+            } else {
+                document.getElementById('sos-link').style.display = 'none';
+            }
+        }
 
         function showError() {
             document.getElementById('main-view').style.display = 'none';

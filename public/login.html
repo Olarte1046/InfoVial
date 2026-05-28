@@ -104,13 +104,30 @@
             </p>
         </div>
 
-        <div id="magic-sent" class="magic-status">
-            <div style="font-size: 40px; margin-bottom: 16px;">✉️</div>
-            <h3>¡Enlace enviado!</h3>
-            <p>Hemos enviado un enlace de acceso a <strong id="sent-email-display">...</strong>.<br>Revisa tu bandeja de
-                entrada (y spam) para ingresar.</p>
+        <div id="magic-sent" class="magic-status"
+            style="border: 2px solid var(--primary-soft); background: var(--surface);">
+            <div style="font-size: 48px; margin-bottom: 20px;">✉️</div>
+            <h3 style="font-size: 22px; margin-bottom: 12px;">¡Enlace enviado!</h3>
+            <p style="font-size: 16px; margin-bottom: 24px;">Hemos enviado un enlace de acceso a <strong
+                    id="sent-email-display" style="color: var(--primary);">...</strong>.</p>
+
+            <div
+                style="text-align: left; background: var(--primary-soft); padding: 20px; border-radius: 16px; margin-bottom: 24px;">
+                <p style="font-weight: 700; color: var(--primary); margin-bottom: 8px; font-size: 14px;">Próximos pasos:
+                </p>
+                <ul
+                    style="margin: 0; padding-left: 20px; font-size: 14px; color: var(--text-main); display: grid; gap: 8px;">
+                    <li>Revisa tu bandeja de entrada (y carpeta de spam).</li>
+                    <li>Haz clic en el botón <strong>"Ingresar a InfoVial"</strong>.</li>
+                    <li>Confirma con el código si se te solicita.</li>
+                </ul>
+            </div>
+
+            <p class="description" style="font-size: 13px; margin-bottom: 24px;">El enlace expira en 15 minutos por tu
+                seguridad.</p>
+
             <button onclick="location.reload()" class="btn btn-outline"
-                style="margin-top: 24px; border: none; font-weight: 800; font-size: 13px;">Volver a intentar</button>
+                style="border: 1px solid var(--border); font-weight: 800; font-size: 14px;">No recibí el correo</button>
         </div>
     </div>
 

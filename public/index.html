@@ -52,20 +52,123 @@
             </p>
         </div>
 
+        <!-- CTA Principal -->
         <div class="card animate-fade"
-            style="animation-delay: 0.1s; padding: 24px; text-align: center; margin-bottom: 0;">
-            <button onclick="startFresh()" class="btn btn-primary" style="margin-bottom: 16px;">
-                Crear nuevo perfil
+            style="animation-delay: 0.1s; padding: 24px; text-align: center; margin-bottom: 40px; border: 2px solid var(--primary-soft);">
+            <button onclick="startFresh()" class="btn btn-primary" style="margin-bottom: 16px; font-size: 18px;">
+                Crear mi perfil de emergencia
             </button>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Toma menos de 1 minuto</p>
             <a href="login.html" class="btn btn-outline" style="background: transparent;">
                 Ingresar a mi cuenta
             </a>
         </div>
 
-        <div style="text-align: center; margin-top: 32px;" class="animate-fade" style="animation-delay: 0.2s;">
+        <!-- Cómo Funciona -->
+        <section class="animate-fade" style="animation-delay: 0.2s; margin-bottom: 48px;">
+            <h2 style="font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 24px;">¿Cómo funciona?</h2>
+            <div style="display: grid; gap: 16px;">
+                <div class="card"
+                    style="display: flex; align-items: flex-start; gap: 16px; padding: 20px; border: none; background: var(--surface-alt, #f9f9f9);">
+                    <div
+                        style="background: var(--primary); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 800; font-size: 14px;">
+                        1</div>
+                    <div>
+                        <h3 style="font-size: 16px; margin-bottom: 4px;">Creas tu perfil</h3>
+                        <p class="description" style="font-size: 14px;">Ingresas tus datos vitales y contacto de
+                            emergencia de forma segura.</p>
+                    </div>
+                </div>
+                <div class="card"
+                    style="display: flex; align-items: flex-start; gap: 16px; padding: 20px; border: none; background: var(--surface-alt, #f9f9f9);">
+                    <div
+                        style="background: var(--primary); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 800; font-size: 14px;">
+                        2</div>
+                    <div>
+                        <h3 style="font-size: 16px; margin-bottom: 4px;">Recibes tu QR</h3>
+                        <p class="description" style="font-size: 14px;">Obtienes un código único para llevar contigo en
+                            tu celular, reloj o billetera.</p>
+                    </div>
+                </div>
+                <div class="card"
+                    style="display: flex; align-items: flex-start; gap: 16px; padding: 20px; border: none; background: var(--surface-alt, #f9f9f9);">
+                    <div
+                        style="background: var(--primary); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 800; font-size: 14px;">
+                        3</div>
+                    <div>
+                        <h3 style="font-size: 16px; margin-bottom: 4px;">En emergencia escanean</h3>
+                        <p class="description" style="font-size: 14px;">El rescatista escanea el QR y ve tus datos
+                            críticos en segundos, incluso con baja señal.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bloque de Confianza -->
+        <section class="animate-fade"
+            style="animation-delay: 0.3s; margin-bottom: 48px; background: var(--primary-soft); padding: 32px 24px; border-radius: 24px; text-align: center;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+                <div style="font-size: 13px; font-weight: 700; color: var(--primary);">✓ Acceso inmediato</div>
+                <div style="font-size: 13px; font-weight: 700; color: var(--primary);">✓ Baja señal OK</div>
+                <div style="font-size: 13px; font-weight: 700; color: var(--primary);">✓ Solo datos vitales</div>
+                <div style="font-size: 13px; font-weight: 700; color: var(--primary);">✓ Privacidad total</div>
+            </div>
+            <p class="description" style="font-size: 14px; margin-bottom: 0;">Tus datos completos registrados están
+                protegidos por cifrado de grado médico.</p>
+        </section>
+
+        <!-- QR Demo -->
+        <section class="animate-fade" style="animation-delay: 0.4s; margin-bottom: 48px; text-align: center;">
+            <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 24px;">Prueba el sistema real</h2>
+            <div class="card" style="padding: 32px; display: inline-block; width: 100%; max-width: 380px;">
+                <img src="/qr-ana-rojas-2.png" alt="Demo QR"
+                    style="width: 180px; height: 180px; margin-bottom: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                <p style="font-weight: 700; margin-bottom: 8px;">Perfil de muestra: Ana Rojas</p>
+                <p class="description" style="font-size: 13px; margin-bottom: 20px;">Escanea con tu celular para ver la
+                    respuesta instantánea.</p>
+                <a href="/u.html?s=ana-rojas-demo" class="btn btn-outline" style="font-size: 14px; padding: 12px;">Ver
+                    demo en este dispositivo</a>
+            </div>
+        </section>
+
+        <!-- FAQ Simple -->
+        <section class="animate-fade" style="animation-delay: 0.5s; margin-bottom: 48px;">
+            <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 24px;">Preguntas Frecuentes</h2>
+            <div style="text-align: left;">
+                <details style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
+                    <summary
+                        style="font-weight: 700; cursor: pointer; margin-bottom: 8px; list-style: none; display: flex; justify-content: space-between; align-items: center;">
+                        ¿Funciona sin internet?
+                        <span style="color: var(--primary);">+</span>
+                    </summary>
+                    <p class="description" style="font-size: 14px; margin-left: 0;">Sí. El sistema optimiza la carga
+                        para funcionar incluso con señal 2G, y guarda una copia local si ya se ha visualizado antes.</p>
+                </details>
+                <details style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
+                    <summary
+                        style="font-weight: 700; cursor: pointer; margin-bottom: 8px; list-style: none; display: flex; justify-content: space-between; align-items: center;">
+                        ¿Quién puede ver mis datos?
+                        <span style="color: var(--primary);">+</span>
+                    </summary>
+                    <p class="description" style="font-size: 14px; margin-left: 0;">En una emergencia médica, cualquier
+                        rescatista con el QR. Por eso solo pedimos datos vitales (tipo de sangre, alergias, contacto
+                        SOS).</p>
+                </details>
+                <details style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
+                    <summary
+                        style="font-weight: 700; cursor: pointer; margin-bottom: 8px; list-style: none; display: flex; justify-content: space-between; align-items: center;">
+                        ¿Qué pasa si pierdo el QR?
+                        <span style="color: var(--primary);">+</span>
+                    </summary>
+                    <p class="description" style="font-size: 14px; margin-left: 0;">Puedes ingresar a tu cuenta en
+                        cualquier momento y generar un nuevo código o anular el anterior por seguridad.</p>
+                </details>
+            </div>
+        </section>
+
+        <div style="text-align: center; margin-top: 0;" class="animate-fade" style="animation-delay: 0.6s;">
             <p style="font-size: 13px; color: var(--text-muted);">Seguridad de grado médico.</p>
         </div>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
